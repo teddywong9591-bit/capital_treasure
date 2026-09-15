@@ -348,10 +348,24 @@
         });
 
         function closeModal() {
-            document.getElementById('successModal').classList.remove('active');
-            // usermanage.html သို့ တိုက်ရိုက် လမ်းကြောင်းလွှဲပါသည်
-            window.location.href = 'usermanage.html';
-        }
+    document.getElementById('successModal').classList.remove('active');
+    
+    // Login ဝင်ထားသော Role ကို ယူပါ
+    const role = localStorage.getItem('login_role') || 'ADMIN';
+
+    // Role အလိုက် သက်ဆိုင်ရာ Landing Page သို့ လမ်းကြောင်းလွှဲပေးပါ
+    if (role === 'FLEET') {
+        window.location.href = 'refilling.html';
+    } else if (role === 'WAREHOUSE') {
+        window.location.href = 'warehouse.html';
+    } else if (role === 'HR') {
+        window.location.href = 'leaves.html';
+    } else {
+        // ADMIN သို့မဟုတ် အခြား Role များ
+        window.location.href = 'usermanage.html';
+    }
+}
+
     </script>
 
 </body>
