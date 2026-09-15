@@ -9,17 +9,29 @@
         :root { --bg-primary: #0f172a; --bg-card: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --accent: #2563eb; --border: #e2e8f0; --radius: 12px; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background-color: #f8fafc; color: var(--text-main); display: flex; min-height: 100vh; }
+        
         .sidebar { width: 260px; background-color: var(--bg-primary); color: #fff; display: flex; flex-direction: column; position: fixed; height: 100vh; overflow-y: auto; }
-        .brand { padding: 24px; display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .brand { padding: 20px 24px; display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .brand i { color: var(--accent); }
-        .nav-list { list-style: none; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; }
-        .nav-item a { width: 100%; padding: 10px 14px; border-radius: var(--radius); color: #94a3b8; font-size: 13.5px; font-weight: 500; display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        
+        /* Role Indicator Badge */
+        .user-role-badge { margin: 12px 16px 4px 16px; padding: 8px 12px; background: rgba(37, 99, 235, 0.2); border: 1px solid rgba(37, 99, 235, 0.4); border-radius: 8px; font-size: 12px; color: #93c5fd; display: flex; align-items: center; justify-content: space-between; }
+        
+        .nav-list { list-style: none; padding: 12px; display: flex; flex-direction: column; gap: 4px; }
+        
+        /* Group Title Header */
+        .group-title { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #64748b; padding: 12px 12px 4px 12px; letter-spacing: 0.5px; }
+        
+        .nav-item a { width: 100%; padding: 9px 12px; border-radius: 8px; color: #94a3b8; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 10px; text-decoration: none; }
         .nav-item a:hover, .nav-item.active a { background-color: rgba(255, 255, 255, 0.1); color: #fff; }
         .nav-item.active a { background-color: var(--accent); }
+        
         .nav-divider { height: 1px; background-color: rgba(255, 255, 255, 0.1); margin: 8px 0; }
+        
         .main-wrapper { margin-left: 260px; flex: 1; display: flex; flex-direction: column; }
         header { background-color: var(--bg-card); padding: 16px 32px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .content-body { padding: 32px; }
+        
         .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
         .stat-card { background: var(--bg-card); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .stat-val { font-size: 24px; font-weight: 700; margin-top: 4px; }
@@ -30,46 +42,106 @@
 <body>
     <aside class="sidebar">
         <div class="brand"><i data-lucide="shield-check"></i><span>Capital Treasure</span></div>
+        
+        <!-- Current Role Badge -->
+        <div class="user-role-badge">
+            <span>Role: <strong id="role-display">HR Admin (Full Access)</strong></span>
+            <i data-lucide="user-cog" style="width: 14px; height: 14px;"></i>
+        </div>
+
         <ul class="nav-list">
-            <li class="nav-item active"><a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
-            <li class="nav-item"><a href="refilling.html"><i data-lucide="fuel"></i> Fuel Refilling</a></li>
-            <li class="nav-item"><a href="matainment.html"><i data-lucide="wrench"></i> Maintenance</a></li>
-            <li class="nav-item"><a href="Inspection.html"><i data-lucide="clipboard-check"></i> Inspection</a></li>
-            <li class="nav-item"><a href="user manage.html"><i data-lucide="users"></i> User Manage</a></li>
-            
-            <!-- ထပ်တိုးထားသော ဖိုင်အသစ်များ -->
-            <li class="nav-item"><a href="stationary.html"><i data-lucide="pen-tool"></i> Stationery</a></li>
-            <li class="nav-item"><a href="fixaccess.html"><i data-lucide="box"></i> Fixed Assets</a></li>
-            <li class="nav-item"><a href="leaves.html"><i data-lucide="calendar"></i> Leave Requests</a></li>
-            <li class="nav-item"><a href="meetingnote.html"><i data-lucide="file-text"></i> Meeting Notes</a></li>
-            <li class="nav-item"><a href="manpower.html"><i data-lucide="user-plus"></i> Manpower Plan</a></li>
-            <li class="nav-item"><a href="interview-tracking.html"><i data-lucide="user-check"></i> Interview Tracking</a></li>
+            <!-- Global Dashboard -->
+            <li class="nav-item active"><a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Overview Dashboard</a></li>
             
             <li class="nav-divider"></li>
-            <!-- Log Out Button ကို အောက်ဆုံးသို့ ကန်မထုတ်ဘဲ မီနူးများ၏ အောက်တွင် တိုက်ရိုက်ပြထားသည် -->
+
+            <!-- GROUP 1: Fleet Management -->
+            <div class="menu-group" id="group-fleet">
+                <div class="group-title">Fleet Operations</div>
+                <li class="nav-item"><a href="refilling.html"><i data-lucide="fuel"></i> Fuel Refilling</a></li>
+                <li class="nav-item"><a href="matainment.html"><i data-lucide="wrench"></i> Maintenance</a></li>
+                <li class="nav-item"><a href="Inspection.html"><i data-lucide="clipboard-check"></i> Inspection</a></li>
+            </div>
+
+            <!-- GROUP 2: Admin Operations -->
+            <div class="menu-group" id="group-admin">
+                <div class="group-title">Admin & Assets</div>
+                <li class="nav-item"><a href="stationary.html"><i data-lucide="pen-tool"></i> Stationery Requests</a></li>
+                <li class="nav-item"><a href="fixaccess.html"><i data-lucide="box"></i> Fixed Assets</a></li>
+                <li class="nav-item"><a href="meetingnote.html"><i data-lucide="file-text"></i> Meeting Notes</a></li>
+            </div>
+
+            <!-- GROUP 3: HR & People Management -->
+            <div class="menu-group" id="group-hr">
+                <div class="group-title">HR & Recruitment</div>
+                <li class="nav-item"><a href="leaves.html"><i data-lucide="calendar"></i> Leave Requests</a></li>
+                <li class="nav-item"><a href="manpower.html"><i data-lucide="user-plus"></i> Manpower Plan</a></li>
+                <li class="nav-item"><a href="interview-tracking.html"><i data-lucide="user-check"></i> Interview Tracking</a></li>
+                <li class="nav-item"><a href="user-manage.html"><i data-lucide="users"></i> User & Role Control</a></li>
+            </div>
+
+            <li class="nav-divider"></li>
             <li class="nav-item"><a href="logout.html" style="color: #ef4444;"><i data-lucide="log-out"></i> Log Out</a></li>
         </ul>
     </aside>
 
     <div class="main-wrapper">
-        <header><h1 style="font-size: 20px;">Dashboard</h1></header>
+        <header>
+            <h1 style="font-size: 20px;">Main Overview</h1>
+            <!-- Role Switcher Demo (Test ပြုလုပ်ရန်) -->
+            <select id="roleSelector" onchange="switchRole(this.value)" style="padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border);">
+                <option value="HR">View as HR (Full Access)</option>
+                <option value="FLEET">View as Fleet Manager</option>
+                <option value="ADMIN">View as Admin Staff</option>
+            </select>
+        </header>
+
         <div class="content-body">
             <div class="grid-stats">
                 <div class="stat-card">
-                    <div><div class="stat-label">Total Vehicles</div><div class="stat-val">42</div></div>
+                    <div><div class="stat-label">Total Fleet Vehicles</div><div class="stat-val">42</div></div>
                     <div class="stat-icon"><i data-lucide="car"></i></div>
                 </div>
                 <div class="stat-card">
-                    <div><div class="stat-label">Monthly Fuel (MMK)</div><div class="stat-val">12,450,000</div></div>
-                    <div class="stat-icon"><i data-lucide="fuel"></i></div>
+                    <div><div class="stat-label">Pending Leave Requests</div><div class="stat-val">8</div></div>
+                    <div class="stat-icon"><i data-lucide="calendar"></i></div>
                 </div>
                 <div class="stat-card">
-                    <div><div class="stat-label">Active Maintenances</div><div class="stat-val">5</div></div>
-                    <div class="stat-icon"><i data-lucide="wrench"></i></div>
+                    <div><div class="stat-label">Interviews Scheduled</div><div class="stat-val">12</div></div>
+                    <div class="stat-icon"><i data-lucide="user-check"></i></div>
                 </div>
             </div>
         </div>
     </div>
-    <script>lucide.createIcons();</script>
+
+    <script>
+        lucide.createIcons();
+
+        // Access Control Logic
+        function switchRole(role) {
+            const fleetGroup = document.getElementById('group-fleet');
+            const adminGroup = document.getElementById('group-admin');
+            const hrGroup = document.getElementById('group-hr');
+            const roleDisplay = document.getElementById('role-display');
+
+            if (role === 'HR') {
+                // HR ထိန်းချုပ်ခွင့်: HTML အကုန်လုံးကို မြင်တွေ့နိုင်သည်
+                fleetGroup.style.display = 'block';
+                adminGroup.style.display = 'block';
+                hrGroup.style.display = 'block';
+                roleDisplay.innerText = 'HR Admin (Full Access)';
+            } else if (role === 'FLEET') {
+                fleetGroup.style.display = 'block';
+                adminGroup.style.display = 'none';
+                hrGroup.style.display = 'none';
+                roleDisplay.innerText = 'Fleet Manager';
+            } else if (role === 'ADMIN') {
+                fleetGroup.style.display = 'none';
+                adminGroup.style.display = 'block';
+                hrGroup.style.display = 'none';
+                roleDisplay.innerText = 'Admin Staff';
+            }
+        }
+    </script>
 </body>
 </html>
