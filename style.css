@@ -1,32 +1,60 @@
-.powered-by {
-    margin-top: 20px;
+/* Powered By Professional Footer Styling */
+.powered-footer {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #f1f5f9;
     text-align: center;
-    font-size: 13px;
-    color: var(--text-muted, #64748b);
 }
-.powered-by a {
-    color: var(--accent, #2563eb);
-    text-decoration: none;
+
+.powered-title {
+    font-size: 11px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
     font-weight: 600;
 }
-.powered-by a:hover {
-    text-decoration: underline;
+
+.developer-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e293b;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 12px;
 }
-/* Contact Popup / Dropdown Style (optional menu) */
-.contact-links {
+
+.developer-name:hover {
+    color: #2563eb;
+}
+
+.social-icons-grid {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.social-icon-btn {
     display: inline-flex;
-    gap: 12px;
-    margin-top: 6px;
-    font-size: 12px;
-}
-.contact-links a {
-    color: #475569;
-    background: #f1f5f9;
-    padding: 3px 8px;
-    border-radius: 6px;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #f8fafc;
     border: 1px solid #e2e8f0;
+    color: #64748b;
+    text-decoration: none;
+    transition: all 0.2s ease;
 }
-.contact-links a:hover {
-    background: #2563eb;
-    color: #fff;
+
+.social-icon-btn svg, .social-icon-btn i {
+    width: 15px;
+    height: 15px;
 }
+
+/* Hover effects for brand colors */
+.social-icon-btn.telegram:hover { background-color: #eff6ff; color: #0088cc; border-color: #bfdbfe; }
+.social-icon-btn.gmail:hover { background-color: #fef2f2; color: #ea4335; border-color: #fecaca; }
+.social-icon-btn.viber:hover { background-color: #f5f3ff; color: #7360f2; border-color: #ddd6fe; }
+.social-icon-btn.phone:hover { background-color: #f0fdf4; color: #16a34a; border-color: #bbf7d0; }
