@@ -1,0 +1,32 @@
+.powered-by {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted, #64748b);
+}
+.powered-by a {
+    color: var(--accent, #2563eb);
+    text-decoration: none;
+    font-weight: 600;
+}
+.powered-by a:hover {
+    text-decoration: underline;
+}
+/* Contact Popup / Dropdown Style (optional menu) */
+.contact-links {
+    display: inline-flex;
+    gap: 12px;
+    margin-top: 6px;
+    font-size: 12px;
+}
+.contact-links a {
+    color: #475569;
+    background: #f1f5f9;
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+.contact-links a:hover {
+    background: #2563eb;
+    color: #fff;
+}
