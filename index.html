@@ -268,7 +268,7 @@
         <!-- Demo Accounts Hint Box -->
         <div class="demo-accounts">
             <strong>Demo Logins:</strong><br>
-            • Admin (Full): <code>admin</code> / <code>admin123</code><br>
+            • Admin: <code>admin</code> / <code>admin123</code><br>
             • Fleet Mgr: <code>fleet</code> / <code>fleet123</code><br>
             • Warehouse: <code>warehouse</code> / <code>warehouse123</code><br>
             • HR Mgr: <code>hr</code> / <code>hr123</code>
@@ -302,7 +302,7 @@
 
         // Account Credentials & Role Mapping
         const usersDatabase = {
-            'admin': { pass: 'admin123', role: 'ADMIN', label: 'System Admin (Full Access)' },
+            'admin': { pass: 'admin123', role: 'ADMIN', label: 'Admin (Stationery & Assets)' },
             'fleet': { pass: 'fleet123', role: 'FLEET', label: 'Fleet Manager' },
             'warehouse': { pass: 'warehouse123', role: 'WAREHOUSE', label: 'Warehouse Manager' },
             'hr': { pass: 'hr123', role: 'HR', label: 'HR Manager' }
@@ -328,7 +328,7 @@
                 if (user && user.pass === password) {
                     errorMsg.style.display = 'none';
                     
-                    // Save Session & Roles (login_role နှင့် user_role နှစ်ခုလုံး သိမ်းဆည်းပေးမည်)
+                    // Save Session & Roles
                     localStorage.setItem('isAuthenticated', 'true');
                     localStorage.setItem('login_role', user.role);
                     localStorage.setItem('user_role', user.role);
@@ -348,26 +348,29 @@
         });
 
         function closeModal() {
-    document.getElementById('successModal').classList.remove('active');
-    
-    // Login ဝင်ထားသော Role ကို ယူပါ
-    const role = localStorage.getItem('login_role') || 'ADMIN';
+            document.getElementById('successModal').classList.remove('active');
+            
+            // Login ဝင်ထားသော Role ကို ယူပါ
+            const role = localStorage.getItem('login_role') || 'ADMIN';
 
-    // Role အလိုက် သက်ဆိုင်ရာ Landing Page သို့ လမ်းကြောင်းလွှဲပေးပါ
-    if (role === 'FLEET') {
-        window.location.href = 'refilling.html';
-    } else if (role === 'WAREHOUSE') {
-        window.location.href = 'warehouse.html';
-    } else if (role === 'HR') {
-        window.location.href = 'leaves.html';
-    } else {
-        // ADMIN သို့မဟုတ် အခြား Role များ
-        window.location.href = 'usermanage.html';
-    }
-}
-
+            // Role အလိုက် သက်ဆိုင်ရာ Landing Page သို့ လမ်းကြောင်းလွှဲပေးမည်
+            if (role === 'FLEET') {
+                window.location.href = 'refilling.html';
+            } else if (role === 'WAREHOUSE') {
+                window.location.href = 'warehouse.html';
+            } else if (role === 'HR') {
+                window.location.href = 'leaves.html';
+            } else if (role === 'ADMIN') {
+                // Admin Role အတွက် Stationery Page သို့ ဦးတည်ပေးမည် (User Manage ကို ဖြုတ်ထားသောကြောင့် ဖြစ်သည်)
+                window.location.href = 'stationary.html';
+            } else {
+                window.location.href = 'stationary.html';
+            }
+        }
     </script>
-<script src="script.js"></script>
+
+    <!-- External Script File -->
+    <script src="script.js"></script>
 
 </body>
 </html>

@@ -10,13 +10,19 @@
         <h2>Logging out...</h2>
         <p style="color: #94a3b8; margin-top: 8px;">စနစ်အတွင်းမှ ထွက်ခွာနေပါသည်။</p>
     </div>
+
+    <!-- External Script File -->
+    <script src="script.js"></script>
+
     <script>
+        // Clear all stored data (both Local & Session)
         localStorage.clear();
+        sessionStorage.clear();
+
+        // Redirect to login page after 1 second
         setTimeout(() => {
             window.location.href = 'index.html';
         }, 1000);
     </script>
-<script src="script.js"></script>
-
 </body>
 </html>
