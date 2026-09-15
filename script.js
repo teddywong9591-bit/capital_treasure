@@ -2,7 +2,7 @@ function applyRoleAccess() {
     // LocalStorage မှ Login ဝင်ထားသော Role ကို ယူမည် (မရှိပါက Default 'ADMIN')
     const loginRole = localStorage.getItem('login_role') || 'ADMIN';
 
-    // HTML ထဲရှိ Menu ID အားလုံးကို ရယူခြင်း
+    // HTML ထဲရှိ Menu ID အားလုံးကို ရယူခြင်း (Interview အတွက် menu-interview ကိုသာ သုံးပါ)
     const menus = {
         dashboard: document.getElementById('menu-dashboard'),
         fuel: document.getElementById('menu-fuel'),
@@ -29,6 +29,7 @@ function applyRoleAccess() {
     
     // --- HR Role ---
     if (loginRole === 'HR') {
+        if (menus.dashboard) menus.dashboard.style.display = 'block';
         if (menus.leave) menus.leave.style.display = 'block';
         if (menus.meeting) menus.meeting.style.display = 'block';
         if (menus.manpower) menus.manpower.style.display = 'block';
@@ -37,14 +38,16 @@ function applyRoleAccess() {
 
     // --- FLEET Role ---
     else if (loginRole === 'FLEET') {
+        if (menus.dashboard) menus.dashboard.style.display = 'block';
         if (menus.fuel) menus.fuel.style.display = 'block';
         if (menus.maintenance) menus.maintenance.style.display = 'block';
         if (menus.inspection) menus.inspection.style.display = 'block';
     }
 
-    // --- WAREHOUSE Role (Interview လုံးဝမပါစေရပါ) ---
+    // --- WAREHOUSE Role (Warehouse နှင့်ဆိုင်သည်များသာပြမည်၊ Interview လုံးဝမပါရပါ) ---
     else if (loginRole === 'WAREHOUSE') {
-         if (menus.warehouse) menus.warehouse.style.display = 'block';
+        if (menus.dashboard) menus.dashboard.style.display = 'block';
+        if (menus.warehouse) menus.warehouse.style.display = 'block';
         if (menus.stock) menus.stock.style.display = 'block';
         if (menus.inventory) menus.inventory.style.display = 'block';
     }
@@ -75,5 +78,5 @@ function logout() {
     window.location.href = 'index.html';
 }
 
-// Page Load ဖြစ်သည်နှင့် တစ်ပြိုင်နက် အလိုအလျောက် စစ်ဆေး అమలుမည်
+// Page Load ဖြစ်သည်နှင့် တစ်ပြိုင်နက် အလိုအလျောက် စစ်ဆေးမည်
 window.addEventListener('DOMContentLoaded', applyRoleAccess);
