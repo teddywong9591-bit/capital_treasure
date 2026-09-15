@@ -17,69 +17,93 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            padding: 16px;
         }
         .login-card {
             background-color: #ffffff;
             width: 100%;
             max-width: 380px;
             padding: 32px 24px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             text-align: center;
+            position: relative;
         }
         .icon-box {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             background-color: #0066ff;
-            border-radius: 10px;
+            border-radius: 12px;
             display: inline-flex;
             justify-content: center;
             align-items: center;
             margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
         }
         .icon-box svg {
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             fill: #ffffff;
         }
         h2 {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
-            color: #1e293b;
+            color: #0f172a;
             margin-bottom: 4px;
         }
         .subtitle {
-            font-size: 12px;
+            font-size: 13px;
             color: #64748b;
             margin-bottom: 24px;
         }
         .form-group {
             text-align: left;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
+            position: relative;
         }
         label {
             display: block;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
             color: #64748b;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 6px;
         }
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
         input {
             width: 100%;
-            padding: 12px;
+            padding: 12px 14px;
             background-color: #f8fafc;
             border: 1px solid #e2e8f0;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 14px;
-            color: #334155;
+            color: #1e293b;
             outline: none;
-            transition: border-color 0.2s;
+            transition: all 0.2s ease;
         }
         input:focus {
             border-color: #0066ff;
             background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+        }
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+        }
+        .toggle-password:hover {
+            color: #475569;
         }
         .btn-submit {
             width: 100%;
@@ -87,21 +111,105 @@
             background-color: #0066ff;
             color: #ffffff;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             margin-top: 8px;
             transition: background-color 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
         }
         .btn-submit:hover {
             background-color: #0052cc;
         }
+        .btn-submit:disabled {
+            background-color: #94a3b8;
+            cursor: not-allowed;
+        }
         .error-message {
             color: #ef4444;
+            background-color: #fef2f2;
+            border: 1px solid #fee2e2;
+            padding: 10px;
+            border-radius: 6px;
             font-size: 12px;
-            margin-top: 12px;
+            margin-top: 14px;
             display: none;
+        }
+
+        /* Custom Success Modal UI */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 100;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-card {
+            background: #ffffff;
+            padding: 28px 24px;
+            border-radius: 16px;
+            text-align: center;
+            width: 90%;
+            max-width: 320px;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .modal-overlay.active .modal-card {
+            transform: scale(1);
+        }
+        .success-icon {
+            width: 56px;
+            height: 56px;
+            background-color: #dcfce7;
+            color: #16a34a;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+        .modal-desc {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+        .btn-modal {
+            width: 100%;
+            padding: 10px;
+            background-color: #16a34a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .btn-modal:hover {
+            background-color: #15803d;
         }
     </style>
 </head>
@@ -120,38 +228,96 @@
         <form id="loginForm">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" placeholder="Enter username" required autocomplete="off">
+                <div class="input-wrapper">
+                    <input type="text" id="username" placeholder="Enter username" required autocomplete="off">
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter password" required>
+                <div class="input-wrapper">
+                    <input type="password" id="password" placeholder="Enter password" required>
+                    <button type="button" class="toggle-password" id="togglePassword">
+                        <svg id="eyeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
             </div>
 
-            <button type="submit" class="btn-submit">Sign In</button>
+            <button type="submit" class="btn-submit" id="submitBtn">
+                <span id="btnText">Sign In</span>
+            </button>
+            
             <div id="errorMsg" class="error-message">Username သို့မဟုတ် Password မှားယွင်းနေပါသည်။</div>
         </form>
     </div>
 
+    <!-- Custom Success Modal UI -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-card">
+            <div class="success-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <div class="modal-title">Sign In အောင်မြင်ပါသည်</div>
+            <div class="modal-desc">စနစ်အတွင်းသို့ အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။</div>
+            <button class="btn-modal" onclick="closeModal()">ဆက်လက်လုပ်ဆောင်မည်</button>
+        </div>
+    </div>
+
     <script>
+        // Password Visibility Toggle
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.style.color = type === 'text' ? '#0066ff' : '#94a3b8';
+        });
+
+        // Login Logic
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
             const errorMsg = document.getElementById('errorMsg');
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
 
-            if (username === 'admin' && password === 'admin123') {
-                errorMsg.style.display = 'none';
-                alert('Login အောင်မြင်ပါသည်။');
-                // dashboard.html သို့ ရွှေ့လိုပါက အောက်ပါ line ကို သုံးနိုင်ပါသည်
-                // window.location.href = 'dashboard.html';
-            } else {
-                errorMsg.style.display = 'block';
-            }
+            // UI Loading State
+            submitBtn.disabled = true;
+            btnText.innerText = "Authenticating...";
+
+            setTimeout(() => {
+                if (username === 'admin' && password === 'admin123') {
+                    errorMsg.style.display = 'none';
+                    
+                    // Save Session
+                    localStorage.setItem('isAuthenticated', 'true');
+                    localStorage.setItem('userRole', 'admin');
+
+                    // Show Custom UI Modal
+                    document.getElementById('successModal').classList.add('active');
+                } else {
+                    errorMsg.style.display = 'block';
+                }
+
+                submitBtn.disabled = false;
+                btnText.innerText = "Sign In";
+            }, 600);
         });
+
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+            // Dashboard Page ရှိပါက အောက်ပါ Line ဖြင့် Redirect ပြုလုပ်နိုင်ပါသည်
+            // window.location.href = 'dashboard.html';
+        }
     </script>
 
 </body>
 </html>
-
