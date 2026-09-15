@@ -81,10 +81,17 @@
                 <li class="nav-item"><a href="leaves.html"><i data-lucide="calendar"></i> Leave Requests</a></li>
                 <li class="nav-item"><a href="manpower.html"><i data-lucide="user-plus"></i> Manpower Plan</a></li>
                 <li class="nav-item"><a href="interview-tracking.html"><i data-lucide="user-check"></i> Interview Tracking</a></li>
-                <li class="nav-item active"><a href="usermanage.html"><i data-lucide="users"></i> User & Role Control</a></li>
             </div>
+            
+            <!-- User & Role Control Link (Admin Only) -->
+            <div class="menu-group" id="group-user-control">
+                <li class="nav-item active" id="user-control-link">
+                    <a href="usermanage.html"><i data-lucide="users"></i> User & Role Control</a>
+                </li>
+            </div>
+
             <li class="nav-divider"></li>
-            <li class="nav-item"><a href="index.html" style="color: #ef4444;"><i data-lucide="log-out"></i> Log Out</a></li>
+            <li class="nav-item"><a href="index.html" onclick="logout()" style="color: #ef4444;"><i data-lucide="log-out"></i> Log Out</a></li>
         </ul>
     </aside>
 
@@ -144,7 +151,7 @@
                         </tr>
                     </thead>
                     <tbody id="userTableBody">
-                        <!-- Dynamic Data will render here -->
+                        <!-- Dynamic Data -->
                     </tbody>
                 </table>
             </div>
@@ -154,7 +161,6 @@
     <script>
         lucide.createIcons();
 
-        // Default Sample Users
         const initialUsers = [
             { id: 1, name: "Admin User", dept: "IT System", role: "ADMIN", status: "Active" },
             { id: 2, name: "Kyaw Swar", dept: "Logistics & Fleet", role: "FLEET", status: "Active" },
@@ -206,15 +212,7 @@
             const role = document.getElementById('userRole').value;
 
             const users = getUsers();
-            const newUser = {
-                id: Date.now(),
-                name: name,
-                dept: dept,
-                role: role,
-                status: 'Active'
-            };
-
-            users.push(newUser);
+            users.push({ id: Date.now(), name, dept, role, status: 'Active' });
             saveUsers(users);
             document.getElementById('addUserForm').reset();
         }
@@ -236,29 +234,37 @@
             }
         }
 
-        function applyRoleAccess(role) {
+        function applyRoleAccess(activeRole, loginRole) {
             const groups = {
                 fleet: document.getElementById('group-fleet'),
                 warehouse: document.getElementById('group-warehouse'),
                 admin: document.getElementById('group-admin'),
-                hr: document.getElementById('group-hr')
+                hr: document.getElementById('group-hr'),
+                userControl: document.getElementById('group-user-control')
             };
             const roleDisplay = document.getElementById('role-display');
 
+            // All Hidden Initially
             Object.values(groups).forEach(g => { if(g) g.style.display = 'none'; });
 
-            if (role === 'ADMIN') {
+            // Render Role-based Items
+            if (activeRole === 'ADMIN') {
                 Object.values(groups).forEach(g => { if(g) g.style.display = 'block'; });
                 if(roleDisplay) roleDisplay.innerText = 'System Admin (Full)';
-            } else if (role === 'FLEET') {
+            } else if (activeRole === 'FLEET') {
                 if(groups.fleet) groups.fleet.style.display = 'block';
                 if(roleDisplay) roleDisplay.innerText = 'Fleet Manager';
-            } else if (role === 'WAREHOUSE') {
+            } else if (activeRole === 'WAREHOUSE') {
                 if(groups.warehouse) groups.warehouse.style.display = 'block';
                 if(roleDisplay) roleDisplay.innerText = 'Warehouse Staff';
-            } else if (role === 'HR') {
+            } else if (activeRole === 'HR') {
                 if(groups.hr) groups.hr.style.display = 'block';
                 if(roleDisplay) roleDisplay.innerText = 'HR Manager';
+            }
+
+            // User & Role Control Menu -> ADMIN Only
+            if (groups.userControl) {
+                groups.userControl.style.display = (loginRole === 'ADMIN') ? 'block' : 'none';
             }
         }
 
@@ -267,26 +273,34 @@
             if (loginRole !== 'ADMIN') return;
 
             localStorage.setItem('user_role', role);
-            applyRoleAccess(role);
+            applyRoleAccess(role, loginRole);
+        }
+
+        function logout() {
+            localStorage.clear();
         }
 
         window.onload = function() {
-    const loginRole = localStorage.getItem('login_role') || 'ADMIN';
-    const currentRole = localStorage.getItem('user_role') || loginRole;
+            const loginRole = localStorage.getItem('login_role') || 'ADMIN';
+            const currentRole = localStorage.getItem('user_role') || loginRole;
+            const roleSelector = document.getElementById('roleSelector');
 
-    // ADMIN မဟုတ်ပါက မိမိ Role ၏ ပထမဆုံး Page သို့ ပြန်မောင်းထုတ်မည်
-    if (loginRole !== 'ADMIN') {
-        if (loginRole === 'FLEET') window.location.href = 'refilling.html';
-        else if (loginRole === 'WAREHOUSE') window.location.href = 'warehouse.html';
-        else if (loginRole === 'HR') window.location.href = 'leaves.html';
-        return;
-    }
+            // Security Check: Non-admin users cannot stay on usermanage.html
+            if (loginRole !== 'ADMIN') {
+                if (loginRole === 'FLEET') window.location.href = 'refilling.html';
+                else if (loginRole === 'WAREHOUSE') window.location.href = 'warehouse.html';
+                else if (loginRole === 'HR') window.location.href = 'leaves.html';
+                return;
+            }
 
-    // Admin အတွက် Function များ ပုံမှန်အတိုင်း အလုပ်လုပ်မည်
-    applyRoleAccess(currentRole, loginRole);
-    renderUsersTable();
-};
+            if (roleSelector) {
+                roleSelector.style.display = 'inline-block';
+                roleSelector.value = currentRole;
+            }
 
+            applyRoleAccess(currentRole, loginRole);
+            renderUsersTable();
+        };
     </script>
 </body>
 </html>
