@@ -9,13 +9,14 @@
         :root { --bg-primary: #0f172a; --bg-card: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --accent: #2563eb; --border: #e2e8f0; --radius: 12px; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background-color: #f8fafc; color: var(--text-main); display: flex; min-height: 100vh; }
-        .sidebar { width: 260px; background-color: var(--bg-primary); color: #fff; display: flex; flex-direction: column; position: fixed; height: 100vh; }
+        .sidebar { width: 260px; background-color: var(--bg-primary); color: #fff; display: flex; flex-direction: column; position: fixed; height: 100vh; overflow-y: auto; }
         .brand { padding: 24px; display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .brand i { color: var(--accent); }
-        .nav-list { list-style: none; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
-        .nav-item a { width: 100%; padding: 12px 16px; border-radius: var(--radius); color: #94a3b8; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .nav-list { list-style: none; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; }
+        .nav-item a { width: 100%; padding: 10px 14px; border-radius: var(--radius); color: #94a3b8; font-size: 13.5px; font-weight: 500; display: flex; align-items: center; gap: 12px; text-decoration: none; }
         .nav-item a:hover, .nav-item.active a { background-color: rgba(255, 255, 255, 0.1); color: #fff; }
         .nav-item.active a { background-color: var(--accent); }
+        .nav-divider { height: 1px; background-color: rgba(255, 255, 255, 0.1); margin: 8px 0; }
         .main-wrapper { margin-left: 260px; flex: 1; display: flex; flex-direction: column; }
         header { background-color: var(--bg-card); padding: 16px 32px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .content-body { padding: 32px; }
@@ -35,9 +36,21 @@
             <li class="nav-item"><a href="matainment.html"><i data-lucide="wrench"></i> Maintenance</a></li>
             <li class="nav-item"><a href="Inspection.html"><i data-lucide="clipboard-check"></i> Inspection</a></li>
             <li class="nav-item"><a href="user manage.html"><i data-lucide="users"></i> User Manage</a></li>
-            <li class="nav-item" style="margin-top: auto;"><a href="logout.html"><i data-lucide="log-out"></i> Log Out</a></li>
+            
+            <!-- ထပ်တိုးထားသော ဖိုင်အသစ်များ -->
+            <li class="nav-item"><a href="stationary.html"><i data-lucide="pen-tool"></i> Stationery</a></li>
+            <li class="nav-item"><a href="fixaccess.html"><i data-lucide="box"></i> Fixed Assets</a></li>
+            <li class="nav-item"><a href="leaves.html"><i data-lucide="calendar"></i> Leave Requests</a></li>
+            <li class="nav-item"><a href="meetingnote.html"><i data-lucide="file-text"></i> Meeting Notes</a></li>
+            <li class="nav-item"><a href="manpower.html"><i data-lucide="user-plus"></i> Manpower Plan</a></li>
+            <li class="nav-item"><a href="interview-tracking.html"><i data-lucide="user-check"></i> Interview Tracking</a></li>
+            
+            <li class="nav-divider"></li>
+            <!-- Log Out Button ကို အောက်ဆုံးသို့ ကန်မထုတ်ဘဲ မီနူးများ၏ အောက်တွင် တိုက်ရိုက်ပြထားသည် -->
+            <li class="nav-item"><a href="logout.html" style="color: #ef4444;"><i data-lucide="log-out"></i> Log Out</a></li>
         </ul>
     </aside>
+
     <div class="main-wrapper">
         <header><h1 style="font-size: 20px;">Dashboard</h1></header>
         <div class="content-body">
