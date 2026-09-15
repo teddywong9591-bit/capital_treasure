@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Tracking - Capital Treasure</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root { --bg-primary: #0f172a; --bg-card: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --accent: #2563eb; --border: #e2e8f0; --radius: 12px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f8fafc; color: var(--text-main); display: flex; min-height: 100vh; }
+        .sidebar { width: 260px; background-color: var(--bg-primary); color: #fff; display: flex; flex-direction: column; position: fixed; height: 100vh; }
+        .brand { padding: 24px; display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .brand i { color: var(--accent); }
+        .nav-list { list-style: none; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+        .nav-item a { width: 100%; padding: 12px 16px; border-radius: var(--radius); color: #94a3b8; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .nav-item a:hover, .nav-item.active a { background-color: rgba(255, 255, 255, 0.1); color: #fff; }
+        .nav-item.active a { background-color: var(--accent); }
+        .main-wrapper { margin-left: 260px; flex: 1; display: flex; flex-direction: column; }
+        header { background-color: var(--bg-card); padding: 16px 32px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .content-body { padding: 32px; display: flex; flex-direction: column; gap: 24px; }
+        
+        /* Stats Dashboard */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+        .stat-card { background: var(--bg-card); padding: 16px 20px; border-radius: var(--radius); border: 1px solid var(--border); }
+        .stat-val { font-size: 22px; font-weight: 700; margin-top: 4px; }
+        .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+        
+        /* Form & Table Section */
+        .form-card { background: var(--bg-card); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group.full { grid-column: 1 / -1; }
+        label { font-size: 12px; font-weight: 600; color: #334155; }
+        input, select, textarea { padding: 10px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 13px; }
+        .btn-primary { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
+        .table-card { background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background: #f8fafc; padding: 14px 16px; font-size: 12px; color: var(--text-muted); font-weight: 600; }
+        td { padding: 14px 16px; border-top: 1px solid var(--border); font-size: 13px; }
+        
+        /* Status Badges */
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; }
+        .badge-pending { background: #fef3c7; color: #d97706; }
+        .badge-passed { background: #d1fae5; color: #059669; }
+        .badge-failed { background: #fee2e2; color: #dc2626; }
+        .badge-absent { background: #f3f4f6; color: #4b5563; }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand"><i data-lucide="shield-check"></i><span>Capital Treasure</span></div>
+        <ul class="nav-list">
+            <li class="nav-item"><a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+            <li class="nav-item"><a href="manpower.html"><i data-lucide="users"></i> Manpower Plan</a></li>
+            <li class="nav-item active"><a href="interview-tracking.html"><i data-lucide="user-check"></i> Interview Tracking</a></li>
+            <li class="nav-item"><a href="leaves.html"><i data-lucide="calendar"></i> Leave Requests</a></li>
+            <li class="nav-item" style="margin-top: auto;"><a href="logout.html"><i data-lucide="log-out"></i> Log Out</a></li>
+        </ul>
+    </aside>
+
+    <div class="main-wrapper">
+        <header><h1 style="font-size: 20px;">Interview Tracking & Management</h1></header>
+        
+        <div class="content-body">
+            <!-- Stats Row -->
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-label">Total Called</div><div class="stat-val">12</div></div>
+                <div class="stat-card"><div class="stat-label">Passed (အောင်)</div><div class="stat-val" style="color: #059669;">4</div></div>
+                <div class="stat-card"><div class="stat-label">Failed (မအောင်)</div><div class="stat-val" style="color: #dc2626;">3</div></div>
+                <div class="stat-card"><div class="stat-label">Absent (မလာဖြေ)</div><div class="stat-val" style="color: #4b5563;">2</div></div>
+                <div class="stat-card"><div class="stat-label">Pending Review</div><div class="stat-val" style="color: #d97706;">3</div></div>
+            </div>
+
+            <!-- Registration Form -->
+            <div class="form-card">
+                <h3 style="font-size: 15px; margin-bottom: 16px;">Add / Update Candidate Entry</h3>
+                <form class="form-grid" onsubmit="event.preventDefault(); alert('Candidate Record Saved!');">
+                    <div class="form-group"><label>Candidate Name</label><input type="text" placeholder="e.g. Aung Aung" required></div>
+                    <div class="form-group"><label>Applied Position</label><input type="text" placeholder="e.g. Driver / Operation Officer" required></div>
+                    <div class="form-group"><label>Phone Number</label><input type="text" placeholder="09xxxxxxxxx" required></div>
+                    <div class="form-group"><label>Interview Date & Time</label><input type="datetime-local" required></div>
+                    <div class="form-group">
+                        <label>Attendance Status</label>
+                        <select>
+                            <option value="pending">Pending (စောင့်ဆိုင်းဆဲ)</option>
+                            <option value="attended">Attended (လာရောက်ဖြေဆို)</option>
+                            <option value="absent">Absent / Cancelled (မလာရောက်ပါ)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Interview Result</label>
+                        <select>
+                            <option value="pending">Pending Evaluation</option>
+                            <option value="passed">Passed (အောင်မြင်)</option>
+                            <option value="failed">Failed (မအောင်မြင်)</option>
+                            <option value="onhold">On-Hold / Reserve</option>
+                        </select>
+                    </div>
+                    <div class="form-group full"><label>Interviewer Notes & Feedback</label><textarea rows="2" placeholder="Write interview evaluation comments..."></textarea></div>
+                    <div class="form-group full"><button class="btn-primary">Save Candidate Record</button></div>
+                </form>
+            </div>
+
+            <!-- Candidate List Table -->
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Candidate</th>
+                            <th>Position</th>
+                            <th>Phone</th>
+                            <th>Interview Date</th>
+                            <th>Attendance</th>
+                            <th>Result Status</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>U Kyaw Swar</strong></td>
+                            <td>Senior Driver</td>
+                            <td>09-250123456</td>
+                            <td>15 Sep 2026 (10:00 AM)</td>
+                            <td>Attended</td>
+                            <td><span class="badge badge-passed">Passed</span></td>
+                            <td>Good driving experience, suitable for YGN route.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mg Thura</strong></td>
+                            <td>Admin Assistant</td>
+                            <td>09-450987654</td>
+                            <td>15 Sep 2026 (02:00 PM)</td>
+                            <td>Attended</td>
+                            <td><span class="badge badge-failed">Failed</span></td>
+                            <td>Lack of required Excel skills.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ma Win Win</strong></td>
+                            <td>Accountant</td>
+                            <td>09-790112233</td>
+                            <td>16 Sep 2026 (11:00 AM)</td>
+                            <td>Absent</td>
+                            <td><span class="badge badge-absent">No Show</span></td>
+                            <td>Unreachable via phone call.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>U Ko Ko</strong></td>
+                            <td>Fleet Supervisor</td>
+                            <td>09-970554433</td>
+                            <td>16 Sep 2026 (03:00 PM)</td>
+                            <td>Pending</td>
+                            <td><span class="badge badge-pending">Pending</span></td>
+                            <td>Scheduled for tomorrow.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
