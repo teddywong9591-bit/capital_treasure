@@ -1,5 +1,5 @@
 .powered-footer {
-    margin-top: 46px;
+    margin-top: 32px;
     padding-top: 12px;
     border-top: 1px solid #f1f5f9;
     display: flex;
@@ -8,43 +8,40 @@
 }
 
 /* နာမည်ကို ဘယ်ဘက်တွင် ပြရန် */
-..powered-right {
+.powered-right {
     text-align: left;
-    transform: scale(0.75); /* စာသားကို ၇၅ ရာခိုင်နှုန်း ပိုသေးသွားအောင် 縮စရာ မလိုဘဲ ညှိခြင်း */
-    transform-origin: left center;
 }
 .powered-title {
-    font-size: 10px;
+    font-size: 8px;
     color: #94a3b8;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    font-weight: 500;
+    font-weight: 600;
 }
 .developer-name {
     font-size: 11px;
-    font-weight: 500;
-    color: #94a3b8;
+    font-weight: 600;
+    color: #64748b;
     text-decoration: none;
     display: block;
 }
-
 
 /* Icon များကို ညာဘက်တွင် ပြရန် */
 .social-icons-grid {
     display: flex;
     align-items: center;
-    gap: 8px;
-    justify-content: flex-end; /* ညာဘက်သို့ ညှိရန် */
+    gap: 6px;
+    justify-content: flex-end;
 }
 
 .social-icon-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
-    min-width: 34px;
-    min-height: 34px;
+    width: 28px; /* Icon များကို card နှင့် လိုက်ဖက်အောင် အနည်းငယ် သေးငယ်စေသည် */
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
     border-radius: 50%;
     background-color: #f8fafc;
     border: 1px solid #e2e8f0;
@@ -53,6 +50,8 @@
 }
 
 .social-icon-btn svg {
+    width: 14px;
+    height: 14px;
     fill: currentColor;
 }
 
