@@ -276,11 +276,12 @@
             const roleSelector = document.getElementById('roleSelector');
 
             if (roleSelector) {
-                roleSelector.value = currentRole;
                 if (loginRole !== 'ADMIN') {
-                    roleSelector.disabled = true;
-                    roleSelector.style.opacity = '0.6';
-                    roleSelector.style.cursor = 'not-allowed';
+                    // Mobile Picker UI ကို တားဆီးရန် မဟုတ်ပါက Dropdown ကို လုံးဝ ပျောက်သွားအောင်လုပ်မည်
+                    roleSelector.style.display = 'none';
+                } else {
+                    roleSelector.style.display = 'inline-block';
+                    roleSelector.value = currentRole;
                 }
             }
 
