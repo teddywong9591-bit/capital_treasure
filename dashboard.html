@@ -14,24 +14,17 @@
         .brand { padding: 20px 24px; display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .brand i { color: var(--accent); }
         
-        /* Role Indicator Badge */
         .user-role-badge { margin: 12px 16px 4px 16px; padding: 8px 12px; background: rgba(37, 99, 235, 0.2); border: 1px solid rgba(37, 99, 235, 0.4); border-radius: 8px; font-size: 12px; color: #93c5fd; display: flex; align-items: center; justify-content: space-between; }
-        
         .nav-list { list-style: none; padding: 12px; display: flex; flex-direction: column; gap: 4px; }
-        
-        /* Group Title Header */
         .group-title { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #64748b; padding: 12px 12px 4px 12px; letter-spacing: 0.5px; }
-        
         .nav-item a { width: 100%; padding: 9px 12px; border-radius: 8px; color: #94a3b8; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 10px; text-decoration: none; }
         .nav-item a:hover, .nav-item.active a { background-color: rgba(255, 255, 255, 0.1); color: #fff; }
         .nav-item.active a { background-color: var(--accent); }
-        
         .nav-divider { height: 1px; background-color: rgba(255, 255, 255, 0.1); margin: 8px 0; }
         
         .main-wrapper { margin-left: 260px; flex: 1; display: flex; flex-direction: column; }
         header { background-color: var(--bg-card); padding: 16px 32px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .content-body { padding: 32px; }
-        
         .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
         .stat-card { background: var(--bg-card); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .stat-val { font-size: 24px; font-weight: 700; margin-top: 4px; }
@@ -43,16 +36,13 @@
     <aside class="sidebar">
         <div class="brand"><i data-lucide="shield-check"></i><span>Capital Treasure</span></div>
         
-        <!-- Current Role Badge -->
         <div class="user-role-badge">
-            <span>Role: <strong id="role-display">HR Admin (Full Access)</strong></span>
+            <span>Role: <strong id="role-display">System Admin (Full)</strong></span>
             <i data-lucide="user-cog" style="width: 14px; height: 14px;"></i>
         </div>
 
         <ul class="nav-list">
-            <!-- Global Dashboard -->
-            <li class="nav-item active"><a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Overview Dashboard</a></li>
-            
+            <li class="nav-item active"><a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
             <li class="nav-divider"></li>
 
             <!-- GROUP 1: Fleet Management -->
@@ -63,7 +53,15 @@
                 <li class="nav-item"><a href="Inspection.html"><i data-lucide="clipboard-check"></i> Inspection</a></li>
             </div>
 
-            <!-- GROUP 2: Admin Operations -->
+            <!-- GROUP 2: Warehouse Operations -->
+            <div class="menu-group" id="group-warehouse">
+                <div class="group-title">Warehouse & Inventory</div>
+                <li class="nav-item"><a href="warehouse.html"><i data-lucide="warehouse"></i> Warehouse Overview</a></li>
+                <li class="nav-item"><a href="stock.html"><i data-lucide="boxes"></i> Stock In/Out</a></li>
+                <li class="nav-item"><a href="inventory.html"><i data-lucide="list-checks"></i> Inventory List</a></li>
+            </div>
+
+            <!-- GROUP 3: Admin Operations -->
             <div class="menu-group" id="group-admin">
                 <div class="group-title">Admin & Assets</div>
                 <li class="nav-item"><a href="stationary.html"><i data-lucide="pen-tool"></i> Stationery Requests</a></li>
@@ -71,7 +69,7 @@
                 <li class="nav-item"><a href="meetingnote.html"><i data-lucide="file-text"></i> Meeting Notes</a></li>
             </div>
 
-            <!-- GROUP 3: HR & People Management -->
+            <!-- GROUP 4: HR & People Management -->
             <div class="menu-group" id="group-hr">
                 <div class="group-title">HR & Recruitment</div>
                 <li class="nav-item"><a href="leaves.html"><i data-lucide="calendar"></i> Leave Requests</a></li>
@@ -87,12 +85,13 @@
 
     <div class="main-wrapper">
         <header>
-            <h1 style="font-size: 20px;">Main Overview</h1>
-            <!-- Role Switcher Demo (Test ပြုလုပ်ရန်) -->
-            <select id="roleSelector" onchange="switchRole(this.value)" style="padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border);">
-                <option value="HR">View as HR (Full Access)</option>
+            <h1 style="font-size: 20px;">System Overview</h1>
+            <!-- Role Selector (Testing & Access Demo) -->
+            <select id="roleSelector" onchange="changeRole(this.value)" style="padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border);">
+                <option value="ADMIN">View as System Admin (Full Access)</option>
                 <option value="FLEET">View as Fleet Manager</option>
-                <option value="ADMIN">View as Admin Staff</option>
+                <option value="WAREHOUSE">View as Warehouse Manager</option>
+                <option value="HR">View as HR Manager</option>
             </select>
         </header>
 
@@ -103,12 +102,12 @@
                     <div class="stat-icon"><i data-lucide="car"></i></div>
                 </div>
                 <div class="stat-card">
-                    <div><div class="stat-label">Pending Leave Requests</div><div class="stat-val">8</div></div>
-                    <div class="stat-icon"><i data-lucide="calendar"></i></div>
+                    <div><div class="stat-label">Total Warehouse Items</div><div class="stat-val">1,240</div></div>
+                    <div class="stat-icon"><i data-lucide="boxes"></i></div>
                 </div>
                 <div class="stat-card">
-                    <div><div class="stat-label">Interviews Scheduled</div><div class="stat-val">12</div></div>
-                    <div class="stat-icon"><i data-lucide="user-check"></i></div>
+                    <div><div class="stat-label">Pending Leaves</div><div class="stat-val">8</div></div>
+                    <div class="stat-icon"><i data-lucide="calendar"></i></div>
                 </div>
             </div>
         </div>
@@ -117,31 +116,46 @@
     <script>
         lucide.createIcons();
 
-        // Access Control Logic
-        function switchRole(role) {
-            const fleetGroup = document.getElementById('group-fleet');
-            const adminGroup = document.getElementById('group-admin');
-            const hrGroup = document.getElementById('group-hr');
+        // System Access Control Script
+        function applyRoleAccess(role) {
+            const groups = {
+                fleet: document.getElementById('group-fleet'),
+                warehouse: document.getElementById('group-warehouse'),
+                admin: document.getElementById('group-admin'),
+                hr: document.getElementById('group-hr')
+            };
             const roleDisplay = document.getElementById('role-display');
 
-            if (role === 'HR') {
-                // HR ထိန်းချုပ်ခွင့်: HTML အကုန်လုံးကို မြင်တွေ့နိုင်သည်
-                fleetGroup.style.display = 'block';
-                adminGroup.style.display = 'block';
-                hrGroup.style.display = 'block';
-                roleDisplay.innerText = 'HR Admin (Full Access)';
+            // Reset Display
+            Object.values(groups).forEach(g => g.style.display = 'none');
+
+            if (role === 'ADMIN') {
+                // Admin (Full Access): HTML အကုန်လုံးကို အလွယ်တကူ ဝင်ထွက်နိုင်ပါသည်
+                Object.values(groups).forEach(g => g.style.display = 'block');
+                roleDisplay.innerText = 'System Admin (Full)';
             } else if (role === 'FLEET') {
-                fleetGroup.style.display = 'block';
-                adminGroup.style.display = 'none';
-                hrGroup.style.display = 'none';
+                groups.fleet.style.display = 'block';
                 roleDisplay.innerText = 'Fleet Manager';
-            } else if (role === 'ADMIN') {
-                fleetGroup.style.display = 'none';
-                adminGroup.style.display = 'block';
-                hrGroup.style.display = 'none';
-                roleDisplay.innerText = 'Admin Staff';
+            } else if (role === 'WAREHOUSE') {
+                groups.warehouse.style.display = 'block';
+                roleDisplay.innerText = 'Warehouse Staff';
+            } else if (role === 'HR') {
+                groups.hr.style.display = 'block';
+                roleDisplay.innerText = 'HR Manager';
             }
         }
+
+        function changeRole(role) {
+            localStorage.setItem('user_role', role);
+            applyRoleAccess(role);
+        }
+
+        // Page load ချိန်တွင် ယခင် ရွေးထားသော Role ကို ပြန်လည်မှတ်မိစေရန်
+        window.onload = function() {
+            const savedRole = localStorage.getItem('user_role') || 'ADMIN';
+            document.getElementById('roleSelector').value = savedRole;
+            applyRoleAccess(savedRole);
+        };
     </script>
 </body>
 </html>

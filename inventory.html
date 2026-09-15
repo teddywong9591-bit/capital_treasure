@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory List - Capital Treasure</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root { --bg-primary: #0f172a; --bg-card: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --accent: #2563eb; --border: #e2e8f0; --radius: 12px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f8fafc; color: var(--text-main); display: flex; min-height: 100vh; }
+        .sidebar { width: 260px; background-color: var(--bg-primary); color: #fff; display: flex; flex-direction: column; position: fixed; height: 100vh; }
+        .brand { padding: 20px 24px; display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .brand i { color: var(--accent); }
+        .nav-list { list-style: none; padding: 12px; display: flex; flex-direction: column; gap: 4px; }
+        .nav-item a { width: 100%; padding: 9px 12px; border-radius: 8px; color: #94a3b8; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .nav-item a:hover, .nav-item.active a { background-color: rgba(255, 255, 255, 0.1); color: #fff; }
+        .nav-item.active a { background-color: var(--accent); }
+        .main-wrapper { margin-left: 260px; flex: 1; display: flex; flex-direction: column; }
+        header { background-color: var(--bg-card); padding: 16px 32px; border-bottom: 1px solid var(--border); }
+        .content-body { padding: 32px; }
+        .table-card { background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background: #f8fafc; padding: 14px 16px; font-size: 12px; color: var(--text-muted); font-weight: 600; }
+        td { padding: 14px 16px; border-top: 1px solid var(--border); font-size: 13px; }
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        .badge-ok { background: #d1fae5; color: #059669; }
+        .badge-low { background: #fee2e2; color: #dc2626; }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand"><i data-lucide="shield-check"></i><span>Capital Treasure</span></div>
+        <ul class="nav-list">
+            <li class="nav-item"><a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+            <li class="nav-item"><a href="warehouse.html"><i data-lucide="warehouse"></i> Warehouse Overview</a></li>
+            <li class="nav-item"><a href="stock.html"><i data-lucide="boxes"></i> Stock In/Out</a></li>
+            <li class="nav-item active"><a href="inventory.html"><i data-lucide="list-checks"></i> Inventory List</a></li>
+            <li class="nav-item" style="margin-top: 20px;"><a href="logout.html" style="color: #ef4444;"><i data-lucide="log-out"></i> Log Out</a></li>
+        </ul>
+    </aside>
+    <div class="main-wrapper">
+        <header><h1 style="font-size: 20px;">Current Inventory Stock</h1></header>
+        <div class="content-body">
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>SKU / Code</th>
+                            <th>Item Name</th>
+                            <th>Category</th>
+                            <th>In Stock Qty</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>SKU-001</td><td>Engine Oil (20L)</td><td>Spare Parts</td><td>45 Units</td><td>Main YGN</td><td><span class="badge badge-ok">In Stock</span></td></tr>
+                        <tr><td>SKU-002</td><td>Truck Tires 12R22.5</td><td>Tires</td><td>4 Units</td><td>Main YGN</td><td><span class="badge badge-low">Low Stock</span></td></tr>
+                        <tr><td>SKU-003</td><td>A4 Paper Boxes</td><td>Stationery</td><td>120 Boxes</td><td>MDY Hub</td><td><span class="badge badge-ok">In Stock</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
