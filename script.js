@@ -47,12 +47,24 @@ function applyRoleAccess() {
         if (menus.inventory) menus.inventory.style.display = 'block';
     }
 
-    // --- ADMIN Role --- (Stationery Request, Fixed Access, Meeting Note သာ ပြမည်)
+    // --- ADMIN Role (Full Access) --- Menu အားလုံးကို ပြမည်
     else if (loginRole === 'ADMIN') {
-        if (menus.stationery) menus.stationery.style.display = 'block';
-        if (menus.fixedAssets) menus.fixedAssets.style.display = 'block';
-        if (menus.meeting) menus.meeting.style.display = 'block';
+        Object.values(menus).forEach(menu => {
+            if (menu) menu.style.display = 'block';
+        });
     }
+}
+
+// Login စစ်ဆေးသည့် Function (abc123 / abc1234 အတွက် အထူးထည့်သွင်းပေးခြင်း)
+function loginUser(username, password) {
+    if (username === 'abc123' && password === 'abc1234') {
+        localStorage.setItem('login_role', 'ADMIN');
+        localStorage.setItem('user_role', 'ADMIN');
+        localStorage.setItem('logged_in_user', 'ABC Admin');
+        window.location.href = 'dashboard.html';
+        return true;
+    }
+    return false;
 }
 
 // Log Out ပြုလုပ်သည့် Function
