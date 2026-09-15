@@ -1,59 +1,61 @@
-/* Powered By Professional Footer Styling */
 .powered-footer {
-    margin-top: 24px;
-    padding-top: 16px;
+    margin-top: 46px;
+    padding-top: 12px;
     border-top: 1px solid #f1f5f9;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
+/* နာမည်ကို ဘယ်ဘက်တွင် ပြရန် */
+..powered-right {
+    text-align: left;
+    transform: scale(0.75); /* စာသားကို ၇၅ ရာခိုင်နှုန်း ပိုသေးသွားအောင် 縮စရာ မလိုဘဲ ညှိခြင်း */
+    transform-origin: left center;
+}
 .powered-title {
-    font-size: 11px;
+    font-size: 10px;
     color: #94a3b8;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 8px;
-    font-weight: 600;
+    font-weight: 500;
 }
-
 .developer-name {
-    font-size: 13px;
-    font-weight: 700;
-    color: #1e293b;
+    font-size: 11px;
+    font-weight: 500;
+    color: #94a3b8;
     text-decoration: none;
-    display: inline-block;
-    margin-bottom: 12px;
+    display: block;
 }
 
-.developer-name:hover {
-    color: #2563eb;
-}
 
+/* Icon များကို ညာဘက်တွင် ပြရန် */
 .social-icons-grid {
     display: flex;
-    justify-content: center;
-    gap: 10px;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end; /* ညာဘက်သို့ ညှိရန် */
 }
 
 .social-icon-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
     border-radius: 50%;
     background-color: #f8fafc;
     border: 1px solid #e2e8f0;
     color: #64748b;
     text-decoration: none;
-    transition: all 0.2s ease;
 }
 
-.social-icon-btn svg, .social-icon-btn i {
-    width: 15px;
-    height: 15px;
+.social-icon-btn svg {
+    fill: currentColor;
 }
 
-/* Hover effects for brand colors */
 .social-icon-btn.telegram:hover { background-color: #eff6ff; color: #0088cc; border-color: #bfdbfe; }
 .social-icon-btn.gmail:hover { background-color: #fef2f2; color: #ea4335; border-color: #fecaca; }
 .social-icon-btn.viber:hover { background-color: #f5f3ff; color: #7360f2; border-color: #ddd6fe; }
