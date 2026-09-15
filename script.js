@@ -2,7 +2,7 @@ function applyRoleAccess() {
     // LocalStorage မှ Login ဝင်ထားသော Role ကို ယူမည် (မရှိပါက Default 'ADMIN')
     const loginRole = localStorage.getItem('login_role') || 'ADMIN';
 
-    // Menu Item များကို ID ဖြင့် ရယူမည်
+    // HTML ထဲရှိ Menu ID အားလုံးကို ရယူခြင်း
     const menus = {
         dashboard: document.getElementById('menu-dashboard'),
         fuel: document.getElementById('menu-fuel'),
@@ -16,38 +16,43 @@ function applyRoleAccess() {
         leave: document.getElementById('menu-leave'),
         meeting: document.getElementById('menu-meeting'),
         manpower: document.getElementById('menu-manpower'),
+        interview: document.getElementById('menu-interview'),
         userManage: document.getElementById('menu-usermanage')
     };
 
-    // ၁။ Menu အားလုံးကို ဦးစွာ မမြင်ရအောင် ခေတ္တ ပိတ်ထားမည် (Reset)
+    // ၁။ ပထမဦးစွာ Menu အားလုံးကို မမြင်ရအောင် (display: none) အရင်ပိတ်မည်
     Object.values(menus).forEach(menu => {
         if (menu) menu.style.display = 'none';
     });
 
-    // ၂။ Role အလိုက် သတ်မှတ်ထားသော Menu များကိုသာ ပြသမည် (Show)
+    // ၂။ Login ဝင်ထားသော Role အလိုက် လိုအပ်သည့် Menu များကိုသာ ပြမည် (display: block)
     
     // --- HR Role ---
     if (loginRole === 'HR') {
+        if (menus.dashboard) menus.dashboard.style.display = 'block';
         if (menus.leave) menus.leave.style.display = 'block';
         if (menus.meeting) menus.meeting.style.display = 'block';
         if (menus.manpower) menus.manpower.style.display = 'block';
+        if (menus.interview) menus.interview.style.display = 'block';
     }
 
     // --- FLEET Role ---
     else if (loginRole === 'FLEET') {
+        if (menus.dashboard) menus.dashboard.style.display = 'block';
         if (menus.fuel) menus.fuel.style.display = 'block';
         if (menus.maintenance) menus.maintenance.style.display = 'block';
         if (menus.inspection) menus.inspection.style.display = 'block';
     }
 
-    // --- WAREHOUSE Role ---
+    // --- WAREHOUSE Role (Interview လုံးဝမပါစေရပါ) ---
     else if (loginRole === 'WAREHOUSE') {
+        if (menus.dashboard) menus.dashboard.style.display = 'block';
         if (menus.warehouse) menus.warehouse.style.display = 'block';
         if (menus.stock) menus.stock.style.display = 'block';
         if (menus.inventory) menus.inventory.style.display = 'block';
     }
 
-    // --- ADMIN Role (Full Access) --- Menu အားလုံးကို ပြမည်
+    // --- ADMIN Role (Full Access - အားလုံးပြမည်) ---
     else if (loginRole === 'ADMIN') {
         Object.values(menus).forEach(menu => {
             if (menu) menu.style.display = 'block';
@@ -55,7 +60,7 @@ function applyRoleAccess() {
     }
 }
 
-// Login စစ်ဆေးသည့် Function (abc123 / abc1234 အတွက် အထူးထည့်သွင်းပေးခြင်း)
+// Login စစ်ဆေးသည့် Function
 function loginUser(username, password) {
     if (username === 'abc123' && password === 'abc1234') {
         localStorage.setItem('login_role', 'ADMIN');
@@ -73,5 +78,5 @@ function logout() {
     window.location.href = 'index.html';
 }
 
-// DOM ready ဖြစ်သည်နှင့် ချက်ချင်း အလိုအလျောက် စစ်ဆေးမည်
+// Page Load ဖြစ်သည်နှင့် တစ်ပြိုင်နက် အလိုအလျောက် စစ်ဆေး అమలుမည်
 window.addEventListener('DOMContentLoaded', applyRoleAccess);
