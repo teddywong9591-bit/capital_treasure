@@ -3,383 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fuel Refilling Form - Capital Treasure</title>
-    <!-- Lucide Icons -->
+    <title>Fuel Refilling - Capital Treasure</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-card: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --accent: #2563eb;
-            --accent-hover: #1d4ed8;
-            --border: #e2e8f0;
-            --radius: 12px;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-
-        body {
-            background-color: #f8fafc;
-            color: var(--text-main);
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar Styling */
-        .sidebar {
-            width: 260px;
-            background-color: var(--bg-primary);
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            height: 100vh;
-            z-index: 50;
-        }
-
-        .brand {
-            padding: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
+        :root { --bg-primary: #0f172a; --bg-card: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --accent: #2563eb; --border: #e2e8f0; --radius: 12px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f8fafc; color: var(--text-main); display: flex; min-height: 100vh; }
+        .sidebar { width: 260px; background-color: var(--bg-primary); color: #fff; display: flex; flex-direction: column; position: fixed; height: 100vh; }
+        .brand { padding: 24px; display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .brand i { color: var(--accent); }
-
-        .nav-list {
-            list-style: none;
-            padding: 16px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex: 1;
-        }
-
-        .nav-item a {
-            width: 100%;
-            padding: 12px 16px;
-            background: transparent;
-            border-radius: var(--radius);
-            color: #94a3b8;
-            font-size: 14px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        .nav-item a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-        }
-
-        .nav-item.active a {
-            background-color: var(--accent);
-            color: #ffffff;
-        }
-
-        /* Main Wrapper */
-        .main-wrapper {
-            margin-left: 260px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-
-        header {
-            background-color: var(--bg-card);
-            padding: 16px 32px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 40;
-        }
-
-        .page-title { font-size: 20px; font-weight: 700; }
-        
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: var(--accent);
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-
-        .content-body {
-            padding: 32px;
-            flex: 1;
-        }
-
-        /* Form Styling */
-        .form-card {
-            background: var(--bg-card);
-            padding: 32px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            max-width: 850px;
-            margin: 0 auto;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .form-group.full-width { grid-column: span 2; }
-
+        .nav-list { list-style: none; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+        .nav-item a { width: 100%; padding: 12px 16px; border-radius: var(--radius); color: #94a3b8; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .nav-item a:hover, .nav-item.active a { background-color: rgba(255, 255, 255, 0.1); color: #fff; }
+        .nav-item.active a { background-color: var(--accent); }
+        .main-wrapper { margin-left: 260px; flex: 1; display: flex; flex-direction: column; }
+        header { background-color: var(--bg-card); padding: 16px 32px; border-bottom: 1px solid var(--border); }
+        .content-body { padding: 32px; }
+        .form-card { background: var(--bg-card); padding: 28px; border-radius: var(--radius); border: 1px solid var(--border); max-width: 800px; margin: 0 auto; }
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group.full { grid-column: span 2; }
         label { font-size: 13px; font-weight: 600; color: #334155; }
-        
-        input, select, textarea {
-            padding: 11px 14px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 14px;
-            outline: none;
-            transition: border 0.2s, box-shadow 0.2s;
-            background-color: #fff;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        input[readonly] {
-            background-color: #f1f5f9;
-            color: #64748b;
-            cursor: not-allowed;
-        }
-
-        .btn-primary {
-            background-color: var(--accent);
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 15px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            justify-content: center;
-            transition: background 0.2s;
-        }
-
-        .btn-primary:hover { background-color: var(--accent-hover); }
-
-        @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); }
-            .main-wrapper { margin-left: 0; }
-            .form-grid { grid-template-columns: 1fr; }
-            .form-group.full-width { grid-column: span 1; }
-        }
+        input, select { padding: 10px; border: 1px solid var(--border); border-radius: 8px; outline: none; }
+        .btn-primary { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
     </style>
 </head>
 <body>
-
-    <!-- Sidebar Navigation -->
     <aside class="sidebar">
-        <div class="brand">
-            <i data-lucide="shield-check"></i>
-            <span>Capital Treasure</span>
-        </div>
+        <div class="brand"><i data-lucide="shield-check"></i><span>Capital Treasure</span></div>
         <ul class="nav-list">
-            <li class="nav-item"><a href="index.html"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
-            <li class="nav-item active"><a href="fuel.html"><i data-lucide="fuel"></i> Fuel Refilling</a></li>
-            <li class="nav-item"><a href="#"><i data-lucide="wrench"></i> Maintenance</a></li>
-            <li class="nav-item"><a href="#"><i data-lucide="clipboard-check"></i> Inspection</a></li>
-            <li class="nav-item"><a href="#"><i data-lucide="users"></i> User Manage</a></li>
+            <li class="nav-item"><a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+            <li class="nav-item active"><a href="refilling.html"><i data-lucide="fuel"></i> Fuel Refilling</a></li>
+            <li class="nav-item"><a href="matainment.html"><i data-lucide="wrench"></i> Maintenance</a></li>
+            <li class="nav-item"><a href="Inspection.html"><i data-lucide="clipboard-check"></i> Inspection</a></li>
+            <li class="nav-item"><a href="user manage.html"><i data-lucide="users"></i> User Manage</a></li>
+            <li class="nav-item" style="margin-top: auto;"><a href="logout.html"><i data-lucide="log-out"></i> Log Out</a></li>
         </ul>
     </aside>
-
-    <!-- Main Content -->
     <div class="main-wrapper">
-        <header>
-            <h1 class="page-title">Fuel Refilling Form</h1>
-            <div class="user-profile">
-                <div class="avatar">A</div>
-                <div>
-                    <div style="font-size: 14px; font-weight: 600;">Admin User</div>
-                    <div style="font-size: 12px; color: var(--text-muted);">Fleet Manager</div>
-                </div>
-            </div>
-        </header>
-
+        <header><h1 style="font-size: 20px;">Fuel Refilling Form</h1></header>
         <div class="content-body">
             <div class="form-card">
-                <h2 style="margin-bottom: 24px; font-size: 18px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">Fuel Refilling Record</h2>
-                
-                <form class="form-grid" onsubmit="event.preventDefault(); alert('Saved successfully!');">
-                    
-                    <!-- Region Selection -->
+                <form class="form-grid" onsubmit="event.preventDefault(); alert('Saved!');">
                     <div class="form-group">
-                        <label for="region">Region / Location</label>
-                        <select id="region" onchange="updateDropdowns()" required>
+                        <label>Region</label>
+                        <select id="region" onchange="updateData()">
                             <option value="">Select Region</option>
                             <option value="YGN">Yangon (YGN)</option>
                             <option value="MDY">Mandalay (MDY)</option>
                         </select>
                     </div>
-
-                    <!-- Vehicle Number (Dynamic) -->
                     <div class="form-group">
-                        <label for="vehicleNo">Vehicle No.</label>
-                        <select id="vehicleNo" required disabled>
-                            <option value="">Select Region First</option>
-                        </select>
+                        <label>Vehicle No.</label>
+                        <select id="vehicle" disabled><option>Select Region First</option></select>
                     </div>
-
-                    <!-- Driver Name (Dynamic) -->
                     <div class="form-group">
-                        <label for="driverName">Driver Name</label>
-                        <select id="driverName" required disabled>
-                            <option value="">Select Region First</option>
-                        </select>
+                        <label>Driver Name</label>
+                        <select id="driver" disabled><option>Select Region First</option></select>
                     </div>
-
-                    <!-- Fuel Type -->
                     <div class="form-group">
-                        <label for="fuelType">Fuel Type</label>
-                        <select id="fuelType" required>
-                            <option value="Octane 92">Octane 92</option>
-                            <option value="Octane 95">Octane 95</option>
-                            <option value="Diesel">Diesel</option>
-                            <option value="Premium Diesel">Premium Diesel</option>
-                        </select>
+                        <label>Fuel Type</label>
+                        <select><option>Octane 92</option><option>Octane 95</option><option>Diesel</option></select>
                     </div>
-
-                    <!-- Rate per Liter -->
                     <div class="form-group">
-                        <label for="rate">Rate per Liter (MMK)</label>
-                        <input type="number" id="rate" placeholder="e.g. 3100" oninput="calculateTotal()" required>
+                        <label>Rate per Liter (MMK)</label>
+                        <input type="number" id="rate" oninput="calcTotal()" placeholder="e.g. 3100">
                     </div>
-
-                    <!-- Liters -->
                     <div class="form-group">
-                        <label for="liters">Liters</label>
-                        <input type="number" id="liters" step="0.01" placeholder="0.00" oninput="calculateTotal()" required>
+                        <label>Liters</label>
+                        <input type="number" id="liters" oninput="calcTotal()" placeholder="0.00">
                     </div>
-
-                    <!-- Total Amount (Auto Calculated) -->
                     <div class="form-group">
-                        <label for="totalAmount">Total Amount (MMK)</label>
-                        <input type="text" id="totalAmount" placeholder="0.00" readonly>
+                        <label>Total Amount (MMK)</label>
+                        <input type="text" id="total" readonly placeholder="0.00">
                     </div>
-
-                    <!-- Date -->
                     <div class="form-group">
-                        <label for="refillDate">Date</label>
-                        <input type="date" id="refillDate" required>
+                        <label>Date</label>
+                        <input type="date">
                     </div>
-
-                    <!-- Submit Button -->
-                    <div class="form-group full-width" style="margin-top: 12px;">
-                        <button type="submit" class="btn-primary"><i data-lucide="save"></i> Save Record</button>
+                    <div class="form-group full">
+                        <button class="btn-primary">Save Record</button>
                     </div>
-
                 </form>
             </div>
         </div>
     </div>
-
     <script>
-        // Initialize Icons
         lucide.createIcons();
-
-        // Default Date to Today
-        document.getElementById('refillDate').valueAsDate = new Date();
-
-        // Regional Data (YGN vs MDY)
-        const regionalData = {
-            YGN: {
-                vehicles: ["YGN 1A/1234 (Toyota HiAce)", "YGN 2B/5678 (Canter)", "YGN 3C/9012 (Probox)"],
-                drivers: ["U Ba (YGN)", "Aung Aung (YGN)", "Kyaw Kyaw (YGN)"]
-            },
-            MDY: {
-                vehicles: ["MDY 4D/3456 (Nissan Caravan)", "MDY 5E/7890 (Light Truck)", "MDY 6F/1122 (TownAce)"],
-                drivers: ["U Hla (MDY)", "Tun Tun (MDY)", "Win Ko (MDY)"]
-            }
+        const data = {
+            YGN: { vehicles: ["YGN 1A/1234", "YGN 2B/5678"], drivers: ["U Ba (YGN)", "Aung Aung (YGN)"] },
+            MDY: { vehicles: ["MDY 4D/3456", "MDY 5E/7890"], drivers: ["U Hla (MDY)", "Tun Tun (MDY)"] }
         };
-
-        // Update Dynamic Dropdowns based on Selected Region
-        function updateDropdowns() {
-            const region = document.getElementById('region').value;
-            const vehicleSelect = document.getElementById('vehicleNo');
-            const driverSelect = document.getElementById('driverName');
-
-            vehicleSelect.innerHTML = '<option value="">Select Vehicle</option>';
-            driverSelect.innerHTML = '<option value="">Select Driver</option>';
-
-            if (region && regionalData[region]) {
-                vehicleSelect.disabled = false;
-                driverSelect.disabled = false;
-
-                // Populate Vehicles
-                regionalData[region].vehicles.forEach(v => {
-                    const opt = document.createElement('option');
-                    opt.value = v;
-                    opt.textContent = v;
-                    vehicleSelect.appendChild(opt);
-                });
-
-                // Populate Drivers
-                regionalData[region].drivers.forEach(d => {
-                    const opt = document.createElement('option');
-                    opt.value = d;
-                    opt.textContent = d;
-                    driverSelect.appendChild(opt);
-                });
-            } else {
-                vehicleSelect.disabled = true;
-                driverSelect.disabled = true;
-                vehicleSelect.innerHTML = '<option value="">Select Region First</option>';
-                driverSelect.innerHTML = '<option value="">Select Region First</option>';
-            }
+        function updateData() {
+            const r = document.getElementById('region').value;
+            const v = document.getElementById('vehicle');
+            const d = document.getElementById('driver');
+            v.innerHTML = d.innerHTML = '';
+            if(r) {
+                v.disabled = d.disabled = false;
+                data[r].vehicles.forEach(x => v.innerHTML += `<option>${x}</option>`);
+                data[r].drivers.forEach(x => d.innerHTML += `<option>${x}</option>`);
+            } else { v.disabled = d.disabled = true; }
         }
-
-        // Auto Calculate Total Amount
-        function calculateTotal() {
-            const rate = parseFloat(document.getElementById('rate').value) || 0;
-            const liters = parseFloat(document.getElementById('liters').value) || 0;
-            const total = rate * liters;
-
-            document.getElementById('totalAmount').value = total ? total.toLocaleString() + " MMK" : "0.00";
+        function calcTotal() {
+            const r = parseFloat(document.getElementById('rate').value) || 0;
+            const l = parseFloat(document.getElementById('liters').value) || 0;
+            document.getElementById('total').value = (r * l).toLocaleString() + " MMK";
         }
     </script>
 </body>
