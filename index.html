@@ -328,8 +328,9 @@
                 if (user && user.pass === password) {
                     errorMsg.style.display = 'none';
                     
-                    // Save Session & Selected Role
+                    // Save Session & Roles (login_role နှင့် user_role နှစ်ခုလုံး သိမ်းဆည်းပေးမည်)
                     localStorage.setItem('isAuthenticated', 'true');
+                    localStorage.setItem('login_role', user.role);
                     localStorage.setItem('user_role', user.role);
                     localStorage.setItem('user_name', username);
 
@@ -348,8 +349,8 @@
 
         function closeModal() {
             document.getElementById('successModal').classList.remove('active');
-            // Dashboard ဖိုင်သို့ တိုက်ရိုက် သွားရောက်ရန်
-            window.location.href = 'dashboard.html';
+            // usermanage.html သို့ တိုက်ရိုက် လမ်းကြောင်းလွှဲပါသည်
+            window.location.href = 'usermanage.html';
         }
     </script>
 
