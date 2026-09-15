@@ -211,6 +211,18 @@
         .btn-modal:hover {
             background-color: #15803d;
         }
+
+        /* Hint Box for Demo Accounts */
+        .demo-accounts {
+            margin-top: 18px;
+            padding: 10px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            font-size: 11px;
+            color: #475569;
+            text-align: left;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
@@ -223,7 +235,7 @@
         </div>
         
         <h2>Capital Treasure</h2>
-        <p class="subtitle">Fleet & Fuel Expense Management</p>
+        <p class="subtitle">Fleet & Operations Management</p>
 
         <form id="loginForm">
             <div class="form-group">
@@ -252,6 +264,15 @@
             
             <div id="errorMsg" class="error-message">Username သို့မဟုတ် Password မှားယွင်းနေပါသည်။</div>
         </form>
+
+        <!-- Demo Accounts Hint Box -->
+        <div class="demo-accounts">
+            <strong>Demo Logins:</strong><br>
+            • Admin (Full): <code>admin</code> / <code>admin123</code><br>
+            • Fleet Mgr: <code>fleet</code> / <code>fleet123</code><br>
+            • Warehouse: <code>warehouse</code> / <code>warehouse123</code><br>
+            • HR Mgr: <code>hr</code> / <code>hr123</code>
+        </div>
     </div>
 
     <!-- Custom Success Modal UI -->
@@ -263,7 +284,7 @@
                 </svg>
             </div>
             <div class="modal-title">Sign In အောင်မြင်ပါသည်</div>
-            <div class="modal-desc">စနစ်အတွင်းသို့ အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။</div>
+            <div class="modal-desc" id="modalRoleText">စနစ်အတွင်းသို့ အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။</div>
             <button class="btn-modal" id="modalBtn" onclick="closeModal()">ဆက်လက်လုပ်ဆောင်မည်</button>
         </div>
     </div>
@@ -279,11 +300,19 @@
             this.style.color = type === 'text' ? '#2563eb' : '#94a3b8';
         });
 
+        // Account Credentials & Role Mapping
+        const usersDatabase = {
+            'admin': { pass: 'admin123', role: 'ADMIN', label: 'System Admin (Full Access)' },
+            'fleet': { pass: 'fleet123', role: 'FLEET', label: 'Fleet Manager' },
+            'warehouse': { pass: 'warehouse123', role: 'WAREHOUSE', label: 'Warehouse Manager' },
+            'hr': { pass: 'hr123', role: 'HR', label: 'HR Manager' }
+        };
+
         // Login Logic
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const username = document.getElementById('username').value.trim();
+            const username = document.getElementById('username').value.trim().toLowerCase();
             const password = document.getElementById('password').value.trim();
             const errorMsg = document.getElementById('errorMsg');
             const submitBtn = document.getElementById('submitBtn');
@@ -294,12 +323,17 @@
             btnText.innerText = "Authenticating...";
 
             setTimeout(() => {
-                if (username === 'admin' && password === 'admin123') {
+                const user = usersDatabase[username];
+
+                if (user && user.pass === password) {
                     errorMsg.style.display = 'none';
                     
-                    // Save Session
+                    // Save Session & Selected Role
                     localStorage.setItem('isAuthenticated', 'true');
-                    localStorage.setItem('userRole', 'admin');
+                    localStorage.setItem('user_role', user.role);
+                    localStorage.setItem('user_name', username);
+
+                    document.getElementById('modalRoleText').innerText = `${user.label} အဖြစ် စနစ်အတွင်းသို့ ဝင်ရောက်နေပါသည်။`;
 
                     // Show Custom UI Modal
                     document.getElementById('successModal').classList.add('active');
@@ -321,3 +355,4 @@
 
 </body>
 </html>
+
