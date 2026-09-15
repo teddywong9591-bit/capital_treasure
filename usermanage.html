@@ -54,6 +54,7 @@
         .action-btns { display: flex; gap: 6px; flex-wrap: wrap; }
         .btn-action { padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border); cursor: pointer; font-size: 12px; font-weight: 500; background: #f8fafc; transition: all 0.2s; }
         .btn-action:hover { background: #f1f5f9; }
+        .btn-permission { background: #e0f2fe; color: #0284c7; border-color: #bae6fd; }
         .btn-toggle { background: #fef3c7; border-color: #fde68a; color: #d97706; }
         .btn-resign { background: #f1f5f9; color: #4b5563; }
         .btn-delete { background: #fef2f2; border-color: #fee2e2; color: #dc2626; }
@@ -70,6 +71,12 @@
         .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
         input:checked + .slider { background-color: #2563eb; }
         input:checked + .slider:before { transform: translateX(18px); }
+
+        /* Modal Styles for User-Specific Permissions */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: var(--bg-card); width: 500px; max-width: 90%; border-radius: var(--radius); padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 16px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+        .modal-close { background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-muted); }
     </style>
 </head>
 <body>
@@ -176,13 +183,27 @@
                 </table>
             </div>
 
-            <!-- Form/Menu Permission On/Off Section -->
+            <!-- Form/Menu Permission On/Off Section (Global Default) -->
             <div class="permission-card">
-                <h3 style="font-size: 15px; margin-bottom: 4px;">Form & Menu Permission Control (On/Off)</h3>
-                <p style="font-size: 12px; color: var(--text-muted);">စနစ်အတွင်းရှိ သီးသန့် Form များနှင့် Page များကို အသုံးပြုခွင့် ပိတ်ရန်/ဖွင့်ရန် (On/Off) ထိန်းချုပ်ပါ။</p>
+                <h3 style="font-size: 15px; margin-bottom: 4px;">Global Form & Menu Permission Control (On/Off)</h3>
+                <p style="font-size: 12px; color: var(--text-muted);">စနစ်အတွင်းရှိ သီးသန့် Form များနှင့် Page များကို ယေဘုယျ ပိတ်ရန်/ဖွင့်ရန် (On/Off) ထိန်းချုပ်ပါ။</p>
                 <div class="permission-grid" id="permissionGrid">
                     <!-- Dynamic Permission Toggles -->
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User-Specific Permission Modal -->
+    <div class="modal-overlay" id="userPermModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle" style="font-size: 16px;">User Permissions</h3>
+                <button class="modal-close" onclick="closeUserPermissionModal()">&times;</button>
+            </div>
+            <p style="font-size: 12px; color: var(--text-muted);">ဤဝန်ထမ်းအတွက် သီးသန့် Form ဝင်ရောက်ခွင့်များကို ဖွင့်မည်/ပိတ်မည်။</p>
+            <div id="modalPermissionGrid" style="display: flex; flex-direction: column; gap: 10px; max-height: 350px; overflow-y: auto;">
+                <!-- Dynamic per-user toggles -->
             </div>
         </div>
     </div>
@@ -208,6 +229,8 @@
             { id: 'interview', name: 'Interview Tracking', enabled: true }
         ];
 
+        let currentEditingUserId = null;
+
         function getUsers() {
             return JSON.parse(localStorage.getItem('app_users')) || initialUsers;
         }
@@ -224,6 +247,21 @@
         function savePermissions(perms) {
             localStorage.setItem('app_permissions', JSON.stringify(perms));
             renderPermissions();
+        }
+
+        // Get user-specific permissions or fallback to global/department defaults
+        function getUserPermissions(userId) {
+            const customPerms = JSON.parse(localStorage.getItem('user_custom_permissions')) || {};
+            if (customPerms[userId]) {
+                return customPerms[userId];
+            }
+            return JSON.parse(JSON.stringify(getPermissions()));
+        }
+
+        function saveUserPermissions(userId, perms) {
+            const customPerms = JSON.parse(localStorage.getItem('user_custom_permissions')) || {};
+            customPerms[userId] = perms;
+            localStorage.setItem('user_custom_permissions', JSON.stringify(customPerms));
         }
 
         function renderUsersTable() {
@@ -252,6 +290,7 @@
                     </td>
                     <td>
                         <div class="action-btns">
+                            <button class="btn-action btn-permission" onclick="openUserPermissionModal(${user.id})">Permissions</button>
                             <button class="btn-action btn-toggle" onclick="toggleStatus(${user.id})">
                                 ${user.status === 'Active' ? 'Block' : 'Unblock'}
                             </button>
@@ -285,6 +324,49 @@
             });
         }
 
+        // Open Modal for Individual User Permissions
+        function openUserPermissionModal(userId) {
+            currentEditingUserId = userId;
+            const users = getUsers();
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            document.getElementById('modalTitle').innerText = `Permissions for: ${user.name} (${user.dept})`;
+            
+            const userPerms = getUserPermissions(userId);
+            const modalGrid = document.getElementById('modalPermissionGrid');
+            modalGrid.innerHTML = '';
+
+            userPerms.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'permission-item';
+                div.innerHTML = `
+                    <span>${p.name}</span>
+                    <label class="switch">
+                        <input type="checkbox" ${p.enabled ? 'checked' : ''} onchange="updateUserPermissionItem(${userId}, '${p.id}')">
+                        <span class="slider"></span>
+                    </label>
+                `;
+                modalGrid.appendChild(div);
+            });
+
+            document.getElementById('userPermModal').style.display = 'flex';
+        }
+
+        function closeUserPermissionModal() {
+            document.getElementById('userPermModal').style.display = 'none';
+            currentEditingUserId = null;
+        }
+
+        function updateUserPermissionItem(userId, permId) {
+            let userPerms = getUserPermissions(userId);
+            const perm = userPerms.find(p => p.id === permId);
+            if (perm) {
+                perm.enabled = !perm.enabled;
+                saveUserPermissions(userId, userPerms);
+            }
+        }
+
         function handleAddUser(e) {
             e.preventDefault();
             const name = document.getElementById('userName').value;
@@ -292,8 +374,9 @@
             const role = document.getElementById('userRole').value;
 
             const users = getUsers();
+            const newUserId = Date.now();
             users.push({ 
-                id: Date.now(), 
+                id: newUserId, 
                 name, 
                 dept, 
                 role, 
@@ -301,6 +384,24 @@
                 online: Math.random() > 0.5 
             });
             saveUsers(users);
+
+            // Optional: Automatically assign tailored default permissions based on Department
+            let defaultPerms = JSON.parse(JSON.stringify(initialPermissions));
+            defaultPerms.forEach(p => {
+                if (dept === 'Warehouse') {
+                    p.enabled = ['warehouse', 'stock', 'inventory'].includes(p.id);
+                } else if (dept === 'Logistics & Fleet') {
+                    p.enabled = ['fuel', 'maintenance', 'inspection'].includes(p.id);
+                } else if (dept === 'Human Resources') {
+                    p.enabled = ['leave', 'interview', 'manpower'].includes(p.id);
+                } else if (dept === 'IT System' || dept === 'Operations') {
+                    p.enabled = true;
+                } else {
+                    p.enabled = false;
+                }
+            });
+            saveUserPermissions(newUserId, defaultPerms);
+
             document.getElementById('addUserForm').reset();
         }
 
