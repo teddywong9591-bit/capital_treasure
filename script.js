@@ -29,7 +29,6 @@ function applyRoleAccess() {
     
     // --- HR Role ---
     if (loginRole === 'HR') {
-        if (menus.dashboard) menus.dashboard.style.display = 'block';
         if (menus.leave) menus.leave.style.display = 'block';
         if (menus.meeting) menus.meeting.style.display = 'block';
         if (menus.manpower) menus.manpower.style.display = 'block';
@@ -38,7 +37,6 @@ function applyRoleAccess() {
 
     // --- FLEET Role ---
     else if (loginRole === 'FLEET') {
-        if (menus.dashboard) menus.dashboard.style.display = 'block';
         if (menus.fuel) menus.fuel.style.display = 'block';
         if (menus.maintenance) menus.maintenance.style.display = 'block';
         if (menus.inspection) menus.inspection.style.display = 'block';
@@ -46,8 +44,7 @@ function applyRoleAccess() {
 
     // --- WAREHOUSE Role (Interview လုံးဝမပါစေရပါ) ---
     else if (loginRole === 'WAREHOUSE') {
-        if (menus.dashboard) menus.dashboard.style.display = 'block';
-        if (menus.warehouse) menus.warehouse.style.display = 'block';
+         if (menus.warehouse) menus.warehouse.style.display = 'block';
         if (menus.stock) menus.stock.style.display = 'block';
         if (menus.inventory) menus.inventory.style.display = 'block';
     }
