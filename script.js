@@ -2,7 +2,7 @@ function applyRoleAccess() {
     // LocalStorage မှ Login ဝင်ထားသော Role ကို ယူမည် (မရှိပါက Default 'ADMIN')
     const loginRole = localStorage.getItem('login_role') || 'ADMIN';
 
-    // HTML ထဲရှိ Menu ID အားလုံးကို ရယူခြင်း (Interview အတွက် menu-interview ကိုသာ သုံးပါ)
+    // HTML ထဲရှိ Menu ID အားလုံးကို ရယူခြင်း
     const menus = {
         dashboard: document.getElementById('menu-dashboard'),
         fuel: document.getElementById('menu-fuel'),
@@ -27,32 +27,29 @@ function applyRoleAccess() {
 
     // ၂။ Login ဝင်ထားသော Role အလိုက် လိုအပ်သည့် Menu များကိုသာ ပြမည် (display: block)
     
-    // --- HR Role ---
+    // --- HR Role (Dashboard မပါပါ) ---
     if (loginRole === 'HR') {
-        if (menus.dashboard) menus.dashboard.style.display = 'block';
         if (menus.leave) menus.leave.style.display = 'block';
         if (menus.meeting) menus.meeting.style.display = 'block';
         if (menus.manpower) menus.manpower.style.display = 'block';
         if (menus.interview) menus.interview.style.display = 'block';
     }
 
-    // --- FLEET Role ---
+    // --- FLEET Role (Dashboard မပါပါ) ---
     else if (loginRole === 'FLEET') {
-        if (menus.dashboard) menus.dashboard.style.display = 'block';
         if (menus.fuel) menus.fuel.style.display = 'block';
         if (menus.maintenance) menus.maintenance.style.display = 'block';
         if (menus.inspection) menus.inspection.style.display = 'block';
     }
 
-    // --- WAREHOUSE Role (Warehouse နှင့်ဆိုင်သည်များသာပြမည်၊ Interview လုံးဝမပါရပါ) ---
+    // --- WAREHOUSE Role (Dashboard မပါပါ) ---
     else if (loginRole === 'WAREHOUSE') {
-        if (menus.dashboard) menus.dashboard.style.display = 'block';
         if (menus.warehouse) menus.warehouse.style.display = 'block';
         if (menus.stock) menus.stock.style.display = 'block';
         if (menus.inventory) menus.inventory.style.display = 'block';
     }
 
-    // --- ADMIN Role (Full Access - အားလုံးပြမည်) ---
+    // --- ADMIN Role (Full Access - Dashboard အပါအဝင် အားလုံးပြမည်) ---
     else if (loginRole === 'ADMIN') {
         Object.values(menus).forEach(menu => {
             if (menu) menu.style.display = 'block';

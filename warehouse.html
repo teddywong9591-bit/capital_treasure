@@ -71,7 +71,21 @@
     </div>
     
     <!-- Lucide Icons Initialization -->
-    <script>lucide.createIcons();</script>
+    <script>lucide.createIcons();
+    window.addEventListener('DOMContentLoaded', (event) => {
+    const role = localStorage.getItem('user_role') || localStorage.getItem('login_role');
+    
+    // Admin မှလွဲ၍ အခြား Role များတွင် ဘယ်ဘက် Sidebar မှ Dashboard ကို ဖျောက်ရန်
+    if(role !== 'ADMIN') {
+        const dashboardMenu = document.getElementById('menu-dashboard');
+        if(dashboardMenu) {
+            dashboardMenu.style.display = 'none';
+        }
+    }
+});
+
+    
+    </script>
 
     <!-- External Script File -->
     <script src="script.js"></script>
