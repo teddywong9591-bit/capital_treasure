@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fuel Refilling - Capital Treasure</title>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" href="data:,">
     <style>
         :root { --bg-primary: #0f172a; --bg-card: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --accent: #2563eb; --border: #e2e8f0; --radius: 12px; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -27,118 +28,188 @@
         label { font-size: 13px; font-weight: 600; color: #334155; }
         input, select { padding: 10px; border: 1px solid var(--border); border-radius: 8px; outline: none; }
         .btn-primary { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .btn-primary:hover { background: #1d4ed8; }
+
+        /* --- Custom UI Modal Styling --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+            display: flex; align-items: center; justify-content: center; z-index: 9999;
+            opacity: 0; visibility: hidden; transition: all 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-box {
+            background: #ffffff; width: 100%; max-width: 380px; padding: 24px;
+            border-radius: 16px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transform: scale(0.9); transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-box { transform: scale(1); }
+        .modal-icon {
+            width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px auto; font-size: 24px;
+        }
+        .modal-icon.success { background: #dcfce7; color: #16a34a; }
+        .modal-icon.error { background: #fee2e2; color: #dc2626; }
+        .modal-title { font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+        .modal-desc { font-size: 14px; color: #64748b; margin-bottom: 20px; line-height: 1.5; }
+        .modal-btn {
+            background: #2563eb; color: #ffffff; border: none; width: 100%; padding: 10px;
+            border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;
+        }
+        .modal-btn:hover { background: #1d4ed8; }
     </style>
 </head>
 <body>
     <aside class="sidebar">
         <div class="brand"><i data-lucide="shield-check"></i><span>Capital Treasure</span></div>
         <ul class="nav-list">
-            <!-- Dashboard Menu -->
             <li class="nav-item" id="menu-dashboard"><a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
-
-            <!-- Fleet Items -->
             <li class="nav-item active" id="menu-fuel"><a href="refilling.html"><i data-lucide="fuel"></i> Fuel Refilling</a></li>
             <li class="nav-item" id="menu-maintenance"><a href="matainment.html"><i data-lucide="wrench"></i> Maintenance</a></li>
             <li class="nav-item" id="menu-inspection"><a href="Inspection.html"><i data-lucide="clipboard-check"></i> Inspection</a></li>
-
-            <!-- Warehouse Items -->
             <li class="nav-item" id="menu-warehouse"><a href="warehouse.html"><i data-lucide="warehouse"></i> Warehouse Overview</a></li>
             <li class="nav-item" id="menu-stock"><a href="stock.html"><i data-lucide="boxes"></i> Stock In/Out</a></li>
             <li class="nav-item" id="menu-inventory"><a href="inventory.html"><i data-lucide="list-checks"></i> Inventory List</a></li>
-
-            <!-- Admin / Stationery Items -->
             <li class="nav-item" id="menu-stationery"><a href="stationary.html"><i data-lucide="pen-tool"></i> Stationery Requests</a></li>
             <li class="nav-item" id="menu-fixed-assets"><a href="fixaccess.html"><i data-lucide="box"></i> Fixed Assets</a></li>
-
-            <!-- HR Items -->
             <li class="nav-item" id="menu-leave"><a href="leaves.html"><i data-lucide="calendar"></i> Leave Requests</a></li>
             <li class="nav-item" id="menu-meeting"><a href="meetingnote.html"><i data-lucide="file-text"></i> Meeting Notes</a></li>
             <li class="nav-item" id="menu-manpower"><a href="manpower.html"><i data-lucide="user-plus"></i> Manpower Plan</a></li>
             <li class="nav-item" id="menu-interview"><a href="interview-tracking.html"><i data-lucide="user-check"></i> Interview Tracking</a></li>
-
-            <!-- User Manage -->
             <li class="nav-item" id="menu-usermanage"><a href="usermanage.html"><i data-lucide="users"></i> User & Role Control</a></li>
-
-            <!-- Log Out -->
             <li class="nav-divider"></li>
             <li class="nav-item"><a href="#" onclick="logout()" style="color: #ef4444;"><i data-lucide="log-out"></i> Log Out</a></li>
         </ul>
     </aside>
+    
     <div class="main-wrapper">
         <header><h1 style="font-size: 20px;">Fuel Refilling Form</h1></header>
         <div class="content-body">
             <div class="form-card">
-                <form class="form-grid" onsubmit="event.preventDefault(); alert('Saved!');">
+                <form class="form-grid" id="refillForm" onsubmit="event.preventDefault(); submitFuel();">
+                    <!-- Date -->
                     <div class="form-group">
-                        <label>Region</label>
-                        <select id="region" onchange="updateData()">
+                        <label>Date <span style="color: red;">*</span></label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <!-- Voucher -->
+                    <div class="form-group">
+                        <label>Voucher No. <span style="color: red;">*</span></label>
+                        <input type="text" id="voucher" placeholder="Enter voucher number" required>
+                    </div>
+                    <!-- Region -->
+                    <div class="form-group">
+                        <label>Region <span style="color: red;">*</span></label>
+                        <select id="region" onchange="updateVehiclesAndDrivers()" required>
                             <option value="">Select Region</option>
                             <option value="YGN">Yangon (YGN)</option>
                             <option value="MDY">Mandalay (MDY)</option>
                         </select>
                     </div>
+                    <!-- Vehicle No. -->
                     <div class="form-group">
-                        <label>Vehicle No.</label>
-                        <select id="vehicle" disabled><option>Select Region First</option></select>
+                        <label>Vehicle No. <span style="color: red;">*</span></label>
+                        <select id="vehicle" onchange="updateFuelType()" disabled required><option value="">Select Region First</option></select>
                     </div>
+                    <!-- Driver Name -->
                     <div class="form-group">
-                        <label>Driver Name</label>
-                        <select id="driver" disabled><option>Select Region First</option></select>
+                        <label>Driver Name <span style="color: red;">*</span></label>
+                        <select id="driver" disabled required><option value="">Select Region First</option></select>
                     </div>
+                    <!-- Fuel Type -->
                     <div class="form-group">
-                        <label>Fuel Type</label>
-                        <select><option>Octane 92</option><option>Octane 95</option><option>Diesel</option></select>
+                        <label>Fuel Type <span style="color: red;">*</span></label>
+                        <select id="fuelType" required>
+                            <option value="">Select Fuel Type</option>
+                            <option value="Octane 92">Octane 92</option>
+                            <option value="Octane 95">Octane 95</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Premium Diesel / D">Premium Diesel / D</option>
+                            <option value="92 / 95 / PD / D">92 / 95 / PD / D</option>
+                        </select>
                     </div>
+                    <!-- Rate per Liter (MMK) -->
                     <div class="form-group">
-                        <label>Rate per Liter (MMK)</label>
-                        <input type="number" id="rate" oninput="calcTotal()" placeholder="e.g. 3100">
+                        <label>Rate per Liter (MMK) <span style="color: red;">*</span></label>
+                        <input type="number" id="rate" oninput="calcTotal()" placeholder="e.g. 3100" step="0.01" required>
                     </div>
+                    <!-- Liters -->
                     <div class="form-group">
-                        <label>Liters</label>
-                        <input type="number" id="liters" oninput="calcTotal()" placeholder="0.00">
+                        <label>Liters <span style="color: red;">*</span></label>
+                        <input type="number" id="liters" oninput="calcTotal()" placeholder="0.00" step="0.01" required>
                     </div>
+                    <!-- Total Amount (MMK) -->
                     <div class="form-group">
-                        <label>Total Amount (MMK)</label>
-                        <input type="text" id="total" readonly placeholder="0.00">
+                        <label>Total Amount (MMK) <span style="color: red;">*</span></label>
+                        <input type="text" id="total" readonly placeholder="0.00" style="background:#f1f5f9;" required>
                     </div>
+                    <!-- Extra Cash -->
                     <div class="form-group">
-                        <label>Date</label>
-                        <input type="date">
+                        <label>Extra Cash <span style="color: red;">*</span></label>
+                        <input type="number" id="extraCash" placeholder="0" step="0.01" required>
                     </div>
+                    <!-- Station Name -->
+                    <div class="form-group">
+                        <label>Station Name <span style="color: red;">*</span></label>
+                        <input type="text" id="stationName" placeholder="Enter station name" required>
+                    </div>
+                    <!-- Remark -->
+                    <div class="form-group">
+                        <label>Remark <span style="color: red;">*</span></label>
+                        <input type="text" id="remark" placeholder="Enter remark" required>
+                    </div>
+                    <!-- Voucher Photo Upload -->
                     <div class="form-group full">
-                        <button class="btn-primary">Save Record</button>
+                        <label>Voucher Photo / Scan <span style="color: red;">*</span></label>
+                        <input type="file" id="voucherPhoto" accept="image/*" required style="padding: 8px;">
+                    </div>
+                    
+
+                    <div class="form-group full">
+                        <button type="submit" class="btn-primary" id="submitBtn">Submit</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <script>
-        lucide.createIcons();
-        const data = {
-            YGN: { vehicles: ["YGN 1A/1234", "YGN 2B/5678"], drivers: ["U Ba (YGN)", "Aung Aung (YGN)"] },
-            MDY: { vehicles: ["MDY 4D/3456", "MDY 5E/7890"], drivers: ["U Hla (MDY)", "Tun Tun (MDY)"] }
-        };
-        function updateData() {
-            const r = document.getElementById('region').value;
-            const v = document.getElementById('vehicle');
-            const d = document.getElementById('driver');
-            v.innerHTML = d.innerHTML = '';
-            if(r) {
-                v.disabled = d.disabled = false;
-                data[r].vehicles.forEach(x => v.innerHTML += `<option>${x}</option>`);
-                data[r].drivers.forEach(x => d.innerHTML += `<option>${x}</option>`);
-            } else { v.disabled = d.disabled = true; }
-        }
-        function calcTotal() {
-            const r = parseFloat(document.getElementById('rate').value) || 0;
-            const l = parseFloat(document.getElementById('liters').value) || 0;
-            document.getElementById('total').value = (r * l).toLocaleString() + " MMK";
-        }
 
-      window.addEventListener('DOMContentLoaded', (event) => {
+    <!-- Custom UI Modal Structure -->
+    <div class="modal-overlay" id="customModal">
+        <div class="modal-box">
+            <div class="modal-icon success" id="modalIcon"><i data-lucide="check" id="modalLucideIcon"></i></div>
+            <div class="modal-title" id="modalTitle">Success!</div>
+            <div class="modal-desc" id="modalDesc">Record saved successfully.</div>
+            <button class="modal-btn" onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+<script>
+        lucide.createIcons();
+
+        document.getElementById('date').valueAsDate = new Date();
+
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxjBI1W7hkwxHhmm8x7Xod7rfRx2Z17dxglGU7VZdpnvKPbKbJuDMQRwFChg0Tbd21R/exec';
+        let globalUsersData = [];
+
+window.addEventListener('DOMContentLoaded', () => {
+    fetch(scriptURL + '?action=getLogs')
+        .then(res => res.json())
+        .then(data => {
+            if (Array.isArray(data)) {
+                globalUsersData = data; 
+            } else if (data && Array.isArray(data.data)) {
+                globalUsersData = data.data;
+            } else {
+                globalUsersData = [];
+                console.warn("Received data is not an array:", data);
+            }
+        })
+        .catch(err => {
+            globalUsersData = [];
+            console.error("Failed to load log data from sheet", err);
+        });
+
     const role = localStorage.getItem('user_role') || localStorage.getItem('login_role');
-    
-    // Admin မှလွဲ၍ အခြား Role များတွင် ဘယ်ဘက် Sidebar မှ Dashboard ကို ဖျောက်ရန်
     if(role !== 'ADMIN') {
         const dashboardMenu = document.getElementById('menu-dashboard');
         if(dashboardMenu) {
@@ -146,8 +217,194 @@
         }
     }
 });
+        
+        function updateVehiclesAndDrivers() {
+            if (!Array.isArray(globalUsersData)) {
+                globalUsersData = [];
+                return;
+            }
 
+            const r = document.getElementById('region').value;
+            const vSelect = document.getElementById('vehicle');
+            const dSelect = document.getElementById('driver');
+            
+            vSelect.innerHTML = '<option value="">Select Vehicle</option>';
+            dSelect.innerHTML = '<option value="">Select Driver</option>';
+
+            if(r) {
+                vSelect.disabled = false;
+                dSelect.disabled = false;
+
+                const filtered = globalUsersData.filter(item => item.region === r);
+
+                const uniqueVehicles = [...new Set(filtered.map(item => item.carName))];
+                uniqueVehicles.forEach(car => {
+                    if(car) {
+                        vSelect.innerHTML += `<option value="${car}">${car}</option>`;
+                    }
+                });
+
+                const uniqueDrivers = [...new Set(filtered.map(item => item.driverName))];
+                uniqueDrivers.forEach(driver => {
+                    if(driver) {
+                        dSelect.innerHTML += `<option value="${driver}">${driver}</option>`;
+                    }
+                });
+            } else { 
+                vSelect.disabled = dSelect.disabled = true; 
+                vSelect.innerHTML = '<option value="">Select Region First</option>';
+                dSelect.innerHTML = '<option value="">Select Region First</option>';
+            }
+        }
+
+        function updateFuelType() {
+            const selectedCar = document.getElementById('vehicle').value;
+            const fuelTypeSelect = document.getElementById('fuelType');
+
+            if (selectedCar) {
+                const matchedItem = globalUsersData.find(item => item.carName === selectedCar);
+                if (matchedItem && matchedItem.fuelType) {
+                    fuelTypeSelect.value = matchedItem.fuelType;
+                }
+            }
+        }
+
+        function calcTotal() {
+            const r = parseFloat(document.getElementById('rate').value) || 0;
+            const l = parseFloat(document.getElementById('liters').value) || 0;
+            document.getElementById('total').value = (r * l).toLocaleString();
+        }
+
+        function showModal(title, message, type = 'success') {
+            const overlay = document.getElementById('customModal');
+            const iconDiv = document.getElementById('modalIcon');
+            const lucideIcon = document.getElementById('modalLucideIcon');
+            
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDesc').innerText = message;
+
+            iconDiv.className = `modal-icon ${type}`;
+            lucideIcon.setAttribute('data-lucide', type === 'success' ? 'check' : 'x');
+            lucide.createIcons();
+
+            overlay.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('customModal').classList.remove('active');
+            location.reload();
+        }
+
+        // Server သို့ ဒေတာပို့ပေးမည့် သီးသန့် Function
+        function sendToServer(payload, btn) {
+            fetch(scriptURL, { 
+                method: 'POST', 
+                body: JSON.stringify(payload) 
+            })
+            .then(res => res.json())
+            .then(res => {
+                btn.innerText = "Save Record";
+                btn.disabled = false;
+                showModal("Successfully Saved!", res.message || "Data have been saved successfully.", "success");
+            })
+            .catch(err => {
+                console.error(err);
+                btn.innerText = "Save Record";
+                btn.disabled = false;
+                showModal("Connection Error!", "Could not save data. Please check your internet connection.", "error");
+            });
+        }
+
+  function submitFuel() {
+            const btn = document.getElementById('submitBtn');
+            btn.innerText = "Loading...";
+            btn.disabled = true;
+
+            const fileInput = document.getElementById('voucherPhoto');
+            if (fileInput.files.length === 0) {
+                showModal("Warning!", "Please select a voucher photo.", "error");
+                btn.innerText = "Save Record";
+                btn.disabled = false;
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function (event) {
+                const img = new Image();
+                img.src = event.target.result;
+                
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 800;
+                    const MAX_HEIGHT = 800;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+
+                    // payload ကို ဒီနေရာမှာ တခါတည်း ကြေညာပေးထားပါတယ်
+                    const payload = {
+                        action: "saveRefilling",
+                        user: localStorage.getItem('userEmail') || localStorage.getItem('user_email') || localStorage.getItem('email') || localStorage.getItem('loggedInUser') || "admin@capitaltreasure.com",
+                        date: document.getElementById('date').value,
+                        voucherNumber: document.getElementById('voucher').value,  
+                        regions: document.getElementById('region').value,        
+                        plateNumber: document.getElementById('vehicle').value,    
+                        driverName: document.getElementById('driver').value,     
+                        type: document.getElementById('fuelType').value,
+                        rate: document.getElementById('rate').value,
+                        liter: document.getElementById('liters').value,          
+                        amount: document.getElementById('total').value,
+                        extraCash: document.getElementById('extraCash').value,
+                        stationName: document.getElementById('stationName').value,
+                        remark: document.getElementById('remark').value,
+                        photoData: compressedDataUrl.split(',')[1],
+                        photoName: file.name,
+                        mimeType: 'image/jpeg'
+                    };
+
+                    // sendToServer ကို တိုက်ရိုက် ခေါ်သုံးခြင်း
+                    fetch(scriptURL, { 
+                        method: 'POST', 
+                        body: JSON.stringify(payload) 
+                    })
+                    .then(res => res.json())
+                    .then(res => {
+                        btn.innerText = "Save Record";
+                        btn.disabled = false;
+                        showModal("Successfully Saved!", res.message || "Thank you for your data entry.", "success");
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        btn.innerText = "Save Record";
+                        btn.disabled = false;
+                        showModal("Connection Error!", "Could not save data. Please check your internet connection.", "error");
+                    });
+                };
+            };
+            
+            reader.readAsDataURL(file);
+        }
     </script>
-    <script src="script.js"></script>
-</body>
+   </body>
 </html>
+
