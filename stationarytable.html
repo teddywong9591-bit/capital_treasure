@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stationery Inventory Table - Capital Treasure</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root { --bg-primary: #0f172a; --bg-card: #ffffff; --text-main: #0f172a; --accent: #2563eb; --border: #e2e8f0; --radius: 12px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f8fafc; color: var(--text-main); display: flex; min-height: 100vh; }
+        
+        /* Sidebar Styling (Same as main page) */
+        .sidebar { width: 260px; background-color: var(--bg-primary); color: #fff; display: flex; flex-direction: column; position: fixed; height: 100vh; }
+        .brand { padding: 24px; display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .brand i { color: var(--accent); }
+        .nav-list { list-style: none; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+        .nav-item a { padding: 12px 16px; border-radius: var(--radius); color: #94a3b8; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .nav-item a:hover { background-color: rgba(255, 255, 255, 0.1); color: #fff; }
+        .nav-item.active a { background-color: var(--accent); color: #fff;}
+        
+        /* Main Content Styling */
+        .main-wrapper { margin-left: 260px; flex: 1; display: flex; flex-direction: column; }
+        header { background-color: var(--bg-card); padding: 16px 32px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .content-body { padding: 32px; }
+        
+        /* Filter Section */
+        .filter-bar { display: flex; gap: 15px; margin-bottom: 20px; align-items: center; background: #fff; padding: 15px 20px; border-radius: 8px; border: 1px solid var(--border); }
+        .filter-group { display: flex; align-items: center; gap: 8px; }
+        .filter-group label { font-size: 13px; font-weight: 600; color: #475569; }
+        .filter-group select { padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; font-size: 13px; }
+        
+        /* Table Styling */
+        .table-container { background: #fff; border-radius: 12px; border: 1px solid var(--border); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 16px 20px; border-bottom: 1px solid var(--border); font-size: 14px; }
+        th { background-color: #f1f5f9; font-weight: 600; color: #475569; }
+        tr:hover { background-color: #f8fafc; }
+        
+        /* Status Badges */
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge.in-stock { background: #dcfce7; color: #16a34a; }
+        .badge.low-stock { background: #fef08a; color: #b45309; }
+        .badge.out-of-stock { background: #fee2e2; color: #ef4444; }
+        
+        .btn-back { display: inline-flex; align-items: center; gap: 8px; color: #2563eb; text-decoration: none; font-weight: 600; font-size: 14px; margin-bottom: 20px; }
+        .btn-back:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand"><i data-lucide="shield-check"></i><span>Capital Treasure</span></div>
+        <ul class="nav-list">
+            <li class="nav-item"><a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+            <li class="nav-item"><a href="stationary.html"><i data-lucide="pen-tool"></i> Stationery Requests</a></li>
+            <li class="nav-item active"><a href="stationarytable.html"><i data-lucide="table"></i> Stationery Inventory</a></li>
+        </ul>
+    </aside>
+    <div class="main-wrapper">
+        <header>
+            <h1 style="font-size: 20px;">Stationery Inventory & Logs</h1>
+        </header>
+        <div class="content-body">
+            
+            <a href="stationary.html" class="btn-back"><i data-lucide="arrow-left"></i> Back to Requisition Form</a>
+            
+            <!-- Filters -->
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label><i data-lucide="filter" style="width:16px; height:16px;"></i> Filter By:</label>
+                    <select id="stockFilter" onchange="applyFilter()">
+                        <option value="all">All Items</option>
+                        <option value="in-stock">Current Stock (Available)</option>
+                        <option value="low-stock">Low Stock Alerts</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Sort By:</label>
+                    <select>
+                        <option>Most Popular (High Usage)</option>
+                        <option>Least Used</option>
+                        <option>Alphabetical (A-Z)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-container">
+                <table id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Item Name</th>
+                            <th>Category</th>
+                            <th>Total Usage (This Month)</th>
+                            <th>Current Stock</th>
+                            <th>Status</th>
+                            <th>Last Restocked</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-status="in-stock">
+                            <td>STN-001</td>
+                            <td>A4 Paper (Double A)</td>
+                            <td>Paper</td>
+                            <td>45 Rims</td>
+                            <td>120 Rims</td>
+                            <td><span class="badge in-stock">In Stock</span></td>
+                            <td>12 Oct 2024</td>
+                        </tr>
+                        <tr data-status="low-stock">
+                            <td>STN-002</td>
+                            <td>Blue Ballpoint Pen</td>
+                            <td>Writing</td>
+                            <td>150 Pcs</td>
+                            <td>15 Pcs</td>
+                            <td><span class="badge low-stock">Low Stock</span></td>
+                            <td>05 Sep 2024</td>
+                        </tr>
+                        <tr data-status="in-stock">
+                            <td>STN-003</td>
+                            <td>Sticky Notes (Yellow)</td>
+                            <td>Paper</td>
+                            <td>20 Pads</td>
+                            <td>50 Pads</td>
+                            <td><span class="badge in-stock">In Stock</span></td>
+                            <td>15 Oct 2024</td>
+                        </tr>
+                        <tr data-status="out-of-stock">
+                            <td>STN-004</td>
+                            <td>Printer Toner (HP 85A)</td>
+                            <td>Supplies</td>
+                            <td>5 Units</td>
+                            <td>0 Units</td>
+                            <td><span class="badge out-of-stock">Out of Stock</span></td>
+                            <td>01 Aug 2024</td>
+                        </tr>
+                        <tr data-status="in-stock">
+                            <td>STN-005</td>
+                            <td>Arch File (Black)</td>
+                            <td>Folders</td>
+                            <td>30 Pcs</td>
+                            <td>85 Pcs</td>
+                            <td><span class="badge in-stock">In Stock</span></td>
+                            <td>20 Oct 2024</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    
+    <script>
+        lucide.createIcons();
+
+        // Simple Filter Logic based on Row Data-Status attribute
+        function applyFilter() {
+            let filterValue = document.getElementById('stockFilter').value;
+            let rows = document.querySelectorAll('#inventoryTable tbody tr');
+
+            rows.forEach(row => {
+                let status = row.getAttribute('data-status');
+                if (filterValue === 'all' || status === filterValue || (filterValue==='low-stock' && status==='out-of-stock')) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
