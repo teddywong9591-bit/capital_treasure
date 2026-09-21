@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stationery Stock In & Inventory - Capital Treasure</title>
+    <title>Stationery Requisition & Inventory - Capital Treasure</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root { --bg-primary: #0f172a; --bg-card: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --accent: #2563eb; --border: #e2e8f0; --radius: 12px; }
@@ -21,30 +21,39 @@
         
         .main-wrapper { margin-left: 260px; flex: 1; display: flex; flex-direction: column; }
         header { background-color: var(--bg-card); padding: 16px 32px; border-bottom: 1px solid var(--border); }
-        .content-body { padding: 32px; display: flex; flex-direction: column; gap: 24px; max-width: 1100px; margin: 0 auto; width: 100%; }
+        .content-body { padding: 32px; display: flex; flex-direction: column; gap: 24px; max-width: 1000px; margin: 0 auto; width: 100%; }
         
         .form-card, .table-card { background: var(--bg-card); padding: 28px; border-radius: var(--radius); border: 1px solid var(--border); }
         .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
         .form-group { display: flex; flex-direction: column; gap: 6px; }
         .form-group.full { grid-column: span 2; }
         label { font-size: 13px; font-weight: 600; color: #334155; }
-        input, select, textarea { padding: 10px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 14px; background: #fff; }
+        input, select, textarea { padding: 10px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 14px; }
         
-        .btn-success { background: #16a34a; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
-        .btn-success:hover { background: #15803d; }
+        .btn-primary { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-primary:hover { background: #1d4ed8; }
 
+        /* Filter Section inside Table */
         .section-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
-        
+        .filter-bar { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+        .filter-group { display: flex; align-items: center; gap: 8px; }
+        .filter-group label { font-size: 13px; font-weight: 600; color: #475569; }
+        .filter-group select { padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; font-size: 13px; background: #fff; }
+
+        /* Table Styling */
         .table-responsive { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 750px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
         th, td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
         th { background-color: #f1f5f9; font-weight: 600; color: #475569; }
         tr:hover { background-color: #f8fafc; }
 
+        /* Status Badges */
         .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; }
         .badge.in-stock { background: #dcfce7; color: #16a34a; }
         .badge.low-stock { background: #fef08a; color: #b45309; }
+        .badge.out-of-stock { background: #fee2e2; color: #ef4444; }
 
+        /* Mobile Responsive */
         @media screen and (max-width: 768px) {
             .sidebar { width: 70px; }
             .sidebar .brand span, .sidebar .nav-item span { display: none; }
@@ -60,7 +69,7 @@
         <div class="brand"><i data-lucide="shield-check"></i><span>Capital Treasure</span></div>
         <ul class="nav-list">
             <li class="nav-item"><a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
-            <li class="nav-item active"><a href="stationary.html"><i data-lucide="pen-tool"></i> Stationery Inventory</a></li>
+            <li class="nav-item active" id="menu-stationery"><a href="stationary.html"><i data-lucide="pen-tool"></i> Stationery Requests</a></li>
             <li class="nav-item"><a href="warehouse.html"><i data-lucide="warehouse"></i> Warehouse</a></li>
             <li class="nav-divider"></li>
             <li class="nav-item"><a href="logout.html"><i data-lucide="log-out"></i> Log Out</a></li>
@@ -68,16 +77,23 @@
     </aside>
     
     <div class="main-wrapper">
-        <header><h1 style="font-size: 20px;">Stationery Stock & Purchase Management</h1></header>
+        <header><h1 style="font-size: 20px;">Stationery Management</h1></header>
         
         <div class="content-body">
-            <!-- 1. Stock In / New Purchase Form -->
+            <!-- 1. Requisition Form -->
             <div class="form-card">
-                <h2 class="section-title"><i data-lucide="package-plus"></i> New Stock In (ပစ္စည်းအသစ် ဝယ်ယူမှုစာရင်းသွင်းရန်)</h2>
-                <form class="form-grid" onsubmit="event.preventDefault(); alert('New Stationery Stock Added Successfully!');">
+                <h2 class="section-title"><i data-lucide="file-plus"></i> Stationery Requisition Form</h2>
+                <form class="form-grid" onsubmit="event.preventDefault(); alert('Stationery Request Submitted Successfully!');">
+                    <div class="form-group"><label>Employee Name / ID</label><input type="text" placeholder="e.g. Mg Mg (EMP-001)" required></div>
                     <div class="form-group">
-                        <label>Item Name / Description</label>
-                        <input type="text" placeholder="ဥပမာ - A4 Paper (Double A)" required>
+                        <label>Department</label>
+                        <select required>
+                            <option value="">Select Department</option>
+                            <option>HR & Admin</option>
+                            <option>Finance</option>
+                            <option>Operations</option>
+                            <option>IT</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Category</label>
@@ -90,70 +106,95 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Quantity Purchased (ဝယ်ယူသည့် အရေအတွက်)</label>
-                        <input type="number" min="1" placeholder="ဥပမာ - 50" required>
+                        <label>Item Name</label>
+                        <select required>
+                            <option value="">Select Item</option>
+                            <option>A4 Paper (Rim)</option>
+                            <option>Ballpoint Pen (Box)</option>
+                            <option>Sticky Notes</option>
+                            <option>Printer Toner</option>
+                            <option>Arch File</option>
+                        </select>
                     </div>
+                    <div class="form-group"><label>Quantity</label><input type="number" min="1" placeholder="1" required></div>
                     <div class="form-group">
-                        <label>Purchase Price (ဝယ်ယူသည့် ဈေးနှုန်း - MMK)</label>
-                        <input type="text" placeholder="ဥပမာ - 12,500" required>
+                        <label>Urgency Level</label>
+                        <select><option>Normal</option><option>High / Urgent</option></select>
                     </div>
-                    <div class="form-group">
-                        <label>Supplier / Shop Name (ဆိုင်အမည်)</label>
-                        <input type="text" placeholder="ဥပမာ - City Mart / A One Stationery">
-                    </div>
-                    <div class="form-group">
-                        <label>Purchase Date (ဝယ်ယူသည့်ရက်စွဲ)</label>
-                        <input type="date" required>
-                    </div>
-                    <div class="form-group full">
-                        <button class="btn-success" type="submit"><i data-lucide="plus-circle"></i> Save & Add to Stock</button>
-                    </div>
+                    <div class="form-group full"><label>Reason / Purpose</label><textarea rows="3" placeholder="State reason for requisition..."></textarea></div>
+                    <div class="form-group full"><button class="btn-primary" type="submit"><i data-lucide="send"></i> Submit Request</button></div>
                 </form>
             </div>
 
-            <!-- 2. Stationery Table (Inventory List) -->
+            <!-- 2. Stationery Inventory & Usage Table (Directly Below Form) -->
             <div class="table-card">
-                <h2 class="section-title"><i data-lucide="table"></i> Current Stationery Inventory Table</h2>
+                <h2 class="section-title"><i data-lucide="table"></i> Stationery Inventory & Usage Log</h2>
+                
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <label><i data-lucide="filter" style="width:14px; height:14px;"></i> Filter Status:</label>
+                        <select id="stockFilter" onchange="applyFilter()">
+                            <option value="all">All Items</option>
+                            <option value="in-stock">In Stock</option>
+                            <option value="low-stock">Low Stock</option>
+                            <option value="out-of-stock">Out of Stock</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Sort By:</label>
+                        <select>
+                            <option>Most Popular (High Usage)</option>
+                            <option>Alphabetical (A-Z)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Table -->
                 <div class="table-responsive">
-                    <table>
+                    <table id="inventoryTable">
                         <thead>
                             <tr>
                                 <th>Item ID</th>
                                 <th>Item Name</th>
                                 <th>Category</th>
+                                <th>Total Usage</th>
                                 <th>Current Stock</th>
-                                <th>Latest Purchase Price</th>
-                                <th>Last Restocked Date</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr data-status="in-stock">
                                 <td>STN-001</td>
                                 <td>A4 Paper (Double A)</td>
                                 <td>Paper</td>
+                                <td>45 Rims</td>
                                 <td>120 Rims</td>
-                                <td>12,500 MMK</td>
-                                <td>20 Jun 2026</td>
                                 <td><span class="badge in-stock">In Stock</span></td>
                             </tr>
-                            <tr>
+                            <tr data-status="low-stock">
                                 <td>STN-002</td>
                                 <td>Blue Ballpoint Pen</td>
                                 <td>Writing</td>
+                                <td>150 Pcs</td>
                                 <td>15 Pcs</td>
-                                <td>3,500 MMK</td>
-                                <td>10 May 2026</td>
                                 <td><span class="badge low-stock">Low Stock</span></td>
                             </tr>
-                            <tr>
+                            <tr data-status="in-stock">
                                 <td>STN-003</td>
                                 <td>Sticky Notes (Yellow)</td>
                                 <td>Paper</td>
+                                <td>20 Pads</td>
                                 <td>50 Pads</td>
-                                <td>1,800 MMK</td>
-                                <td>15 Jun 2026</td>
                                 <td><span class="badge in-stock">In Stock</span></td>
+                            </tr>
+                            <tr data-status="out-of-stock">
+                                <td>STN-004</td>
+                                <td>Printer Toner (HP 85A)</td>
+                                <td>Supplies</td>
+                                <td>5 Units</td>
+                                <td>0 Units</td>
+                                <td><span class="badge out-of-stock">Out of Stock</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -164,7 +205,22 @@
     
     <script>
         lucide.createIcons();
+
+        // Filter Function for Table
+        function applyFilter() {
+            let filterValue = document.getElementById('stockFilter').value;
+            let rows = document.querySelectorAll('#inventoryTable tbody tr');
+
+            rows.forEach(row => {
+                let status = row.getAttribute('data-status');
+                if (filterValue === 'all' || status === filterValue) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
     </script>
 </body>
-</html>
+                                </html>
 
