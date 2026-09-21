@@ -1,3 +1,28 @@
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDXxz98pnMZd9M0Hwc1He4mycOGZDub5xw",
+    authDomain: "capitaltreasure-2020.firebaseapp.com",
+    databaseURL: "https://capitaltreasure-2020-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "capitaltreasure-2020",
+    storageBucket: "capitaltreasure-2020.firebasestorage.app",
+    messagingSenderId: "27339976932",
+    appId: "1:27339976932:web:50881deb7f2334ef237cf1",
+    measurementId: "G-Z8C39DE428"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+
 function applyRoleAccess() {
     // LocalStorage မှ Login ဝင်ထားသော Role ကို ယူမည် (မရှိပါက Default 'ADMIN')
     const loginRole = localStorage.getItem('login_role') || 'ADMIN';
