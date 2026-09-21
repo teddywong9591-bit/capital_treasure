@@ -5,24 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logging Out...</title>
 </head>
-<body style="background-color: #0f172a; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif;">
+<body style="background-color: #0f172a; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
     <div style="text-align: center;">
         <h2>Logging out...</h2>
-        <p style="color: #94a3b8; margin-top: 8px;">စနစ်အတွင်းမှ ထွက်ခွာနေပါသည်။</p>
+        <p style="color: #94a3b8; margin-top: 8px;">စနစ်မှ ထွက်ခွာနေပါသည်...</p>
     </div>
 
     <!-- External Script File -->
     <script src="script.js"></script>
 
     <script>
-        // Clear all stored data (both Local & Session)
+        // Clear all stored data (both local & session)
         localStorage.clear();
         sessionStorage.clear();
 
         // Redirect to login page after 1 second
         setTimeout(() => {
-            window.location.href = 'index.html';
+            window.location.href = 'index.html'; // သို့မဟုတ် login.html သို့ ပြောင်းနိုင်ပါသည်
         }, 1000);
     </script>
 </body>
 </html>
+
