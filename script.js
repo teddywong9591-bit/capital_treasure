@@ -1,28 +1,29 @@
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+// ==========================================
+// 1. Firebase Initialization
+// ==========================================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
+// လိုအပ်ပါက Google Auth အတွက် ဤနေရာတွင် ထပ်မံ import လုပ်နိုင်ပါသည် (ဥပမာ- getAuth, GoogleAuthProvider စသည်ဖြင့်)
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyDXxz98pnMZd9M0Hwc1He4mycOGZDub5xw",
-    authDomain: "capitaltreasure-2020.firebaseapp.com",
-    databaseURL: "https://capitaltreasure-2020-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "capitaltreasure-2020",
-    storageBucket: "capitaltreasure-2020.firebasestorage.app",
-    messagingSenderId: "27339976932",
-    appId: "1:27339976932:web:50881deb7f2334ef237cf1",
-    measurementId: "G-Z8C39DE428"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyDXxz98pnMZd9M0Hwc1He4mycOGZDub5xw",
+  authDomain: "capitaltreasure-2020.firebaseapp.com",
+  databaseURL: "https://capitaltreasure-2020-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "capitaltreasure-2020",
+  storageBucket: "capitaltreasure-2020.firebasestorage.app",
+  messagingSenderId: "27339976932",
+  appId: "1:27339976932:web:50881deb7f2334ef237cf1",
+  measurementId: "G-Z8C39DE428"
+};
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
+
+// ==========================================
+// 2. Role-Based Access Control (RBAC) Logic
+// ==========================================
 function applyRoleAccess() {
     // LocalStorage မှ Login ဝင်ထားသော Role ကို ယူမည် (မရှိပါက Default 'ADMIN')
     const loginRole = localStorage.getItem('login_role') || 'ADMIN';
@@ -52,7 +53,7 @@ function applyRoleAccess() {
 
     // ၂။ Login ဝင်ထားသော Role အလိုက် လိုအပ်သည့် Menu များကိုသာ ပြမည် (display: block)
     
-    // --- HR Role (Dashboard မပါပါ) ---
+    // --- HR Role ---
     if (loginRole === 'HR') {
         if (menus.leave) menus.leave.style.display = 'block';
         if (menus.meeting) menus.meeting.style.display = 'block';
@@ -60,14 +61,14 @@ function applyRoleAccess() {
         if (menus.interview) menus.interview.style.display = 'block';
     }
 
-    // --- FLEET Role (Dashboard မပါပါ) ---
+    // --- FLEET Role ---
     else if (loginRole === 'FLEET') {
         if (menus.fuel) menus.fuel.style.display = 'block';
         if (menus.maintenance) menus.maintenance.style.display = 'block';
         if (menus.inspection) menus.inspection.style.display = 'block';
     }
 
-    // --- WAREHOUSE Role (Dashboard မပါပါ) ---
+    // --- WAREHOUSE Role ---
     else if (loginRole === 'WAREHOUSE') {
         if (menus.warehouse) menus.warehouse.style.display = 'block';
         if (menus.stock) menus.stock.style.display = 'block';
@@ -82,23 +83,27 @@ function applyRoleAccess() {
     }
 }
 
-// Login စစ်ဆေးသည့် Function
-function loginUser(username, password) {
-    if (username === 'abc123' && password === 'abc1234') {
-        localStorage.setItem('login_role', 'ADMIN');
-        localStorage.setItem('user_role', 'ADMIN');
-        localStorage.setItem('logged_in_user', 'ABC Admin');
-        window.location.href = 'dashboard.html';
-        return true;
-    }
-    return false;
+
+// ==========================================
+// 3. Gmail / Google Authentication Process (Placeholder)
+// ==========================================
+// နောင်တွင် Firebase Google Sign-In ဖြင့် ချိတ်ဆက်ရန် ဤနေရာတွင် Function အသစ်ရေးသားနိုင်ပါသည်
+function loginWithGoogle() {
+    // ဥပမာ - Firebase Authentication (Google Provider) ဖြင့် ဝင်ရောက်ရန် ကုဒ်များကို ဤနေရာတွင် ထည့်သွင်းပါမည်။
+    console.log("Google Sign-In process will be implemented here.");
 }
 
-// Log Out ပြုလုပ်သည့် Function
+
+// ==========================================
+// 4. Log Out Function
+// ==========================================
 function logout() {
     localStorage.clear();
     window.location.href = 'index.html';
 }
 
-// Page Load ဖြစ်သည်နှင့် တစ်ပြိုင်နက် အလိုအလျောက် စစ်ဆေးမည်
+
+// ==========================================
+// 5. Page Load Event Listener
+// ==========================================
 window.addEventListener('DOMContentLoaded', applyRoleAccess);
