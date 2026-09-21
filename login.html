@@ -194,21 +194,6 @@
         .modal-desc {
             font-size: 13px;
             color: #64748b;
-            margin-bottom: 20px;
-        }
-        .btn-modal {
-            width: 100%;
-            padding: 10px;
-            background-color: #16a34a;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .btn-modal:hover {
-            background-color: #15803d;
         }
     </style>
 </head>
@@ -253,7 +238,7 @@
         </form>
     </div>
 
-    <!-- Custom Success Modal UI -->
+    <!-- Custom Success Modal UI (ခလုတ်မပါဘဲ အလိုအလျောက်ပျောက်မည့် ပုံစံ) -->
     <div class="modal-overlay" id="successModal">
         <div class="modal-card">
             <div class="success-icon">
@@ -261,8 +246,9 @@
                     <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
             </div>
-            <div class="modal-title">Sign In အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။</div>
-           </div>
+            <div class="modal-title">Sign In အောင်မြင်သည်</div>
+            <div class="modal-desc" id="modalRoleText">စနစ်အတွင်းသို့ ဝင်ရောက်နေပါသည်။</div>
+        </div>
     </div>
 
     <script>
@@ -314,15 +300,21 @@
 
                     // Show Custom UI Modal
                     document.getElementById('successModal').classList.add('active');
+
+                    // ၃ စက္ကန့် (3000 ms) ပြည့်သည်နှင့် အလိုအလျောက် ပိတ်ပြီး သက်ဆိုင်ရာစာမျက်နှာသို့ သွားရန်
+                    setTimeout(() => {
+                        closeModal();
+                    }, 3000);
+
                 } else {
                     errorMsg.style.display = 'block';
+                    submitBtn.disabled = false;
+                    btnText.innerText = "Sign In";
                 }
-
-                submitBtn.disabled = false;
-                btnText.innerText = "Sign In";
             }, 600);
         });
 
+        // Auto Redirect Function (မူရင်းအတိုင်း Role အလိုက် လမ်းကြောင်းပြောင်းပေးခြင်း)
         function closeModal() {
             document.getElementById('successModal').classList.remove('active');
             
@@ -340,5 +332,5 @@
         }
     </script>
 </body>
-  </html>
+</html>
 
