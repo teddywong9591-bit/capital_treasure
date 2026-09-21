@@ -21,7 +21,7 @@
         
         .main-wrapper { margin-left: 260px; flex: 1; display: flex; flex-direction: column; }
         header { background-color: var(--bg-card); padding: 16px 32px; border-bottom: 1px solid var(--border); }
-        .content-body { padding: 32px; display: flex; flex-direction: column; gap: 24px; max-width: 1000px; margin: 0 auto; width: 100%; }
+        .content-body { padding: 32px; display: flex; flex-direction: column; gap: 24px; max-width: 1050px; margin: 0 auto; width: 100%; }
         
         .form-card, .table-card { background: var(--bg-card); padding: 28px; border-radius: var(--radius); border: 1px solid var(--border); }
         .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
@@ -30,30 +30,29 @@
         label { font-size: 13px; font-weight: 600; color: #334155; }
         input, select, textarea { padding: 10px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 14px; }
         
+        .price-history-box { background: #f8fafc; border: 1px dashed #cbd5e1; padding: 12px 16px; border-radius: 8px; font-size: 13px; color: #475569; display: flex; flex-direction: column; gap: 4px; }
+        .price-history-box span { font-weight: 600; color: #1e293b; }
+
         .btn-primary { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn-primary:hover { background: #1d4ed8; }
 
-        /* Filter Section inside Table */
         .section-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
         .filter-bar { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
         .filter-group { display: flex; align-items: center; gap: 8px; }
         .filter-group label { font-size: 13px; font-weight: 600; color: #475569; }
         .filter-group select { padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; font-size: 13px; background: #fff; }
 
-        /* Table Styling */
         .table-responsive { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 700px; }
         th, td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
         th { background-color: #f1f5f9; font-weight: 600; color: #475569; }
         tr:hover { background-color: #f8fafc; }
 
-        /* Status Badges */
         .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; }
         .badge.in-stock { background: #dcfce7; color: #16a34a; }
         .badge.low-stock { background: #fef08a; color: #b45309; }
         .badge.out-of-stock { background: #fee2e2; color: #ef4444; }
 
-        /* Mobile Responsive */
         @media screen and (max-width: 768px) {
             .sidebar { width: 70px; }
             .sidebar .brand span, .sidebar .nav-item span { display: none; }
@@ -107,13 +106,12 @@
                     </div>
                     <div class="form-group">
                         <label>Item Name</label>
-                        <select required>
+                        <select id="itemSelect" onchange="updatePriceHistory()" required>
                             <option value="">Select Item</option>
-                            <option>A4 Paper (Rim)</option>
-                            <option>Ballpoint Pen (Box)</option>
-                            <option>Sticky Notes</option>
-                            <option>Printer Toner</option>
-                            <option>Arch File</option>
+                            <option value="A4 Paper (Rim)">A4 Paper (Rim)</option>
+                            <option value="Ballpoint Pen (Box)">Ballpoint Pen (Box)</option>
+                            <option value="Sticky Notes">Sticky Notes</option>
+                            <option value="Printer Toner">Printer Toner</option>
                         </select>
                     </div>
                     <div class="form-group"><label>Quantity</label><input type="number" min="1" placeholder="1" required></div>
@@ -121,14 +119,23 @@
                         <label>Urgency Level</label>
                         <select><option>Normal</option><option>High / Urgent</option></select>
                     </div>
+                    
+                    <!-- Last 3 Purchase Prices Display Box -->
+                    <div class="form-group full">
+                        <label>Last 3 Purchase Prices (Recent History)</label>
+                        <div class="price-history-box" id="priceHistoryDisplay">
+                            <span>👉 Please select an item to view its last 3 purchase prices.</span>
+                        </div>
+                    </div>
+
                     <div class="form-group full"><label>Reason / Purpose</label><textarea rows="3" placeholder="State reason for requisition..."></textarea></div>
                     <div class="form-group full"><button class="btn-primary" type="submit"><i data-lucide="send"></i> Submit Request</button></div>
                 </form>
             </div>
 
-            <!-- 2. Stationery Inventory & Usage Table (Directly Below Form) -->
+            <!-- 2. Stationery Inventory & Usage Table -->
             <div class="table-card">
-                <h2 class="section-title"><i data-lucide="table"></i> Stationery Inventory & Usage Log</h2>
+                <h2 class="section-title"><i data-lucide="table"></i> Stationery Inventory & Price History</h2>
                 
                 <!-- Filter Bar -->
                 <div class="filter-bar">
@@ -141,13 +148,6 @@
                             <option value="out-of-stock">Out of Stock</option>
                         </select>
                     </div>
-                    <div class="filter-group">
-                        <label>Sort By:</label>
-                        <select>
-                            <option>Most Popular (High Usage)</option>
-                            <option>Alphabetical (A-Z)</option>
-                        </select>
-                    </div>
                 </div>
 
                 <!-- Table -->
@@ -157,43 +157,38 @@
                             <tr>
                                 <th>Item ID</th>
                                 <th>Item Name</th>
-                                <th>Category</th>
-                                <th>Total Usage</th>
                                 <th>Current Stock</th>
+                                <th>Last 3 Purchase Prices (Recent ➔ Oldest)</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr data-status="in-stock">
                                 <td>STN-001</td>
-                                <td>A4 Paper (Double A)</td>
-                                <td>Paper</td>
-                                <td>45 Rims</td>
+                                <td>A4 Paper (Rim)</td>
                                 <td>120 Rims</td>
+                                <td><b>12,500 MMK</b>, 12,000 MMK, 11,500 MMK</td>
                                 <td><span class="badge in-stock">In Stock</span></td>
                             </tr>
                             <tr data-status="low-stock">
                                 <td>STN-002</td>
-                                <td>Blue Ballpoint Pen</td>
-                                <td>Writing</td>
-                                <td>150 Pcs</td>
+                                <td>Ballpoint Pen (Box)</td>
                                 <td>15 Pcs</td>
+                                <td><b>3,500 MMK</b>, 3,200 MMK, 3,000 MMK</td>
                                 <td><span class="badge low-stock">Low Stock</span></td>
                             </tr>
                             <tr data-status="in-stock">
                                 <td>STN-003</td>
-                                <td>Sticky Notes (Yellow)</td>
-                                <td>Paper</td>
-                                <td>20 Pads</td>
+                                <td>Sticky Notes</td>
                                 <td>50 Pads</td>
+                                <td><b>1,800 MMK</b>, 1,700 MMK, 1,600 MMK</td>
                                 <td><span class="badge in-stock">In Stock</span></td>
                             </tr>
                             <tr data-status="out-of-stock">
                                 <td>STN-004</td>
-                                <td>Printer Toner (HP 85A)</td>
-                                <td>Supplies</td>
-                                <td>5 Units</td>
+                                <td>Printer Toner</td>
                                 <td>0 Units</td>
+                                <td><b>45,000 MMK</b>, 44,000 MMK, 42,000 MMK</td>
                                 <td><span class="badge out-of-stock">Out of Stock</span></td>
                             </tr>
                         </tbody>
@@ -206,7 +201,25 @@
     <script>
         lucide.createIcons();
 
-        // Filter Function for Table
+        // Sample Price Database for Form selection
+        const priceDatabase = {
+            "A4 Paper (Rim)": "1. Latest: 12,500 MMK | 2. Previous: 12,000 MMK | 3. Older: 11,500 MMK",
+            "Ballpoint Pen (Box)": "1. Latest: 3,500 MMK | 2. Previous: 3,200 MMK | 3. Older: 3,000 MMK",
+            "Sticky Notes": "1. Latest: 1,800 MMK | 2. Previous: 1,700 MMK | 3. Older: 1,600 MMK",
+            "Printer Toner": "1. Latest: 45,000 MMK | 2. Previous: 44,000 MMK | 3. Older: 42,000 MMK"
+        };
+
+        function updatePriceHistory() {
+            let selectedItem = document.getElementById("itemSelect").value;
+            let displayBox = document.getElementById("priceHistoryDisplay");
+            
+            if(selectedItem && priceDatabase[selectedItem]) {
+                displayBox.innerHTML = `<span>${priceDatabase[selectedItem]}</span>`;
+            } else {
+                displayBox.innerHTML = `<span>👉 Please select an item to view its last 3 purchase prices.</span>`;
+            }
+        }
+
         function applyFilter() {
             let filterValue = document.getElementById('stockFilter').value;
             let rows = document.querySelectorAll('#inventoryTable tbody tr');
