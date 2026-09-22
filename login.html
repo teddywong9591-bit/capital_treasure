@@ -29,24 +29,24 @@
             text-align: center;
             position: relative;
         }
-        .icon-box {
-            width: 72px;
-            height: 72px;
-            background-color: #2563eb;
-            border-radius: 12px;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-            overflow: hidden; /* ပုံထောင့်များ ဝိုင်းနေစေရန် */
-        }
-        /* Logo ပုံအတွက် styling အသစ် */
-        .icon-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* ပုံအပြည့်အဝင်ဖြစ်စေရန် (သို့မဟုတ် contain သုံးနိုင်သည်) */
-        }
+.icon-box {
+    width: 72px;
+    height: 72px;
+    background-color: #2563eb;
+    border-radius: 50%; /* စက်ဝိုင်းပုံစံ ဖြစ်သွားစေရန် 50% ပြောင်းပါ */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    overflow: hidden; /* ပုံစက်ဝိုင်းပုံစံგံအတွင်း ထွက်မသွားစေရန် ထိန်းချုပ်ပေးသည် */
+}
+
+.icon-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* ပုံကို စက်ဝိုင်းကွက်အတွင်း အပြည့်အဝင်ဖြစ်စေသည် */
+}
         h2 {
             font-size: 22px;
             font-weight: 700;
