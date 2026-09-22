@@ -236,14 +236,35 @@
     <script>
         lucide.createIcons();
 
-        // Edit နှင့် Delete အတွက် နမူနာ Function များ
+        // 1. Edit လုပ်ရန် - Form ထဲသို့ Data များ အလိုအလျောက် ဖြည့်ပေးမည်
         function editItem(id) {
-            alert("Edit item ID: " + id);
+            // ဥပမာအနေဖြင့် နှိပ်လိုက်သော Row ကို ရှာခြင်း
+            const row = event.target.closest('tr');
+            const itemName = row.cells[1].innerText;
+            const category = row.cells[2].innerText;
+            const stockText = row.cells[3].innerText.replace(/[^0-9]/g, ''); // ကိန်းဂဏန်းသီးသန့်ထုတ်ရန်
+            const priceText = row.cells[4].innerText.replace(/[^0-9]/g, '');
+
+            // Form ထဲရှိ Input များကို Data ထည့်ပေးခြင်း
+            document.querySelector('input[placeholder*="A4 Paper"]').value = itemName;
+            document.querySelector('select').value = category === 'Paper' ? 'Paper & Notebooks' : 'Writing Instruments'; // လိုသလို ချိန်ရန်
+            document.querySelector('input[type="number"]').value = stockText;
+            document.querySelector('input[placeholder*="12,500"]').value = priceText;
+
+            // Form Title ကို ပြောင်းပေးခြင်း (Optional)
+            document.querySelector('.form-card .section-title').innerHTML = `<i data-lucide="package-plus"></i> Edit Stationery Item (${id})`;
+            lucide.createIcons();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // အပေါ်ဆုံး Form ဆီသို့ မျက်နှာပြင် ရွှေ့ပေးမည်
         }
 
+        // 2. Delete လုပ်ရန် - Row ကို ဇယားထဲမှ ဖျက်ထုတ်မည်
         function deleteItem(id) {
-            if (confirm("ဤအချက်အလက်ကို ဖျက်ရန် သေချာပါသလား?")) {
-                alert("Deleted item ID: " + id);
+            if (confirm("ဤ " + id + " အချက်အလက်ကို ဖျက်ရန် သေချာပါသလား?")) {
+                const btn = event.target.closest('button');
+                const row = btn.closest('tr');
+                row.remove(); // ဇယားထဲမှ Row ကို ဖယ်ရှားမည်
+                alert("Item " + id + " successfully deleted!");
             }
         }
     </script>
