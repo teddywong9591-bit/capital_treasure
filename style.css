@@ -195,3 +195,79 @@ header {
 .social-icon-btn.gmail:hover { background-color: #fef2f2; color: #ea4335; border-color: #fecaca; }
 .social-icon-btn.viber:hover { background-color: #f5f3ff; color: #7360f2; border-color: #ddd6fe; }
 .social-icon-btn.phone:hover { background-color: #f0fdf4; color: #16a34a; border-color: #bbf7d0; }
+
+/* Table Styles */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin-top: 20px;
+}
+
+.data-table th, .data-table td {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+}
+
+.data-table th {
+    background-color: #f1f5f9;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+/* Action Buttons Container */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+/* Edit Button */
+.btn-edit {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    background-color: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-edit:hover {
+    background-color: #dbeafe;
+}
+
+/* Delete Button */
+.btn-delete {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    background-color: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-delete:hover {
+    background-color: #fee2e2;
+}
+
+.action-buttons i {
+    width: 14px;
+    height: 14px;
+}
+
