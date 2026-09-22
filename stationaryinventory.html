@@ -111,17 +111,17 @@
         <header><h1 style="font-size: 20px;">Stationery Stock & Purchase Management</h1></header>
         
         <div class="content-body">
-            <!-- 1. Stock In / New Purchase Form -->
+            <!-- 1. Stock In / New Purchase Form (Import Sheet Data Entry) -->
             <div class="form-card">
-                <h2 class="section-title"><i data-lucide="package-plus"></i> New Stock In (ပစ္စည်းအသစ် ဝယ်ယူမှုစာရင်းသွင်းရန်)</h2>
-                <form class="form-grid" onsubmit="event.preventDefault(); alert('New Stationery Stock Added Successfully!');">
+                <h2 class="section-title"><i data-lucide="package-plus"></i> New Stock In (Import Sheet သို့ စာရင်းသွင်းရန်)</h2>
+                <form class="form-grid" id="importForm" onsubmit="handleFormSubmit(event)">
                     <div class="form-group">
                         <label>Item Name / Description</label>
-                        <input type="text" placeholder="ဥပမာ - A4 Paper (Double A)" required>
+                        <input type="text" id="itemName" placeholder="ဥပမာ - A4 Paper (Double A)" required>
                     </div>
                     <div class="form-group">
                         <label>Category</label>
-                        <select required>
+                        <select id="category" required>
                             <option value="">Select Category</option>
                             <option>Paper & Notebooks</option>
                             <option>Writing Instruments</option>
@@ -131,31 +131,31 @@
                     </div>
                     <div class="form-group">
                         <label>Quantity Purchased (ဝယ်ယူသည့် အရေအတွက်)</label>
-                        <input type="number" min="1" placeholder="ဥပမာ - 50" required>
+                        <input type="number" id="quantity" min="1" placeholder="ဥပမာ - 50" required>
                     </div>
                     <div class="form-group">
                         <label>Purchase Price (ဝယ်ယူသည့် ဈေးနှုန်း - MMK)</label>
-                        <input type="text" placeholder="ဥပမာ - 12,500" required>
+                        <input type="text" id="price" placeholder="ဥပမာ - 12,500" required>
                     </div>
                     <div class="form-group">
                         <label>Supplier / Shop Name (ဆိုင်အမည်)</label>
-                        <input type="text" placeholder="ဥပမာ - City Mart / A One Stationery">
+                        <input type="text" id="supplier" placeholder="ဥပမာ - City Mart / A One Stationery">
                     </div>
                     <div class="form-group">
                         <label>Purchase Date (ဝယ်ယူသည့်ရက်စွဲ)</label>
-                        <input type="date" required>
+                        <input type="date" id="pDate" required>
                     </div>
                     <div class="form-group full">
-                        <button class="btn-success" type="submit"><i data-lucide="plus-circle"></i> Save & Add to Stock</button>
+                        <button class="btn-success" type="submit"><i data-lucide="plus-circle"></i> Save to Import Sheet</button>
                     </div>
                 </form>
             </div>
 
             <!-- 2. Stationery Table (Inventory List) -->
             <div class="table-card">
-                <h2 class="section-title"><i data-lucide="table"></i> Current Stationery Inventory Table</h2>
+                <h2 class="section-title"><i data-lucide="table"></i> Current Stationery Inventory Table (Import Data)</h2>
                 <div class="table-responsive">
-                    <table>
+                    <table id="inventoryTable">
                         <thead>
                             <tr>
                                 <th>Item ID</th>
@@ -165,24 +165,24 @@
                                 <th>Latest Purchase Price</th>
                                 <th>Last Restocked Date</th>
                                 <th>Status</th>
-                                <th>Actions</th> <!-- Actions ခေါင်းစဉ် အသစ်ထည့်သွင်းခြင်း -->
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>STN-001</td>
                                 <td>A4 Paper (Double A)</td>
-                                <td>Paper</td>
+                                <td>Paper & Notebooks</td>
                                 <td>120 Rims</td>
                                 <td>12,500 MMK</td>
                                 <td>20 Jun 2026</td>
                                 <td><span class="badge in-stock">In Stock</span></td>
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn-edit" onclick="editItem('STN-001')">
+                                        <button class="btn-edit" onclick="editItem(this)">
                                             <i data-lucide="edit"></i> Edit
                                         </button>
-                                        <button class="btn-delete" onclick="deleteItem('STN-001')">
+                                        <button class="btn-delete" onclick="deleteItem(this)">
                                             <i data-lucide="trash-2"></i> Delete
                                         </button>
                                     </div>
@@ -191,36 +191,17 @@
                             <tr>
                                 <td>STN-002</td>
                                 <td>Blue Ballpoint Pen</td>
-                                <td>Writing</td>
+                                <td>Writing Instruments</td>
                                 <td>15 Pcs</td>
                                 <td>3,500 MMK</td>
                                 <td>10 May 2026</td>
                                 <td><span class="badge low-stock">Low Stock</span></td>
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn-edit" onclick="editItem('STN-002')">
+                                        <button class="btn-edit" onclick="editItem(this)">
                                             <i data-lucide="edit"></i> Edit
                                         </button>
-                                        <button class="btn-delete" onclick="deleteItem('STN-002')">
-                                            <i data-lucide="trash-2"></i> Delete
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>STN-003</td>
-                                <td>Sticky Notes (Yellow)</td>
-                                <td>Paper</td>
-                                <td>50 Pads</td>
-                                <td>1,800 MMK</td>
-                                <td>15 Jun 2026</td>
-                                <td><span class="badge in-stock">In Stock</span></td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-edit" onclick="editItem('STN-003')">
-                                            <i data-lucide="edit"></i> Edit
-                                        </button>
-                                        <button class="btn-delete" onclick="deleteItem('STN-003')">
+                                        <button class="btn-delete" onclick="deleteItem(this)">
                                             <i data-lucide="trash-2"></i> Delete
                                         </button>
                                     </div>
@@ -236,35 +217,80 @@
     <script>
         lucide.createIcons();
 
-        // 1. Edit လုပ်ရန် - Form ထဲသို့ Data များ အလိုအလျောက် ဖြည့်ပေးမည်
-        function editItem(id) {
-            // ဥပမာအနေဖြင့် နှိပ်လိုက်သော Row ကို ရှာခြင်း
-            const row = event.target.closest('tr');
-            const itemName = row.cells[1].innerText;
-            const category = row.cells[2].innerText;
-            const stockText = row.cells[3].innerText.replace(/[^0-9]/g, ''); // ကိန်းဂဏန်းသီးသန့်ထုတ်ရန်
-            const priceText = row.cells[4].innerText.replace(/[^0-9]/g, '');
+        let editingRow = null; // Edit လုပ်နေစဉ် Row ကို မှတ်ထားရန်
 
-            // Form ထဲရှိ Input များကို Data ထည့်ပေးခြင်း
-            document.querySelector('input[placeholder*="A4 Paper"]').value = itemName;
-            document.querySelector('select').value = category === 'Paper' ? 'Paper & Notebooks' : 'Writing Instruments'; // လိုသလို ချိန်ရန်
-            document.querySelector('input[type="number"]').value = stockText;
-            document.querySelector('input[placeholder*="12,500"]').value = priceText;
-
-            // Form Title ကို ပြောင်းပေးခြင်း (Optional)
-            document.querySelector('.form-card .section-title').innerHTML = `<i data-lucide="package-plus"></i> Edit Stationery Item (${id})`;
+        // 1. Formမှ Save လုပ်လျှင် Import Table ထဲသို့ အသစ်ထည့်ရန် (သို့မဟုတ်) Edit ပြင်ရန်
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('itemName').value;
+            const cat = document.getElementById('category').value;
+            const qty = document.getElementById('quantity').value + " Pcs";
+            const price = document.getElementById('price').value + " MMK";
+            const date = document.getElementById('pDate').value;
+            
+            if (editingRow) {
+                // Edit လုပ်ပြီးသားကို Update ပြန်လုပ်ခြင်း
+                editingRow.cells[1].innerText = name;
+                editingRow.cells[2].innerText = cat;
+                editingRow.cells[3].innerText = qty;
+                editingRow.cells[4].innerText = price;
+                editingRow.cells[5].innerText = date;
+                
+                alert('Import Sheet Data Updated Successfully!');
+                editingRow = null;
+                document.querySelector('.form-card .section-title').innerHTML = `<i data-lucide="package-plus"></i> New Stock In (Import Sheet သို့ စာရင်းသွင်းရန်)`;
+            } else {
+                // အသစ်ထည့်ခြင်း (Import Sheet သို့ Data Entry အသစ်သွင်းခြင်း)
+                const table = document.getElementById('inventoryTable').getElementsByTagName('tbody')[0];
+                const newRow = table.insertRow();
+                
+                const randomId = 'STN-00' + (table.rows.length + 1);
+                
+                newRow.innerHTML = `
+                    <td>${randomId}</td>
+                    <td>${name}</td>
+                    <td>${cat}</td>
+                    <td>${qty}</td>
+                    <td>${price}</td>
+                    <td>${date}</td>
+                    <td><span class="badge in-stock">In Stock</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit" onclick="editItem(this)"><i data-lucide="edit"></i> Edit</button>
+                            <button class="btn-delete" onclick="deleteItem(this)"><i data-lucide="trash-2"></i> Delete</button>
+                        </div>
+                    </td>
+                `;
+                alert('New Data Added to Import Sheet Successfully!');
+            }
+            
+            document.getElementById('importForm').reset();
             lucide.createIcons();
-
-            window.scrollTo({ top: 0, behavior: 'smooth' }); // အပေါ်ဆုံး Form ဆီသို့ မျက်နှာပြင် ရွှေ့ပေးမည်
         }
 
-        // 2. Delete လုပ်ရန် - Row ကို ဇယားထဲမှ ဖျက်ထုတ်မည်
-        function deleteItem(id) {
-            if (confirm("ဤ " + id + " အချက်အလက်ကို ဖျက်ရန် သေချာပါသလား?")) {
-                const btn = event.target.closest('button');
-                const row = btn.closest('tr');
-                row.remove(); // ဇယားထဲမှ Row ကို ဖယ်ရှားမည်
-                alert("Item " + id + " successfully deleted!");
+        // 2. Edit လုပ်ရန် - ဇယားကွက်မှ ဒေတာများကို Form ထဲ ပြန်တင်ပေးမည်
+        function editItem(button) {
+            editingRow = button.closest('tr');
+            
+            document.getElementById('itemName').value = editingRow.cells[1].innerText;
+            document.getElementById('category').value = editingRow.cells[2].innerText;
+            document.getElementById('quantity').value = parseInt(editingRow.cells[3].innerText);
+            document.getElementById('price').value = parseInt(editingRow.cells[4].innerText);
+            document.getElementById('pDate').value = editingRow.cells[5].innerText;
+
+            document.querySelector('.form-card .section-title').innerHTML = `<i data-lucide="package-plus"></i> Edit Import Sheet Item`;
+            lucide.createIcons();
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 3. Delete လုပ်ရန် - Import ဇယားထဲမှ Row ကို ဖယ်ရှားမည်
+        function deleteItem(button) {
+            if (confirm("ဤ Import စာရင်းအချက်အလက်ကို ဖျက်ရန် သေချာပါသလား?")) {
+                const row = button.closest('tr');
+                row.remove();
+                alert("Import Data Successfully Deleted!");
             }
         }
     </script>
