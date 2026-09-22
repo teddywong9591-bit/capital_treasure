@@ -33,57 +33,32 @@
         .btn-success { background: #16a34a; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn-success:hover { background: #15803d; }
 
-        .section-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .section-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-main); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
         
+        /* Table Controls (Filter & Pagination Selector) */
+        .table-controls { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; justify-content: space-between; align-items: center; }
+        .control-group { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); }
+        .control-group select { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); font-size: 13px; }
+
         .table-responsive { width: 100%; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; min-width: 1000px; }
         th, td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
         th { background-color: #f1f5f9; font-weight: 600; color: #475569; }
         tr:hover { background-color: #f8fafc; }
 
-        .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; }
-        .badge.in-stock { background: #dcfce7; color: #16a34a; }
-        .badge.low-stock { background: #fef08a; color: #b45309; }
+        /* Pagination Buttons */
+        .pagination { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-top: 16px; }
+        .pagination button { padding: 6px 12px; border: 1px solid var(--border); background: #fff; border-radius: 6px; cursor: pointer; font-size: 13px; }
+        .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .pagination span { font-size: 13px; color: var(--text-muted); }
 
         /* Action Buttons Styling */
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-        }
-        .btn-edit {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 6px 12px;
-            background-color: #eff6ff;
-            color: #2563eb;
-            border: 1px solid #bfdbfe;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
+        .action-buttons { display: flex; gap: 8px; }
+        .btn-edit { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; background-color: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; }
         .btn-edit:hover { background-color: #dbeafe; }
-        .btn-delete {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 6px 12px;
-            background-color: #fef2f2;
-            color: #dc2626;
-            border: 1px solid #fecaca;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
+        .btn-delete { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; background-color: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; }
         .btn-delete:hover { background-color: #fee2e2; }
-        .action-buttons svg, .action-buttons i {
-            width: 14px;
-            height: 14px;
-        }
+        .action-buttons svg, .action-buttons i { width: 14px; height: 14px; }
 
         @media screen and (max-width: 768px) {
             .sidebar { width: 70px; }
@@ -111,7 +86,7 @@
         <header><h1 style="font-size: 20px;">Stationery Stock & Purchase Management</h1></header>
         
         <div class="content-body">
-            <!-- 1. Stock In / New Purchase Form (Import Sheet Data Entry) -->
+            <!-- 1. Stock In / New Purchase Form -->
             <div class="form-card">
                 <h2 class="section-title"><i data-lucide="package-plus"></i> New Stock In (Import Sheet သို့ စာရင်းသွင်းရန်)</h2>
                 <form class="form-grid" id="importForm" onsubmit="handleFormSubmit(event)">
@@ -161,15 +136,44 @@
                 </form>
             </div>
 
-            <!-- 2. Stationery Table (Inventory List) -->
+            <!-- 2. Stationery Table with Filters -->
             <div class="table-card">
-                <h2 class="section-title"><i data-lucide="table"></i> Current Stationery Inventory Table (Import Data)</h2>
+                <div class="section-title">
+                    <span><i data-lucide="table"></i> Current Stationery Inventory Table</span>
+                </div>
+
+                <!-- Filter Controls -->
+                <div class="table-controls">
+                    <div class="control-group">
+                        <label>Show Rows:</label>
+                        <select id="rowsPerPage" onchange="changeRowsPerPage()">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Filter by Category:</label>
+                        <select id="categoryFilter" onchange="filterTableData()">
+                            <option value="">All Categories</option>
+                            <option>Paper & Notebooks</option>
+                            <option>Writing Instruments</option>
+                            <option>Folders & Files</option>
+                            <option>Printer Supplies</option>
+                            <option>Office Supplies</option>
+                            <option>Electronics</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="table-responsive">
                     <table id="inventoryTable">
                         <thead>
                             <tr>
                                 <th>No.</th>
-                                <td>Date</td>
+                                <th>Date</th>
                                 <th>Item ID</th>
                                 <th>Item Name / Description</th>
                                 <th>Category</th>
@@ -183,9 +187,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Google Sheet မှ Data များ ဝင်ရောက်လာမည် -->
+                            <!-- Data populated dynamically -->
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Pagination Controls -->
+                <div class="pagination">
+                    <button id="prevBtn" onclick="prevPage()">Previous</button>
+                    <span id="pageInfo">Page 1 of 1</span>
+                    <button id="nextBtn" onclick="nextPage()">Next</button>
                 </div>
             </div>
         </div>
@@ -195,51 +206,112 @@
         lucide.createIcons();
 
         let editingRow = null; 
+        let allData = []; // Store fetched data globally
+        let filteredData = []; // Store filtered data
+        let currentPage = 1;
+        let rowsPerPage = 10;
+
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwypUF274aX9_D-t9KemON4-CRAKY6PhxIlbPm6r4kuTnW-J6B7QJU9Mk7pKAwj4CjegA/exec';
 
-        // 1. Google Sheet မှ Data များကို လှမ်းယူပြီး Table ထဲ ထည့်ရန်
-// 1. Google Sheet မှ Data များကို လှမ်းယူပြီး Table ထဲ ထည့်ရန်
+        // 1. Fetch Data from Google Sheet
         function loadSheetData() {
             fetch(WEB_APP_URL)
                 .then(response => response.json())
                 .then(data => {
-                    const tableBody = document.getElementById('inventoryTable').getElementsByTagName('tbody')[0];
-                    tableBody.innerHTML = ''; 
-                    
-                    data.forEach((item, index) => {
-                        // ရက်စွဲကို သန့်စင်ခြင်း (T17:30:00.000Z များကို ဖြတ်ထုတ်ရန်)
-                        let cleanDate = item.date ? item.date.split('T')[0] : '';
-
-                        const newRow = tableBody.insertRow();
-                        newRow.innerHTML = `
-                            <td>${item.no || (index + 1)}</td>
-                            <td>${cleanDate}</td> <!-- ဤနေရာတွင် item.date အစား cleanDate ကို သုံးပေးရပါမည် -->
-                            <td>${item.itemId || ''}</td>
-                            <td>${item.itemName || ''}</td>
-                            <td>${item.category || ''}</td>
-                            <td>${item.quantity || 0}</td>
-                            <td>${item.unit || ''}</td>
-                            <td>${item.price || 0}</td>
-                            <td>${item.totalAmount || 0}</td>
-                            <td>${item.supplier || ''}</td>
-                            <td>${item.remark || ''}</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn-edit" onclick="editItem(this)"><i data-lucide="edit"></i> Edit</button>
-                                    <button class="btn-delete" onclick="deleteItem(this)"><i data-lucide="trash-2"></i> Delete</button>
-                                </div>
-                            </td>
-                        `;
-                    });
-                    lucide.createIcons();
+                    allData = data;
+                    filteredData = allData;
+                    currentPage = 1;
+                    renderTable();
                 })
                 .catch(error => console.error('Error loading data from Google Sheet:', error));
         }
 
-        // ဝဘ်ဆိုဒ် စတင်ဖွင့်လှစ်ချိန်တွင် ဒေတာများကို ဆွဲထုတ်ရန်
         window.addEventListener('DOMContentLoaded', loadSheetData);
 
-        // 2. Formမှ Save လုပ်လျှင် Google Sheet သို့ ပေးပို့ရန်နှင့် Table ထဲ တိုးရန်
+        // 2. Filter Logic
+        function filterTableData() {
+            const selectedCategory = document.getElementById('categoryFilter').value;
+            
+            if (selectedCategory === "") {
+                filteredData = allData;
+            } else {
+                filteredData = allData.filter(item => item.category === selectedCategory);
+            }
+            
+            currentPage = 1; // Reset to page 1 on filter change
+            renderTable();
+        }
+
+        // 3. Rows per page change
+        function changeRowsPerPage() {
+            rowsPerPage = parseInt(document.getElementById('rowsPerPage').value);
+            currentPage = 1;
+            renderTable();
+        }
+
+        // 4. Render Table with Pagination
+        function renderTable() {
+            const tableBody = document.getElementById('inventoryTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; 
+
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginatedItems = filteredData.slice(start, end);
+
+            paginatedItems.forEach((item, index) => {
+                let cleanDate = item.date ? item.date.split('T')[0] : '';
+                const globalIndex = start + index + 1;
+
+                const newRow = tableBody.insertRow();
+                newRow.innerHTML = `
+                    <td>${globalIndex}</td>
+                    <td>${cleanDate}</td>
+                    <td>${item.itemId || ''}</td>
+                    <td>${item.itemName || ''}</td>
+                    <td>${item.category || ''}</td>
+                    <td>${item.quantity || 0}</td>
+                    <td>${item.unit || ''}</td>
+                    <td>${item.price || 0}</td>
+                    <td>${item.totalAmount || 0}</td>
+                    <td>${item.supplier || ''}</td>
+                    <td>${item.remark || ''}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit" onclick="editItem(this)"><i data-lucide="edit"></i> Edit</button>
+                            <button class="btn-delete" onclick="deleteItem(this)"><i data-lucide="trash-2"></i> Delete</button>
+                        </div>
+                    </td>
+                `;
+            });
+
+            // Update Pagination Info
+            document.getElementById('pageInfo').innerText = `Page ${currentPage} of ${totalPages}`;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages || totalPages === 0;
+
+            lucide.createIcons();
+        }
+
+        // Pagination Navigation Functions
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
+            }
+        }
+
+        function nextPage() {
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable();
+            }
+        }
+
+        // 5. Form Submit Handler
         function handleFormSubmit(event) {
             event.preventDefault();
             
@@ -253,84 +325,52 @@
             const date = document.getElementById('pDate').value;
             const remark = document.getElementById('remark').value || "-";
             
-            if (editingRow) {
-                editingRow.cells[1].innerText = date;
-                editingRow.cells[3].innerText = name;
-                editingRow.cells[4].innerText = cat;
-                editingRow.cells[5].innerText = qty;
-                editingRow.cells[6].innerText = unit;
-                editingRow.cells[7].innerText = price;
-                editingRow.cells[8].innerText = totalAmount;
-                editingRow.cells[9].innerText = supplier;
-                editingRow.cells[10].innerText = remark;
-                
-                alert('Import Sheet Data Updated Successfully!');
-                editingRow = null;
-                document.querySelector('.form-card .section-title').innerHTML = `<i data-lucide="package-plus"></i> New Stock In (Import Sheet သို့ စာရင်းသွင်းရန်)`;
-                document.getElementById('importForm').reset();
-                lucide.createIcons();
-            } else {
-                const formData = {
-                    date: date,
-                    itemName: name,
-                    category: cat,
-                    quantity: qty,
-                    unit: unit,
-                    price: price,
-                    totalAmount: totalAmount,
-                    supplier: supplier,
-                    remark: remark
-                };
+            const formData = {
+                date: date,
+                itemName: name,
+                category: cat,
+                quantity: qty,
+                unit: unit,
+                price: price,
+                totalAmount: totalAmount,
+                supplier: supplier,
+                remark: remark
+            };
 
-                const submitBtn = document.getElementById('submitBtn');
-                submitBtn.innerText = "Saving to Google Sheet...";
-                submitBtn.disabled = true;
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.innerText = "Saving to Google Sheet...";
+            submitBtn.disabled = true;
 
-                fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(formData)
-                })
-                .then(response => response.json())
-                .then(result => {
-                    submitBtn.innerHTML = `<i data-lucide="plus-circle"></i> Save to Import Sheet`;
-                    submitBtn.disabled = false;
-                    if(result.status === "success") {
-                        alert('New Data Added to Google Sheet Successfully!');
-                        document.getElementById('importForm').reset();
-                        loadSheetData(); // Table ကို Refresh လုပ်ရန်
-                    } else {
-                        alert('Error saving data: ' + result.message);
-                    }
-                })
-                .catch(error => {
-                    submitBtn.innerHTML = `<i data-lucide="plus-circle"></i> Save to Import Sheet`;
-                    submitBtn.disabled = false;
-                    console.error('Error:', error);
-                    alert('Failed to connect to Google Sheet!');
-                });
-            }
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(result => {
+                submitBtn.innerHTML = `<i data-lucide="plus-circle"></i> Save to Import Sheet`;
+                submitBtn.disabled = false;
+                if(result.status === "success") {
+                    alert('New Data Added to Google Sheet Successfully!');
+                    document.getElementById('importForm').reset();
+                    loadSheetData(); // Reload data
+                } else {
+                    alert('Error saving data: ' + result.message);
+                }
+            })
+            .catch(error => {
+                submitBtn.innerHTML = `<i data-lucide="plus-circle"></i> Save to Import Sheet`;
+                submitBtn.disabled = false;
+                console.error('Error:', error);
+                alert('Failed to connect to Google Sheet!');
+            });
         }
 
-        // 3. Edit လုပ်ရန်
+        // 6. Edit & Delete 
         function editItem(button) {
-            editingRow = button.closest('tr');
-            
-            document.getElementById('pDate').value = editingRow.cells[1].innerText;
-            document.getElementById('itemName').value = editingRow.cells[3].innerText;
-            document.getElementById('category').value = editingRow.cells[4].innerText;
-            document.getElementById('quantity').value = editingRow.cells[5].innerText;
-            document.getElementById('unit').value = editingRow.cells[6].innerText;
-            document.getElementById('price').value = editingRow.cells[7].innerText;
-            document.getElementById('supplier').value = editingRow.cells[9].innerText;
-            document.getElementById('remark').value = editingRow.cells[10].innerText;
-
-            document.querySelector('.form-card .section-title').innerHTML = `<i data-lucide="package-plus"></i> Edit Import Sheet Item`;
-            lucide.createIcons();
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Edit လုပ်ရန် လိုအပ်ပါက ဤနေရာတွင် ဆက်လက်ရေးသားနိုင်ပါသည်
+            alert("Edit feature can be linked with respective row ID.");
         }
 
-        // 4. Delete လုပ်ရန်
         function deleteItem(button) {
             if (confirm("ဤ Import စာရင်းအချက်အလက်ကို ဖျက်ရန် သေချာပါသလား?")) {
                 const row = button.closest('tr');
@@ -338,8 +378,7 @@
                 alert("Import Data Successfully Deleted!");
             }
         }
-
-        let cleanDate = item.date ? item.date.split('T')[0] : '';
     </script>
 </body>
 </html>
+
