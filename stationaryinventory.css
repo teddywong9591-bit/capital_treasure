@@ -65,3 +65,24 @@
             .form-group.full { grid-column: span 1; }
         }
     
+        /* Edit လုပ်နေစဉ် Row ကို Highlight ပြရန် */
+tr.highlight-row {
+    background-color: #fef08a !important; /* အဝါရောင် ဖျော့ဖျော့လေးဖြင့် Highlight ပြမည် */
+    transition: background-color 0.3s ease;
+}
+
+/* Export Button Styling */
+.btn-export { 
+    background: #0284c7; 
+    color: white; 
+    border: none; 
+    padding: 8px 16px; 
+    border-radius: 8px; 
+    font-weight: 600; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    font-size: 13px;
+}
+.btn-export:hover { background: #0369a1; }
