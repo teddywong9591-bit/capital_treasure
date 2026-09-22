@@ -304,6 +304,43 @@
                 alert("Import Data Successfully Deleted!");
             }
         }
+
+// ဝဘ်ဆိုဒ် စတင်ဖွင့်လှစ်ချိန်တွင် Google Sheet မှ Data များကို လှမ်းယူရန်
+window.addEventListener('DOMContentLoaded', () => {
+    fetch('YOUR_WEB_APP_URL_HERE') // အထက်တွင် ရရှိလာသော Web App URL ကို ထည့်ပါ
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('inventoryTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; // ပုံသေရေးထားသော စာကြောင်းကို ရှင်းထုတ်ရန်
+            
+            data.forEach((item, index) => {
+                const newRow = tableBody.insertRow();
+                newRow.innerHTML = `
+                    <td>${item.no || (index + 1)}</td>
+                    <td>${item.date}</td>
+                    <td>${item.itemId}</td>
+                    <td>${item.itemName}</td>
+                    <td>${item.category}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.unit}</td>
+                    <td>${item.price}</td>
+                    <td>${item.totalAmount}</td>
+                    <td>${item.supplier}</td>
+                    <td>${item.remark}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit" onclick="editItem(this)"><i data-lucide="edit"></i> Edit</button>
+                            <button class="btn-delete" onclick="deleteItem(this)"><i data-lucide="trash-2"></i> Delete</button>
+                        </div>
+                    </td>
+                `;
+            });
+            lucide.createIcons();
+        })
+        .catch(error => console.error('Error loading data from Google Sheet:', error));
+});
+
+        
     </script>
 </body>
 </html>
