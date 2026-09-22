@@ -169,7 +169,7 @@
                         <thead>
                             <tr>
                                 <th>No.</th>
-                                <td>${cleanDate}</td>
+                                <td>Date</td>
                                 <th>Item ID</th>
                                 <th>Item Name / Description</th>
                                 <th>Category</th>
@@ -198,6 +198,7 @@
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwypUF274aX9_D-t9KemON4-CRAKY6PhxIlbPm6r4kuTnW-J6B7QJU9Mk7pKAwj4CjegA/exec';
 
         // 1. Google Sheet မှ Data များကို လှမ်းယူပြီး Table ထဲ ထည့်ရန်
+// 1. Google Sheet မှ Data များကို လှမ်းယူပြီး Table ထဲ ထည့်ရန်
         function loadSheetData() {
             fetch(WEB_APP_URL)
                 .then(response => response.json())
@@ -206,10 +207,13 @@
                     tableBody.innerHTML = ''; 
                     
                     data.forEach((item, index) => {
+                        // ရက်စွဲကို သန့်စင်ခြင်း (T17:30:00.000Z များကို ဖြတ်ထုတ်ရန်)
+                        let cleanDate = item.date ? item.date.split('T')[0] : '';
+
                         const newRow = tableBody.insertRow();
                         newRow.innerHTML = `
                             <td>${item.no || (index + 1)}</td>
-                            <td>${item.date || ''}</td>
+                            <td>${cleanDate}</td> <!-- ဤနေရာတွင် item.date အစား cleanDate ကို သုံးပေးရပါမည် -->
                             <td>${item.itemId || ''}</td>
                             <td>${item.itemName || ''}</td>
                             <td>${item.category || ''}</td>
