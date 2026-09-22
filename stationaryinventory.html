@@ -21,7 +21,7 @@
         
         .main-wrapper { margin-left: 260px; flex: 1; display: flex; flex-direction: column; }
         header { background-color: var(--bg-card); padding: 16px 32px; border-bottom: 1px solid var(--border); }
-        .content-body { padding: 32px; display: flex; flex-direction: column; gap: 24px; max-width: 1100px; margin: 0 auto; width: 100%; }
+        .content-body { padding: 32px; display: flex; flex-direction: column; gap: 24px; max-width: 1200px; margin: 0 auto; width: 100%; }
         
         .form-card, .table-card { background: var(--bg-card); padding: 28px; border-radius: var(--radius); border: 1px solid var(--border); }
         .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
@@ -36,7 +36,7 @@
         .section-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
         
         .table-responsive { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 850px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 1000px; }
         th, td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
         th { background-color: #f1f5f9; font-weight: 600; color: #475569; }
         tr:hover { background-color: #f8fafc; }
@@ -127,83 +127,84 @@
                             <option>Writing Instruments</option>
                             <option>Folders & Files</option>
                             <option>Printer Supplies</option>
+                            <option>Office Supplies</option>
+                            <option>Electronics</option>
                         </select>
                     </div>
                     <div class="form-group">
-        <label>Quantity (အရေအတွက်)</label>
-        <input type="number" id="quantity" min="1" placeholder="ဥပမာ - 50" required>
-    </div>
-    <div class="form-group">
-        <label>Unit (ယူနစ် - ဥပမာ၊ Rims, Pcs, Boxes)</label>
-        <input type="text" id="unit" placeholder="ဥပမာ - Rims / Pcs" required>
-    </div>
-    <div class="form-group">
-        <label>Purchase Price (ဝယ်ယူသည့် ဈေးနှုန်း - MMK)</label>
-        <input type="number" id="price" placeholder="ဥပမာ - 12500" required>
-    </div>
-    <div class="form-group">
-        <label>Supplier / Shop Name (ဆိုင်အမည်)</label>
-        <input type="text" id="supplier" placeholder="ဥပမာ - City Mart">
-    </div>
-    <div class="form-group">
-        <label>Purchase Date (ဝယ်ယူသည့်ရက်စွဲ)</label>
-        <input type="date" id="pDate" required>
-    </div>
-    <div class="form-group">
-        <label>Remark (မှတ်ချက်)</label>
-        <input type="text" id="remark" placeholder="ဥပမာ - လစဥ်သုံး / -">
-    </div>
-    <div class="form-group full">
-        <button class="btn-success" type="submit"><i data-lucide="plus-circle"></i> Save to Import Sheet</button>
-    </div>
-</form>
+                        <label>Quantity (အရေအတွက်)</label>
+                        <input type="number" id="quantity" min="1" placeholder="ဥပမာ - 50" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Unit (ယူနစ် - ဥပမာ၊ Rims, Pcs, Boxes)</label>
+                        <input type="text" id="unit" placeholder="ဥပမာ - Rims / Pcs" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Purchase Price (ဝယ်ယူသည့် ဈေးနှုန်း - MMK)</label>
+                        <input type="number" id="price" placeholder="ဥပမာ - 12500" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Supplier / Shop Name (ဆိုင်အမည်)</label>
+                        <input type="text" id="supplier" placeholder="ဥပမာ - City Mart">
+                    </div>
+                    <div class="form-group">
+                        <label>Purchase Date (ဝယ်ယူသည့်ရက်စွဲ)</label>
+                        <input type="date" id="pDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Remark (မှတ်ချက်)</label>
+                        <input type="text" id="remark" placeholder="ဥပမာ - လစဥ်သုံး / -">
+                    </div>
+                    <div class="form-group full">
+                        <button class="btn-success" type="submit"><i data-lucide="plus-circle"></i> Save to Import Sheet</button>
+                    </div>
+                </form>
             </div>
 
             <!-- 2. Stationery Table (Inventory List) -->
             <div class="table-card">
                 <h2 class="section-title"><i data-lucide="table"></i> Current Stationery Inventory Table (Import Data)</h2>
-                
-<div class="table-responsive">
-    <table id="inventoryTable">
-        <thead>
-            <tr>
-                <th>No.</th>
-                <th>Date</th>
-                <th>Item ID</th>
-                <th>Item Name / Description</th>
-                <th>Category</th>
-                <th>Quantity</th>
-                <th>Unit</th>
-                <th>Purchase Price</th>
-                <th>Total Amount</th>
-                <th>Supplier Name</th>
-                <th>Remark</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>01-Jun-2026</td>
-                <td>STN-001</td>
-                <td>A4 Paper (Double A)</td>
-                <td>Paper & Notebooks</td>
-                <td>50</td>
-                <td>Rims</td>
-                <td>12500</td>
-                <td>625000</td>
-                <td>City Mart</td>
-                <td>လစဥ်သုံး</td>
-                <td>
-                    <div class="action-buttons">
-                        <button class="btn-edit" onclick="editItem(this)"><i data-lucide="edit"></i> Edit</button>
-                        <button class="btn-delete" onclick="deleteItem(this)"><i data-lucide="trash-2"></i> Delete</button>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+                <div class="table-responsive">
+                    <table id="inventoryTable">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Date</th>
+                                <th>Item ID</th>
+                                <th>Item Name / Description</th>
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Purchase Price</th>
+                                <th>Total Amount</th>
+                                <th>Supplier Name</th>
+                                <th>Remark</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>01-Jun-2026</td>
+                                <td>STN-001</td>
+                                <td>A4 Paper (Double A)</td>
+                                <td>Paper & Notebooks</td>
+                                <td>50</td>
+                                <td>Rims</td>
+                                <td>12500</td>
+                                <td>625000</td>
+                                <td>City Mart</td>
+                                <td>လစဥ်သုံး</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-edit" onclick="editItem(this)"><i data-lucide="edit"></i> Edit</button>
+                                        <button class="btn-delete" onclick="deleteItem(this)"><i data-lucide="trash-2"></i> Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -219,17 +220,25 @@
             
             const name = document.getElementById('itemName').value;
             const cat = document.getElementById('category').value;
-            const qty = document.getElementById('quantity').value + " Pcs";
-            const price = document.getElementById('price').value + " MMK";
+            const qty = parseInt(document.getElementById('quantity').value);
+            const unit = document.getElementById('unit').value;
+            const price = parseFloat(document.getElementById('price').value);
+            const totalAmount = qty * price;
+            const supplier = document.getElementById('supplier').value;
             const date = document.getElementById('pDate').value;
+            const remark = document.getElementById('remark').value || "-";
             
             if (editingRow) {
                 // Edit လုပ်ပြီးသားကို Update ပြန်လုပ်ခြင်း
-                editingRow.cells[1].innerText = name;
-                editingRow.cells[2].innerText = cat;
-                editingRow.cells[3].innerText = qty;
-                editingRow.cells[4].innerText = price;
-                editingRow.cells[5].innerText = date;
+                editingRow.cells[1].innerText = date;
+                editingRow.cells[3].innerText = name;
+                editingRow.cells[4].innerText = cat;
+                editingRow.cells[5].innerText = qty;
+                editingRow.cells[6].innerText = unit;
+                editingRow.cells[7].innerText = price;
+                editingRow.cells[8].innerText = totalAmount;
+                editingRow.cells[9].innerText = supplier;
+                editingRow.cells[10].innerText = remark;
                 
                 alert('Import Sheet Data Updated Successfully!');
                 editingRow = null;
@@ -237,18 +246,23 @@
             } else {
                 // အသစ်ထည့်ခြင်း (Import Sheet သို့ Data Entry အသစ်သွင်းခြင်း)
                 const table = document.getElementById('inventoryTable').getElementsByTagName('tbody')[0];
+                const rowCount = table.rows.length + 1;
                 const newRow = table.insertRow();
                 
-                const randomId = 'STN-00' + (table.rows.length + 1);
+                const randomId = 'STN-00' + rowCount;
                 
                 newRow.innerHTML = `
+                    <td>${rowCount}</td>
+                    <td>${date}</td>
                     <td>${randomId}</td>
                     <td>${name}</td>
                     <td>${cat}</td>
                     <td>${qty}</td>
+                    <td>${unit}</td>
                     <td>${price}</td>
-                    <td>${date}</td>
-                    <td><span class="badge in-stock">In Stock</span></td>
+                    <td>${totalAmount}</td>
+                    <td>${supplier}</td>
+                    <td>${remark}</td>
                     <td>
                         <div class="action-buttons">
                             <button class="btn-edit" onclick="editItem(this)"><i data-lucide="edit"></i> Edit</button>
@@ -267,11 +281,14 @@
         function editItem(button) {
             editingRow = button.closest('tr');
             
-            document.getElementById('itemName').value = editingRow.cells[1].innerText;
-            document.getElementById('category').value = editingRow.cells[2].innerText;
-            document.getElementById('quantity').value = parseInt(editingRow.cells[3].innerText);
-            document.getElementById('price').value = parseInt(editingRow.cells[4].innerText);
-            document.getElementById('pDate').value = editingRow.cells[5].innerText;
+            document.getElementById('pDate').value = editingRow.cells[1].innerText;
+            document.getElementById('itemName').value = editingRow.cells[3].innerText;
+            document.getElementById('category').value = editingRow.cells[4].innerText;
+            document.getElementById('quantity').value = editingRow.cells[5].innerText;
+            document.getElementById('unit').value = editingRow.cells[6].innerText;
+            document.getElementById('price').value = editingRow.cells[7].innerText;
+            document.getElementById('supplier').value = editingRow.cells[9].innerText;
+            document.getElementById('remark').value = editingRow.cells[10].innerText;
 
             document.querySelector('.form-card .section-title').innerHTML = `<i data-lucide="package-plus"></i> Edit Import Sheet Item`;
             lucide.createIcons();
