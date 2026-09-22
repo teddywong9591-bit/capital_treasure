@@ -1,56 +1,9 @@
-<div class="content-body">
-    <!-- Data Table -->
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>No.</th>
-                <th>Item Name</th>
-                <th>Quantity</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>Sample Stationery</td>
-                <td>120</td>
-                <td>
-                    <div class="action-buttons">
-                        <button class="btn-edit" onclick="editItem(1)">
-                            <i data-lucide="edit"></i> Edit
-                        </button>
-                        <button class="btn-delete" onclick="deleteItem(1)">
-                            <i data-lucide="trash-2"></i> Delete
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- Powered Footer Section -->
-    <div class="powered-footer">
-        <div class="powered-right-group">
-            <div class="powered-right">
-                <span class="powered-title">Powered by</span>
-                <span class="developer-name">Your Name / Team</span>
-            </div>
-            <div class="social-icons-grid">
-                <a href="#" class="social-icon-btn telegram"><i data-lucide="send"></i></a>
-                <a href="#" class="social-icon-btn gmail"><i data-lucide="mail"></i></a>
-                <a href="#" class="social-icon-btn viber"><i data-lucide="phone-call"></i></a>
-                <a href="#" class="social-icon-btn phone"><i data-lucide="phone"></i></a>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stationery Stock In & Inventory - Capital Treasure</title>
+    <title>Stationery Stock & Inventory - Capital Treasure</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root { --bg-primary: #0f172a; --bg-card: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --accent: #2563eb; --border: #e2e8f0; --radius: 12px; }
@@ -83,7 +36,7 @@
         .section-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
         
         .table-responsive { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 750px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 850px; }
         th, td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
         th { background-color: #f1f5f9; font-weight: 600; color: #475569; }
         tr:hover { background-color: #f8fafc; }
@@ -91,6 +44,46 @@
         .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; }
         .badge.in-stock { background: #dcfce7; color: #16a34a; }
         .badge.low-stock { background: #fef08a; color: #b45309; }
+
+        /* Action Buttons Styling */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .btn-edit {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            background-color: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-edit:hover { background-color: #dbeafe; }
+        .btn-delete {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            background-color: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-delete:hover { background-color: #fee2e2; }
+        .action-buttons svg, .action-buttons i {
+            width: 14px;
+            height: 14px;
+        }
 
         @media screen and (max-width: 768px) {
             .sidebar { width: 70px; }
@@ -172,6 +165,7 @@
                                 <th>Latest Purchase Price</th>
                                 <th>Last Restocked Date</th>
                                 <th>Status</th>
+                                <th>Actions</th> <!-- Actions ခေါင်းစဉ် အသစ်ထည့်သွင်းခြင်း -->
                             </tr>
                         </thead>
                         <tbody>
@@ -183,6 +177,16 @@
                                 <td>12,500 MMK</td>
                                 <td>20 Jun 2026</td>
                                 <td><span class="badge in-stock">In Stock</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-edit" onclick="editItem('STN-001')">
+                                            <i data-lucide="edit"></i> Edit
+                                        </button>
+                                        <button class="btn-delete" onclick="deleteItem('STN-001')">
+                                            <i data-lucide="trash-2"></i> Delete
+                                        </button>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
                                 <td>STN-002</td>
@@ -192,6 +196,16 @@
                                 <td>3,500 MMK</td>
                                 <td>10 May 2026</td>
                                 <td><span class="badge low-stock">Low Stock</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-edit" onclick="editItem('STN-002')">
+                                            <i data-lucide="edit"></i> Edit
+                                        </button>
+                                        <button class="btn-delete" onclick="deleteItem('STN-002')">
+                                            <i data-lucide="trash-2"></i> Delete
+                                        </button>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
                                 <td>STN-003</td>
@@ -201,6 +215,16 @@
                                 <td>1,800 MMK</td>
                                 <td>15 Jun 2026</td>
                                 <td><span class="badge in-stock">In Stock</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-edit" onclick="editItem('STN-003')">
+                                            <i data-lucide="edit"></i> Edit
+                                        </button>
+                                        <button class="btn-delete" onclick="deleteItem('STN-003')">
+                                            <i data-lucide="trash-2"></i> Delete
+                                        </button>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -211,6 +235,17 @@
     
     <script>
         lucide.createIcons();
+
+        // Edit နှင့် Delete အတွက် နမူနာ Function များ
+        function editItem(id) {
+            alert("Edit item ID: " + id);
+        }
+
+        function deleteItem(id) {
+            if (confirm("ဤအချက်အလက်ကို ဖျက်ရန် သေချာပါသလား?")) {
+                alert("Deleted item ID: " + id);
+            }
+        }
     </script>
 </body>
 </html>
