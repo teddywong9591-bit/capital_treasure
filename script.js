@@ -126,3 +126,127 @@ function deleteItem(id) {
         alert("အောင်မြင်စွာ ဖျက်ပြီးပါပြီ။");
     }
 }
+
+        // 4. Render Table with Pagination & Action Dropdown (Highlight Row ပါ ထည့်သွင်းထားသည်)
+        function renderTable() {
+            const tableBody = document.getElementById('inventoryTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; 
+
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginatedItems = filteredData.slice(start, end);
+
+            paginatedItems.forEach((item, index) => {
+                let cleanDate = item.date ? item.date.split('T')[0] : '';
+                const globalIndex = start + index; 
+
+                // Check if this row is currently being edited
+                const isEditing = (allData[globalIndex] === allData[editingIndex]);
+
+                const newRow = tableBody.insertRow();
+                if (isEditing) {
+                    newRow.classList.add('highlight-row'); // Edit လုပ်နေသော row ကို အရောင်တင်ပေးမည်
+                }
+
+                newRow.innerHTML = `
+                    <td>${start + index + 1}</td>
+                    <td>${cleanDate}</td>
+                    <td>${item.itemId || ''}</td>
+                    <td>${item.itemName || ''}</td>
+                    <td>${item.category || ''}</td>
+                    <td>${item.quantity || 0}</td>
+                    <td>${item.unit || ''}</td>
+                    <td>${item.price || 0}</td>
+                    <td>${item.totalAmount || 0}</td>
+                    <td>${item.supplier || ''}</td>
+                    <td>${item.remark || ''}</td>
+                    <td>
+                        <div class="dropdown">
+                            <button onclick="toggleDropdown(event, ${globalIndex})" class="dropbtn">
+                                Action <i data-lucide="chevron-down" style="width:12px; height:12px;"></i>
+                            </button>
+                            <div id="dropdown-${globalIndex}" class="dropdown-content">
+                                <button class="edit-action" onclick="editItem(${globalIndex})">
+                                    <i data-lucide="edit" style="width:14px;height:14px;"></i> Edit / Stock+
+                                </button>
+                                <button class="delete-action" onclick="deleteItem(${globalIndex})">
+                                    <i data-lucide="trash-2" style="width:14px;height:14px;"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                `;
+            });
+
+            document.getElementById('pageInfo').innerText = `Page ${currentPage} of ${totalPages}`;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages || totalPages === 0;
+
+            lucide.createIcons();
+        }
+
+        // 5. Edit Item & Stock Addition Handler (Highlight လုပ်ရန် renderTable ထပ်ခေါ်ပေးသည်)
+        function editItem(index) {
+            const item = filteredData[index];
+            editingIndex = allData.findIndex(i => i === item); 
+
+            document.getElementById('itemName').value = item.itemName || '';
+            document.getElementById('category').value = item.category || '';
+            document.getElementById('quantity').value = ''; 
+            document.getElementById('unit').value = item.unit || '';
+            document.getElementById('price').value = item.price || 0;
+            document.getElementById('supplier').value = item.supplier || '';
+            document.getElementById('pDate').value = item.date ? item.date.split('T')[0] : '';
+            document.getElementById('remark').value = item.remark || '';
+
+            document.getElementById('formTitle').innerHTML = `<i data-lucide="package-plus"></i> Update & Add Stock (${item.itemName} - မူလလက်ကျန်: ${item.quantity})`;
+            document.getElementById('submitBtn').innerHTML = `<i data-lucide="refresh-cw"></i> Update Stock (ပေါင်းထည့်ရန်)`;
+            
+            renderTable(); // Row ကို highlight အရောင်ပြောင်းရန် ဇယားကို ပုံစံအသစ်ပြန်ဖော်မည်
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 8. Export Table Data to CSV/Excel File
+        function exportToCSV() {
+            if (allData.length === 0) {
+                alert("Export လုပ်ရန် Data မရှိသေးပါ။");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            // CSV Header
+            csvContent += "No.,Date,Item ID,Item Name,Category,Quantity,Unit,Purchase Price,Total Amount,Supplier Name,Remark\r\n";
+
+            // CSV Rows
+            allData.forEach((item, index) => {
+                let cleanDate = item.date ? item.date.split('T')[0] : '';
+                let row = [
+                    index + 1,
+                    cleanDate,
+                    item.itemId || '',
+                    `"${item.itemName || ''}"`, // Text ထဲမှာ ကော်မာပါပါက ပြဿနာမရှိစေရန်
+                    `"${item.category || ''}"`,
+                    item.quantity || 0,
+                    item.unit || '',
+                    item.price || 0,
+                    item.totalAmount || 0,
+                    `"${item.supplier || ''}"`,
+                    `"${item.remark || ''}"`
+                ];
+                csvContent += row.join(",") + "\r\n";
+            });
+
+            // Download Trigger
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "stationary_inventory_report.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
