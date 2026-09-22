@@ -156,7 +156,7 @@
                         <input type="text" id="remark" placeholder="ဥပမာ - လစဥ်သုံး / -">
                     </div>
                     <div class="form-group full">
-                        <button class="btn-success" type="submit"><i data-lucide="plus-circle"></i> Save to Import Sheet</button>
+                        <button class="btn-success" type="submit" id="submitBtn"><i data-lucide="plus-circle"></i> Save to Import Sheet</button>
                     </div>
                 </form>
             </div>
@@ -183,25 +183,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>01-Jun-2026</td>
-                                <td>STN-001</td>
-                                <td>A4 Paper (Double A)</td>
-                                <td>Paper & Notebooks</td>
-                                <td>50</td>
-                                <td>Rims</td>
-                                <td>12500</td>
-                                <td>625000</td>
-                                <td>City Mart</td>
-                                <td>လစဥ်သုံး</td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-edit" onclick="editItem(this)"><i data-lucide="edit"></i> Edit</button>
-                                        <button class="btn-delete" onclick="deleteItem(this)"><i data-lucide="trash-2"></i> Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
+                            <!-- Google Sheet မှ Data များ ဝင်ရောက်လာမည် -->
                         </tbody>
                     </table>
                 </div>
@@ -212,9 +194,48 @@
     <script>
         lucide.createIcons();
 
-        let editingRow = null; // Edit လုပ်နေစဉ် Row ကို မှတ်ထားရန်
+        let editingRow = null; 
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzJ08b3tAYLgacSEnnUw_h99GC6NYx9CI8oIM1sHrLU2FGh4dgzSTjwXy6tIXpouoR02w/exec';
 
-        // 1. Formမှ Save လုပ်လျှင် Import Table ထဲသို့ အသစ်ထည့်ရန် (သို့မဟုတ်) Edit ပြင်ရန်
+        // 1. Google Sheet မှ Data များကို လှမ်းယူပြီး Table ထဲ ထည့်ရန်
+        function loadSheetData() {
+            fetch(WEB_APP_URL)
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('inventoryTable').getElementsByTagName('tbody')[0];
+                    tableBody.innerHTML = ''; 
+                    
+                    data.forEach((item, index) => {
+                        const newRow = tableBody.insertRow();
+                        newRow.innerHTML = `
+                            <td>${item.no || (index + 1)}</td>
+                            <td>${item.date || ''}</td>
+                            <td>${item.itemId || ''}</td>
+                            <td>${item.itemName || ''}</td>
+                            <td>${item.category || ''}</td>
+                            <td>${item.quantity || 0}</td>
+                            <td>${item.unit || ''}</td>
+                            <td>${item.price || 0}</td>
+                            <td>${item.totalAmount || 0}</td>
+                            <td>${item.supplier || ''}</td>
+                            <td>${item.remark || ''}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-edit" onclick="editItem(this)"><i data-lucide="edit"></i> Edit</button>
+                                    <button class="btn-delete" onclick="deleteItem(this)"><i data-lucide="trash-2"></i> Delete</button>
+                                </div>
+                            </td>
+                        `;
+                    });
+                    lucide.createIcons();
+                })
+                .catch(error => console.error('Error loading data from Google Sheet:', error));
+        }
+
+        // ဝဘ်ဆိုဒ် စတင်ဖွင့်လှစ်ချိန်တွင် ဒေတာများကို ဆွဲထုတ်ရန်
+        window.addEventListener('DOMContentLoaded', loadSheetData);
+
+        // 2. Formမှ Save လုပ်လျှင် Google Sheet သို့ ပေးပို့ရန်နှင့် Table ထဲ တိုးရန်
         function handleFormSubmit(event) {
             event.preventDefault();
             
@@ -229,7 +250,6 @@
             const remark = document.getElementById('remark').value || "-";
             
             if (editingRow) {
-                // Edit လုပ်ပြီးသားကို Update ပြန်လုပ်ခြင်း
                 editingRow.cells[1].innerText = date;
                 editingRow.cells[3].innerText = name;
                 editingRow.cells[4].innerText = cat;
@@ -243,41 +263,51 @@
                 alert('Import Sheet Data Updated Successfully!');
                 editingRow = null;
                 document.querySelector('.form-card .section-title').innerHTML = `<i data-lucide="package-plus"></i> New Stock In (Import Sheet သို့ စာရင်းသွင်းရန်)`;
+                document.getElementById('importForm').reset();
+                lucide.createIcons();
             } else {
-                // အသစ်ထည့်ခြင်း (Import Sheet သို့ Data Entry အသစ်သွင်းခြင်း)
-                const table = document.getElementById('inventoryTable').getElementsByTagName('tbody')[0];
-                const rowCount = table.rows.length + 1;
-                const newRow = table.insertRow();
-                
-                const randomId = 'STN-00' + rowCount;
-                
-                newRow.innerHTML = `
-                    <td>${rowCount}</td>
-                    <td>${date}</td>
-                    <td>${randomId}</td>
-                    <td>${name}</td>
-                    <td>${cat}</td>
-                    <td>${qty}</td>
-                    <td>${unit}</td>
-                    <td>${price}</td>
-                    <td>${totalAmount}</td>
-                    <td>${supplier}</td>
-                    <td>${remark}</td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn-edit" onclick="editItem(this)"><i data-lucide="edit"></i> Edit</button>
-                            <button class="btn-delete" onclick="deleteItem(this)"><i data-lucide="trash-2"></i> Delete</button>
-                        </div>
-                    </td>
-                `;
-                alert('New Data Added to Import Sheet Successfully!');
+                const formData = {
+                    date: date,
+                    itemName: name,
+                    category: cat,
+                    quantity: qty,
+                    unit: unit,
+                    price: price,
+                    totalAmount: totalAmount,
+                    supplier: supplier,
+                    remark: remark
+                };
+
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.innerText = "Saving to Google Sheet...";
+                submitBtn.disabled = true;
+
+                fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    submitBtn.innerHTML = `<i data-lucide="plus-circle"></i> Save to Import Sheet`;
+                    submitBtn.disabled = false;
+                    if(result.status === "success") {
+                        alert('New Data Added to Google Sheet Successfully!');
+                        document.getElementById('importForm').reset();
+                        loadSheetData(); // Table ကို Refresh လုပ်ရန်
+                    } else {
+                        alert('Error saving data: ' + result.message);
+                    }
+                })
+                .catch(error => {
+                    submitBtn.innerHTML = `<i data-lucide="plus-circle"></i> Save to Import Sheet`;
+                    submitBtn.disabled = false;
+                    console.error('Error:', error);
+                    alert('Failed to connect to Google Sheet!');
+                });
             }
-            
-            document.getElementById('importForm').reset();
-            lucide.createIcons();
         }
 
-        // 2. Edit လုပ်ရန် - ဇယားကွက်မှ ဒေတာများကို Form ထဲ ပြန်တင်ပေးမည်
+        // 3. Edit လုပ်ရန်
         function editItem(button) {
             editingRow = button.closest('tr');
             
@@ -296,7 +326,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 3. Delete လုပ်ရန် - Import ဇယားထဲမှ Row ကို ဖယ်ရှားမည်
+        // 4. Delete လုပ်ရန်
         function deleteItem(button) {
             if (confirm("ဤ Import စာရင်းအချက်အလက်ကို ဖျက်ရန် သေချာပါသလား?")) {
                 const row = button.closest('tr');
@@ -304,43 +334,6 @@
                 alert("Import Data Successfully Deleted!");
             }
         }
-
-// ဝဘ်ဆိုဒ် စတင်ဖွင့်လှစ်ချိန်တွင် Google Sheet မှ Data များကို လှမ်းယူရန်
-window.addEventListener('DOMContentLoaded', () => {
-    fetch('https://script.google.com/macros/s/AKfycbzJ08b3tAYLgacSEnnUw_h99GC6NYx9CI8oIM1sHrLU2FGh4dgzSTjwXy6tIXpouoR02w/exec') // အထက်တွင် ရရှိလာသော Web App URL ကို ထည့်ပါ
-        .then(response => response.json())
-        .then(data => {
-            const tableBody = document.getElementById('inventoryTable').getElementsByTagName('tbody')[0];
-            tableBody.innerHTML = ''; // ပုံသေရေးထားသော စာကြောင်းကို ရှင်းထုတ်ရန်
-            
-            data.forEach((item, index) => {
-                const newRow = tableBody.insertRow();
-                newRow.innerHTML = `
-                    <td>${item.no || (index + 1)}</td>
-                    <td>${item.date}</td>
-                    <td>${item.itemId}</td>
-                    <td>${item.itemName}</td>
-                    <td>${item.category}</td>
-                    <td>${item.quantity}</td>
-                    <td>${item.unit}</td>
-                    <td>${item.price}</td>
-                    <td>${item.totalAmount}</td>
-                    <td>${item.supplier}</td>
-                    <td>${item.remark}</td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn-edit" onclick="editItem(this)"><i data-lucide="edit"></i> Edit</button>
-                            <button class="btn-delete" onclick="deleteItem(this)"><i data-lucide="trash-2"></i> Delete</button>
-                        </div>
-                    </td>
-                `;
-            });
-            lucide.createIcons();
-        })
-        .catch(error => console.error('Error loading data from Google Sheet:', error));
-});
-
-        
     </script>
 </body>
 </html>
