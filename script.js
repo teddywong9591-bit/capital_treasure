@@ -110,3 +110,19 @@ function logout() {
 window.addEventListener('DOMContentLoaded', () => {
     applyRoleAccess();
 });
+
+// Edit လုပ်ရန် Click ခလုတ်နှိပ်လျှင်
+function editItem(id) {
+    console.log("Edit item ID: ", id);
+    // ဤနေရာတွင် Edit Form သို့မဟုတ် Modal ပေါ်လာမည့် ကုဒ်များ ထည့်နိုင်သည်
+    alert("Edit ID: " + id);
+}
+
+// Delete လုပ်ရန် Click ခလုတ်နှိပ်လျှင်
+function deleteItem(id) {
+    if (confirm("ဒီအချက်အလက်ကို ဖျက်မှာ သေချာပါသလား?")) {
+        console.log("Delete item ID: ", id);
+        // ဤနေရာတွင် Firebase (သို့) Database မှ Data ဖျက်မည့် ကုဒ်ထည့်ပါ
+        alert("အောင်မြင်စွာ ဖျက်ပြီးပါပြီ။");
+    }
+}
