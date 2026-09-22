@@ -47,7 +47,7 @@ const menus = {
 
     // ၁။ ပထမဦးစွာ Menu အားလုံးကို မမြင်ရအောင် (display: none) အရင်ပိတ်မည်
     Object.values(menus).forEach(menu => {
-        if (menu) menu.style.display = 'block';
+        if (menu) menu.style.display = 'none';
     });
 
     // ၂။ Login ဝင်ထားသော Role အလိုက် လိုအပ်သည့် Menu များကိုသာ ပြမည်
