@@ -307,7 +307,7 @@
 
 // ဝဘ်ဆိုဒ် စတင်ဖွင့်လှစ်ချိန်တွင် Google Sheet မှ Data များကို လှမ်းယူရန်
 window.addEventListener('DOMContentLoaded', () => {
-    fetch('YOUR_WEB_APP_URL_HERE') // အထက်တွင် ရရှိလာသော Web App URL ကို ထည့်ပါ
+    fetch('https://script.google.com/macros/s/AKfycbzJ08b3tAYLgacSEnnUw_h99GC6NYx9CI8oIM1sHrLU2FGh4dgzSTjwXy6tIXpouoR02w/exec') // အထက်တွင် ရရှိလာသော Web App URL ကို ထည့်ပါ
         .then(response => response.json())
         .then(data => {
             const tableBody = document.getElementById('inventoryTable').getElementsByTagName('tbody')[0];
