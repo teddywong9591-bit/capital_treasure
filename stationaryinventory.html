@@ -162,62 +162,48 @@
             <!-- 2. Stationery Table (Inventory List) -->
             <div class="table-card">
                 <h2 class="section-title"><i data-lucide="table"></i> Current Stationery Inventory Table (Import Data)</h2>
-                <div class="table-responsive">
-                    <table id="inventoryTable">
-                        <thead>
-                            <tr>
-                                <th>Item ID</th>
-                                <th>Item Name</th>
-                                <th>Category</th>
-                                <th>Current Stock</th>
-                                <th>Latest Purchase Price</th>
-                                <th>Last Restocked Date</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>STN-001</td>
-                                <td>A4 Paper (Double A)</td>
-                                <td>Paper & Notebooks</td>
-                                <td>120 Rims</td>
-                                <td>12,500 MMK</td>
-                                <td>20 Jun 2026</td>
-                                <td><span class="badge in-stock">In Stock</span></td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-edit" onclick="editItem(this)">
-                                            <i data-lucide="edit"></i> Edit
-                                        </button>
-                                        <button class="btn-delete" onclick="deleteItem(this)">
-                                            <i data-lucide="trash-2"></i> Delete
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>STN-002</td>
-                                <td>Blue Ballpoint Pen</td>
-                                <td>Writing Instruments</td>
-                                <td>15 Pcs</td>
-                                <td>3,500 MMK</td>
-                                <td>10 May 2026</td>
-                                <td><span class="badge low-stock">Low Stock</span></td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-edit" onclick="editItem(this)">
-                                            <i data-lucide="edit"></i> Edit
-                                        </button>
-                                        <button class="btn-delete" onclick="deleteItem(this)">
-                                            <i data-lucide="trash-2"></i> Delete
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                
+<div class="table-responsive">
+    <table id="inventoryTable">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Date</th>
+                <th>Item ID</th>
+                <th>Item Name / Description</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Unit</th>
+                <th>Purchase Price</th>
+                <th>Total Amount</th>
+                <th>Supplier Name</th>
+                <th>Remark</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>01-Jun-2026</td>
+                <td>STN-001</td>
+                <td>A4 Paper (Double A)</td>
+                <td>Paper & Notebooks</td>
+                <td>50</td>
+                <td>Rims</td>
+                <td>12500</td>
+                <td>625000</td>
+                <td>City Mart</td>
+                <td>လစဥ်သုံး</td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="btn-edit" onclick="editItem(this)"><i data-lucide="edit"></i> Edit</button>
+                        <button class="btn-delete" onclick="deleteItem(this)"><i data-lucide="trash-2"></i> Delete</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
             </div>
         </div>
     </div>
