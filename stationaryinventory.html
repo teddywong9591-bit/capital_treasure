@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stationery Stock In & Inventory - Capital Treasure</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root { --bg-primary: #0f172a; --bg-card: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --accent: #2563eb; --border: #e2e8f0; --radius: 12px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f8fafc; color: var(--text-main); display: flex; min-height: 100vh; }
+        
+        .sidebar { width: 260px; background-color: var(--bg-primary); color: #fff; display: flex; flex-direction: column; position: fixed; height: 100vh; overflow-y: auto; }
+        .brand { padding: 24px; display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .brand i { color: var(--accent); }
+        .nav-list { list-style: none; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+        .nav-item a { width: 100%; padding: 12px 16px; border-radius: var(--radius); color: #94a3b8; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .nav-item a:hover, .nav-item.active a { background-color: rgba(255, 255, 255, 0.1); color: #fff; }
+        .nav-item.active a { background-color: var(--accent); }
+        .nav-divider { height: 1px; background-color: rgba(255, 255, 255, 0.1); margin: 8px 0; }
+        
+        .main-wrapper { margin-left: 260px; flex: 1; display: flex; flex-direction: column; }
+        header { background-color: var(--bg-card); padding: 16px 32px; border-bottom: 1px solid var(--border); }
+        .content-body { padding: 32px; display: flex; flex-direction: column; gap: 24px; max-width: 1100px; margin: 0 auto; width: 100%; }
+        
+        .form-card, .table-card { background: var(--bg-card); padding: 28px; border-radius: var(--radius); border: 1px solid var(--border); }
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group.full { grid-column: span 2; }
+        label { font-size: 13px; font-weight: 600; color: #334155; }
+        input, select, textarea { padding: 10px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 14px; background: #fff; }
+        
+        .btn-success { background: #16a34a; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-success:hover { background: #15803d; }
+
+        .section-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        
+        .table-responsive { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 750px; }
+        th, td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
+        th { background-color: #f1f5f9; font-weight: 600; color: #475569; }
+        tr:hover { background-color: #f8fafc; }
+
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; }
+        .badge.in-stock { background: #dcfce7; color: #16a34a; }
+        .badge.low-stock { background: #fef08a; color: #b45309; }
+
+        @media screen and (max-width: 768px) {
+            .sidebar { width: 70px; }
+            .sidebar .brand span, .sidebar .nav-item span { display: none; }
+            .main-wrapper { margin-left: 70px; }
+            .content-body { padding: 16px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full { grid-column: span 1; }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand"><i data-lucide="shield-check"></i><span>Capital Treasure</span></div>
+        <ul class="nav-list">
+            <li class="nav-item"><a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+            <li class="nav-item active"><a href="stationary.html"><i data-lucide="pen-tool"></i> Stationery Inventory</a></li>
+            <li class="nav-item"><a href="warehouse.html"><i data-lucide="warehouse"></i> Warehouse</a></li>
+            <li class="nav-divider"></li>
+            <li class="nav-item"><a href="logout.html"><i data-lucide="log-out"></i> Log Out</a></li>
+        </ul>
+    </aside>
+    
+    <div class="main-wrapper">
+        <header><h1 style="font-size: 20px;">Stationery Stock & Purchase Management</h1></header>
+        
+        <div class="content-body">
+            <!-- 1. Stock In / New Purchase Form -->
+            <div class="form-card">
+                <h2 class="section-title"><i data-lucide="package-plus"></i> New Stock In (ပစ္စည်းအသစ် ဝယ်ယူမှုစာရင်းသွင်းရန်)</h2>
+                <form class="form-grid" onsubmit="event.preventDefault(); alert('New Stationery Stock Added Successfully!');">
+                    <div class="form-group">
+                        <label>Item Name / Description</label>
+                        <input type="text" placeholder="ဥပမာ - A4 Paper (Double A)" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select required>
+                            <option value="">Select Category</option>
+                            <option>Paper & Notebooks</option>
+                            <option>Writing Instruments</option>
+                            <option>Folders & Files</option>
+                            <option>Printer Supplies</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity Purchased (ဝယ်ယူသည့် အရေအတွက်)</label>
+                        <input type="number" min="1" placeholder="ဥပမာ - 50" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Purchase Price (ဝယ်ယူသည့် ဈေးနှုန်း - MMK)</label>
+                        <input type="text" placeholder="ဥပမာ - 12,500" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Supplier / Shop Name (ဆိုင်အမည်)</label>
+                        <input type="text" placeholder="ဥပမာ - City Mart / A One Stationery">
+                    </div>
+                    <div class="form-group">
+                        <label>Purchase Date (ဝယ်ယူသည့်ရက်စွဲ)</label>
+                        <input type="date" required>
+                    </div>
+                    <div class="form-group full">
+                        <button class="btn-success" type="submit"><i data-lucide="plus-circle"></i> Save & Add to Stock</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 2. Stationery Table (Inventory List) -->
+            <div class="table-card">
+                <h2 class="section-title"><i data-lucide="table"></i> Current Stationery Inventory Table</h2>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item ID</th>
+                                <th>Item Name</th>
+                                <th>Category</th>
+                                <th>Current Stock</th>
+                                <th>Latest Purchase Price</th>
+                                <th>Last Restocked Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>STN-001</td>
+                                <td>A4 Paper (Double A)</td>
+                                <td>Paper</td>
+                                <td>120 Rims</td>
+                                <td>12,500 MMK</td>
+                                <td>20 Jun 2026</td>
+                                <td><span class="badge in-stock">In Stock</span></td>
+                            </tr>
+                            <tr>
+                                <td>STN-002</td>
+                                <td>Blue Ballpoint Pen</td>
+                                <td>Writing</td>
+                                <td>15 Pcs</td>
+                                <td>3,500 MMK</td>
+                                <td>10 May 2026</td>
+                                <td><span class="badge low-stock">Low Stock</span></td>
+                            </tr>
+                            <tr>
+                                <td>STN-003</td>
+                                <td>Sticky Notes (Yellow)</td>
+                                <td>Paper</td>
+                                <td>50 Pads</td>
+                                <td>1,800 MMK</td>
+                                <td>15 Jun 2026</td>
+                                <td><span class="badge in-stock">In Stock</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
