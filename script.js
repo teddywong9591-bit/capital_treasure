@@ -27,24 +27,23 @@ function applyRoleAccess() {
     const savedRole = localStorage.getItem('login_role');
     const loginRole = (savedRole) ? savedRole.toUpperCase() : 'ADMIN';
 
-    // HTML ထဲရှိ Menu ID အားလုံးကို ရယူခြင်း (stationaryinventory အပါအဝင်)
-    const menus = {
-        dashboard: document.getElementById('menu-dashboard'),
-        fuel: document.getElementById('menu-fuel'),
-        maintenance: document.getElementById('menu-maintenance'),
-        inspection: document.getElementById('menu-inspection'),
-        warehouse: document.getElementById('menu-warehouse'),
-        stock: document.getElementById('menu-stock'),
-        inventory: document.getElementById('menu-inventory'),
-        stationery: document.getElementById('menu-stationery'),
-        stationaryInventory: document.getElementById('menu-stationaryinventory'), // အသစ်ထည့်ထားသည်
-        fixedAssets: document.getElementById('menu-fixed-assets'),
-        leave: document.getElementById('menu-leave'),
-        meeting: document.getElementById('menu-meeting'),
-        manpower: document.getElementById('menu-manpower'),
-        interview: document.getElementById('menu-interview'),
-        userManage: document.getElementById('menu-usermanage')
-    };
+const menus = {
+    dashboard: document.getElementById('menu-dashboard'),
+    fuel: document.getElementById('menu-fuel'),
+    maintenance: document.getElementById('menu-maintenance'),
+    inspection: document.getElementById('menu-inspection'),
+    warehouse: document.getElementById('menu-warehouse'),
+    stock: document.getElementById('menu-stock'),
+    inventory: document.getElementById('menu-inventory'),
+    stationery: document.getElementById('menu-stationery'),
+    stationaryInventory: document.getElementById('menu-stationaryinventory'), // ဤနေရာတွင် ရှိရပါမည်
+    fixedAssets: document.getElementById('menu-fixed-assets'),
+    leave: document.getElementById('menu-leave'),
+    meeting: document.getElementById('menu-meeting'),
+    manpower: document.getElementById('menu-manpower'),
+    interview: document.getElementById('menu-interview'),
+    userManage: document.getElementById('menu-usermanage')
+};
 
     // ၁။ ပထမဦးစွာ Menu အားလုံးကို မမြင်ရအောင် (display: none) အရင်ပိတ်မည်
     Object.values(menus).forEach(menu => {
