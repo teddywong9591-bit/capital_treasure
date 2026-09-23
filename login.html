@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,233 +9,54 @@
 <body>
 
     <div class="login-card">
-        <!-- SVG နေရာတွင် Logo ပုံ (your-icon.png သို့မဟုတ် your-icon.jpg) အစားထိုးထားသည် -->
+        <!-- Logo ပုံထည့်ရန် (လိုချင်မှထည့်ပါ) -->
         <div class="icon-box">
-            <img src="logo.jpg" alt="Logo">
+            <img src="https://via.placeholder.com/150" alt="Logo">
         </div>
         
         <h2>Capital Treasure</h2>
-        <p class="subtitle">Operations Management</p>
+        <div class="subtitle">Operations Management</div>
 
+        <!-- Login Form -->
         <form id="loginForm">
             <div class="form-group">
-                <label for="username">Username</label>
-                <div class="input-wrapper">
-                    <input type="text" id="username" placeholder="Enter username" required autocomplete="off">
-                </div>
+                <input type="text" placeholder="Username" required>
             </div>
-
             <div class="form-group">
-                <label for="password">Password</label>
-                <div class="input-wrapper">
-                    <input type="password" id="password" placeholder="Enter password" required>
-                    <button type="button" class="toggle-password" id="togglePassword">
-                        <svg id="eyeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                    </button>
-                </div>
+                <input type="password" placeholder="Password" required>
             </div>
 
-            <div style="text-align: right; margin-bottom: 16px;">
-                <a href="#" id="forgotPasswordLink" style="font-size: 12px; color: #2563eb; text-decoration: none;">Password မေ့နေပါသလား?</a>
-            </div>
-            
-            <button type="submit" class="btn-submit" id="submitBtn">
-                <span id="btnText">Sign In</span>
-            </button>
-            
-            <div id="errorMsg" class="error-message">Username သို့မဟုတ် Password မှားယွင်းနေပါသည်။</div>
+            <button type="submit" class="btn-submit">Sign In</button>
         </form>
-    </div>
 
-    <!-- Custom Success Modal UI -->
-    <div class="modal-overlay" id="successModal">
-        <div class="modal-card">
-            <div class="success-icon">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-            </div>
-            <div class="modal-title">Sign In အောင်မြင်သည်</div>
-            <div class="modal-desc" id="modalRoleText">စနစ်အတွင်းသို့ ဝင်ရောက်နေပါသည်။</div>
+        <!-- နှိပ်မှ ပေါ်လာမည့် Password အသစ်လဲသည့် အပိုင်း -->
+        <span class="toggle-link" onclick="toggleChangePassword()">Password အသစ်လဲလှယ်ရန်</span>
+
+        <div id="changePasswordBox" class="change-password-section">
+            <h3>Password အသစ်ပြောင်းရန်</h3>
+            <form>
+                <div class="form-group">
+                    <input type="password" placeholder="Current Password" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="New Password" required>
+                </div>
+                <button type="submit" class="btn-submit" style="background-color: #2563eb; color: #ffffff;">Confirm Change</button>
+            </form>
         </div>
     </div>
 
-    <!-- Forgot Password Modal Overlay -->
-    <div class="modal-overlay" id="forgotModal">
-        <div class="modal-card" style="text-align: left;">
-            <div class="modal-title" style="text-align: center; margin-bottom: 15px;">Password အသစ်လဲလှယ်ရန်</div>
-            
-            <!-- Step 1: Request Code -->
-            <div id="step1">
-                <p style="font-size: 12px; color: #64748b; margin-bottom: 12px;">သင့်အကောင့် Username ကို ထည့်ပါ။ ဝင်ထားသော Gmail သို့ 6 လုံးပါ Code ပို့ပေးပါမည်။</p>
-                <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="resetUsername" placeholder="Enter username" style="width:100%; padding:10px; margin-bottom:12px; border:1px solid #cbd5e1; border-radius:6px;">
-                </div>
-                <button type="button" class="btn-submit" id="sendCodeBtn" style="width:100%; padding:10px; background:#2563eb; color:#fff; border:none; border-radius:6px; cursor:pointer;">Code ပို့မည်</button>
-            </div>
-
-            <!-- Step 2: Verify Code & New Password -->
-            <div id="step2" style="display: none;">
-                <p style="font-size: 12px; color: #64748b; margin-bottom: 12px;">သင့် Gmail သို့ ရောက်လာသော 6-digits code နှင့် Password အသစ်ကို ထည့်ပါ။</p>
-                <div class="form-group">
-                    <label>6-Digits Code</label>
-                    <input type="text" id="enteredCode" placeholder="123456" maxlength="6" style="width:100%; padding:10px; margin-bottom:8px; border:1px solid #cbd5e1; border-radius:6px;">
-                </div>
-                <div class="form-group">
-                    <label>Password အသစ်</label>
-                    <input type="password" id="newPassword" placeholder="Enter new password" style="width:100%; padding:10px; margin-bottom:12px; border:1px solid #cbd5e1; border-radius:6px;">
-                </div>
-                <button type="button" class="btn-submit" id="verifyAndResetBtn" style="width:100%; padding:10px; background:#16a34a; color:#fff; border:none; border-radius:6px; cursor:pointer;">Password ပြောင်းမည်</button>
-            </div>
-
-            <div style="text-align: center; margin-top: 15px;">
-                <a href="#" id="closeForgotModal" style="font-size: 12px; color: #ef4444; text-decoration: none;">ပယ်ဖျက်မည်</a>
-            </div>
-        </div>
-    </div>
-    
     <script>
-        // Password Visibility Toggle
-        const togglePassword = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('password');
-
-        togglePassword.addEventListener('click', function () {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            this.style.color = type === 'text' ? '#2563eb' : '#94a3b8';
-        });
-
-        // Account Credentials & Role Mapping
-        const usersDatabase = {
-            'admin': { pass: 'admin123', role: 'ADMIN', label: 'Admin (Stationery & Assets)' },
-            'fleet': { pass: 'fleet123', role: 'FLEET', label: 'Fleet Manager' },
-            'warehouse': { pass: 'warehouse123', role: 'WAREHOUSE', label: 'Warehouse Manager' },
-            'hr': { pass: 'hr123', role: 'HR', label: 'HR Manager' }
-        };
-
-        // Login Logic
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value.trim().toLowerCase();
-            const password = document.getElementById('password').value.trim();
-            const errorMsg = document.getElementById('errorMsg');
-            const submitBtn = document.getElementById('submitBtn');
-            const btnText = document.getElementById('btnText');
-
-            // UI Loading State
-            submitBtn.disabled = true;
-            btnText.innerText = "Authenticating...";
-
-            setTimeout(() => {
-                const user = usersDatabase[username];
-
-                if (user && user.pass === password) {
-                    errorMsg.style.display = 'none';
-                    
-                    // Save Session & Roles
-                    localStorage.setItem('isAuthenticated', 'true');
-                    localStorage.setItem('login_role', user.role);
-                    localStorage.setItem('user_role', user.role);
-                    localStorage.setItem('user_name', username);
-
-                    document.getElementById('modalRoleText').innerText = `System ထဲသို့ ဝင်ရောက်နေပါသည်။`;
-
-                    // Show Custom UI Modal
-                    document.getElementById('successModal').classList.add('active');
-
-                    // ၃ စက္ကန့် (3000 ms) ပြည့်သည်နှင့် အလိုအလျောက် ပိတ်ပြီး သက်ဆိုင်ရာစာမျက်နှာသို့ သွားရန်
-                    setTimeout(() => {
-                        closeModal();
-                    }, 3000);
-
-                } else {
-                    errorMsg.style.display = 'block';
-                    submitBtn.disabled = false;
-                    btnText.innerText = "Sign In";
-                }
-            }, 600);
-        });
-
-        // Auto Redirect Function
-        function closeModal() {
-            document.getElementById('successModal').classList.remove('active');
-            
-            const role = localStorage.getItem('login_role') || 'ADMIN';
-
-            if (role === 'FLEET') {
-                window.location.href = 'refilling.html';
-            } else if (role === 'WAREHOUSE') {
-                window.location.href = 'warehouse.html';
-            } else if (role === 'HR') {
-                window.location.href = 'leaves.html';
+        // နှိပ်လိုက်ပါက Password အသစ်လဲသည့် box ပေါ်လာ/ပျောက်သွားစေရန် JavaScript လုပ်ဆောင်ချက်
+        function toggleChangePassword() {
+            const box = document.getElementById('changePasswordBox');
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
             } else {
-                window.location.href = 'stationary.html';
+                box.style.display = 'block';
             }
         }
-
-        // --- Forgot Password Logic ---
-        let generatedCode = '';
-        let targetUser = '';
-
-        document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('forgotModal').classList.add('active');
-        });
-
-        document.getElementById('closeForgotModal').addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('forgotModal').classList.remove('active');
-            // Reset fields
-            document.getElementById('step1').style.display = 'block';
-            document.getElementById('step2').style.display = 'none';
-            document.getElementById('resetUsername').value = '';
-            document.getElementById('enteredCode').value = '';
-            document.getElementById('newPassword').value = '';
-        });
-
-        document.getElementById('sendCodeBtn').addEventListener('click', () => {
-            const username = document.getElementById('resetUsername').value.trim().toLowerCase();
-            
-            if (usersDatabase[username]) {
-                targetUser = username;
-                generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
-                
-                alert(`(Testing Mode) သင့် Gmail သို့ ပို့လိုက်သော 6-Digits Code မှာ: ${generatedCode} ဖြစ်ပါသည်။`);
-
-                document.getElementById('step1').style.display = 'none';
-                document.getElementById('step2').style.display = 'block';
-            } else {
-                alert('ထိုကဲ့သို့သော Username မရှိပါ။ ကျေးဇူးပြု၍ မှန်ကန်စွာ ရိုက်ထည့်ပါ။');
-            }
-        });
-
-        document.getElementById('verifyAndResetBtn').addEventListener('click', () => {
-            const enteredCode = document.getElementById('enteredCode').value.trim();
-            const newPassword = document.getElementById('newPassword').value.trim();
-
-            if (enteredCode === generatedCode) {
-                if (newPassword.length >= 6) {
-                    usersDatabase[targetUser].pass = newPassword;
-                    alert('Password အသစ်ပြောင်းလဲခြင်း အောင်မြင်ပါသည်။ ကျေးဇူးပြု၍ Password အသစ်ဖြင့် Login ဝင်ပါ။');
-                    
-                    document.getElementById('forgotModal').classList.remove('active');
-                    document.getElementById('step1').style.display = 'block';
-                    document.getElementById('step2').style.display = 'none';
-                    document.getElementById('resetUsername').value = '';
-                    document.getElementById('enteredCode').value = '';
-                    document.getElementById('newPassword').value = '';
-                } else {
-                    alert('Password သည် အနည်းဆုံး ၆ လုံး ပါရှိရပါမည်။');
-                }
-            } else {
-                alert('ထည့်သွင်းလိုက်သော 6-Digits Code မှားယွင်းနေပါသည်။');
-            }
-        });
     </script>
+
 </body>
 </html>
