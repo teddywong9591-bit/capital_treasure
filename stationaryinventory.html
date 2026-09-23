@@ -112,7 +112,7 @@
                                 <th>No.</th>
                                 <th>Date</th>
                                 <th>Item ID</th>
-                                <th>Item Name / Description</th>
+                                <th>Item Name</th>
                                 <th>Category</th>
                                 <th>Quantity</th>
                                 <th>Unit</th>
@@ -150,16 +150,17 @@
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby1WhGr8hqkjY0xJvqIFbcFGv3Yv4DmFCRNu0T8sR2m_-ILpUk5YUbvDPfQM20CWEXUfg/exec';
 
         function loadSheetData() {
-            fetch(WEB_APP_URL)
-                .then(response => response.json())
-                .then(data => {
-                    allData = data;
-                    filteredData = allData;
-                    currentPage = 1;
-                    renderTable();
-                })
-                .catch(error => console.error('Error loading data from Google Sheet:', error));
-        }
+    fetch(WEB_APP_URL)
+        .then(response => response.json())
+        .then(data => {
+            console.log("Loaded Data from Sheet:", data); // ဒီနေရာမှာ စစ်ဖို့ ထည့်ပါ
+            allData = data;
+            filteredData = allData;
+            currentPage = 1;
+            renderTable();
+        })
+        .catch(error => console.error('Error loading data from Google Sheet:', error));
+}
 
         window.addEventListener('DOMContentLoaded', loadSheetData);
 
