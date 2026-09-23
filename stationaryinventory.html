@@ -44,11 +44,11 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Quantity (အရေအတွက်) - <span style="font-size: 11px; color: var(--accent);">Edit စဉ် ထပ်ပေါင်းလိုပါက ထပ်ထည့်ရန် ပမာဏရေးပါ</span></label>
+                        <label>Quantity (အရေအတွက်)</label>
                         <input type="number" id="quantity" min="1" placeholder="ဥပမာ - 50" required>
                     </div>
                     <div class="form-group">
-                        <label>Unit (ယူနစ် - ဥပမာ၊ Rims, Pcs, Boxes)</label>
+                        <label>Unit (ယူနစ်)</label>
                         <input type="text" id="unit" placeholder="ဥပမာ - Rims / Pcs" required>
                     </div>
                     <div class="form-group">
@@ -75,11 +75,11 @@
 
             <!-- 2. Stationery Table with Filters -->
             <div class="table-card">
-    <div class="section-title">
-        <span><i data-lucide="table"></i> Current Stationery Inventory Table</span>
-        <button class="btn-export" onclick="exportToCSV()"><i data-lucide="file-spreadsheet"></i> Export to CSV</button>
-    </div> 
-                <!-- Filter Controls -->
+                <div class="section-title">
+                    <span><i data-lucide="table"></i> Current Stationery Inventory Table</span>
+                    <button class="btn-export" onclick="exportToCSV()"><i data-lucide="file-spreadsheet"></i> Export to CSV</button>
+                </div> 
+                
                 <div class="table-controls">
                     <div class="control-group">
                         <label>Show Rows:</label>
@@ -129,7 +129,6 @@
                     </table>
                 </div>
 
-                <!-- Pagination Controls -->
                 <div class="pagination">
                     <button id="prevBtn" onclick="prevPage()">Previous</button>
                     <span id="pageInfo">Page 1 of 1</span>
@@ -146,11 +145,10 @@
         let filteredData = []; 
         let currentPage = 1;
         let rowsPerPage = 10;
-        let editingIndex = null; // To track if we are editing an existing item
+        let editingIndex = null; 
 
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwypUF274aX9_D-t9KemON4-CRAKY6PhxIlbPm6r4kuTnW-J6B7QJU9Mk7pKAwj4CjegA/exec';
 
-        // 1. Fetch Data from Google Sheet
         function loadSheetData() {
             fetch(WEB_APP_URL)
                 .then(response => response.json())
@@ -165,7 +163,6 @@
 
         window.addEventListener('DOMContentLoaded', loadSheetData);
 
-        // 2. Filter Logic
         function filterTableData() {
             const selectedCategory = document.getElementById('categoryFilter').value;
             if (selectedCategory === "") {
@@ -177,14 +174,12 @@
             renderTable();
         }
 
-        // 3. Rows per page change
         function changeRowsPerPage() {
             rowsPerPage = parseInt(document.getElementById('rowsPerPage').value);
             currentPage = 1;
             renderTable();
         }
 
-        // 4. Render Table with Pagination & Action Dropdown
         function renderTable() {
             const tableBody = document.getElementById('inventoryTable').getElementsByTagName('tbody')[0];
             tableBody.innerHTML = ''; 
@@ -198,7 +193,7 @@
 
             paginatedItems.forEach((item, index) => {
                 let cleanDate = item.date ? item.date.split('T')[0] : '';
-                const globalIndex = start + index; // Original index in allData/filteredData
+                const globalIndex = start + index; 
 
                 const newRow = tableBody.insertRow();
                 newRow.innerHTML = `
@@ -214,18 +209,9 @@
                     <td>${item.supplier || ''}</td>
                     <td>${item.remark || ''}</td>
                     <td>
-                        <div class="dropdown">
-                            <button onclick="toggleDropdown(event, ${globalIndex})" class="dropbtn">
-                                Action <i data-lucide="chevron-down" style="width:12px; height:12px;"></i>
-                            </button>
-                            <div id="dropdown-${globalIndex}" class="dropdown-content">
-                                <button class="edit-action" onclick="editItem(${globalIndex})">
-                                    <i data-lucide="edit" style="width:14px;height:14px;"></i> Edit / Stock+
-                                </button>
-                                <button class="delete-action" onclick="deleteItem(${globalIndex})">
-                                    <i data-lucide="trash-2" style="width:14px;height:14px;"></i> Delete
-                                </button>
-                            </div>
+                        <div class="action-buttons" style="display: flex; gap: 6px;">
+                            <button class="btn-edit" onclick="editItem(${globalIndex})" style="padding: 4px 8px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;"><i data-lucide="edit" style="width:14px;height:14px;"></i> Edit</button>
+                            <button class="btn-delete" onclick="deleteItem(${globalIndex})" style="padding: 4px 8px; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer;"><i data-lucide="trash-2" style="width:14px;height:14px;"></i> Delete</button>
                         </div>
                     </td>
                 `;
@@ -238,25 +224,6 @@
             lucide.createIcons();
         }
 
-        // Toggle Action Dropdown Menu
-        function toggleDropdown(event, index) {
-            event.stopPropagation();
-            // Close all other opened dropdowns first
-            document.querySelectorAll('.dropdown-content').forEach(el => {
-                if (el.id !== `dropdown-${index}`) el.parentElement.classList.remove('show');
-            });
-            const dropdown = document.getElementById(`dropdown-${index}`);
-            dropdown.parentElement.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        window.onclick = function(event) {
-            if (!event.target.matches('.dropbtn') && !event.target.closest('.dropbtn')) {
-                document.querySelectorAll('.dropdown').forEach(el => el.classList.remove('show'));
-            }
-        }
-
-        // Pagination Navigation Functions
         function prevPage() {
             if (currentPage > 1) {
                 currentPage--;
@@ -272,30 +239,26 @@
             }
         }
 
-        // 5. Edit Item & Stock Addition Handler
         function editItem(index) {
             const item = filteredData[index];
-            editingIndex = allData.findIndex(i => i === item); // Find exact item in main array
+            editingIndex = allData.findIndex(i => i === item); 
 
-            // Populate form fields with existing values
             document.getElementById('itemName').value = item.itemName || '';
             document.getElementById('category').value = item.category || '';
-            document.getElementById('quantity').value = ''; // Leave blank so user can type additional stock quantity
+            document.getElementById('quantity').value = item.quantity || ''; 
             document.getElementById('unit').value = item.unit || '';
             document.getElementById('price').value = item.price || 0;
             document.getElementById('supplier').value = item.supplier || '';
             document.getElementById('pDate').value = item.date ? item.date.split('T')[0] : '';
             document.getElementById('remark').value = item.remark || '';
 
-            // Change form title to indicate Stock Addition / Update mode
-            document.getElementById('formTitle').innerHTML = `<i data-lucide="package-plus"></i> Update & Add Stock (${item.itemName} - မူလလက်ကျန်: ${item.quantity})`;
-            document.getElementById('submitBtn').innerHTML = `<i data-lucide="refresh-cw"></i> Update Stock (ပေါင်းထည့်ရန်)`;
+            document.getElementById('formTitle').innerHTML = `<i data-lucide="package-plus"></i> Update Stock (${item.itemName})`;
+            document.getElementById('submitBtn').innerHTML = `<i data-lucide="refresh-cw"></i> Update Sheet Data`;
             
             lucide.createIcons();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 6. Form Submit Handler (Handles both New Entry & Stock Addition on Edit)
         function handleFormSubmit(event) {
             event.preventDefault();
             
@@ -307,22 +270,23 @@
             const supplier = document.getElementById('supplier').value;
             const date = document.getElementById('pDate').value;
             const remark = document.getElementById('remark').value || "-";
+            const totalAmount = inputQty * price;
 
-            let finalQty = inputQty;
+            let actionType = "create";
+            let itemId = "STN-" + Math.floor(100 + Math.random() * 900);
 
-            // If editing, add new inputted quantity to the previous quantity
             if (editingIndex !== null && editingIndex >= 0) {
-                const prevQty = parseInt(allData[editingIndex].quantity) || 0;
-                finalQty = prevQty + inputQty;
+                actionType = "update";
+                itemId = allData[editingIndex].itemId || "";
             }
 
-            const totalAmount = finalQty * price;
-
             const formData = {
+                action: actionType,
+                itemId: itemId,
                 date: date,
                 itemName: name,
                 category: cat,
-                quantity: finalQty,
+                quantity: inputQty,
                 unit: unit,
                 price: price,
                 totalAmount: totalAmount,
@@ -331,7 +295,7 @@
             };
 
             const submitBtn = document.getElementById('submitBtn');
-            submitBtn.innerText = "Saving to Google Sheet...";
+            submitBtn.innerText = "Processing...";
             submitBtn.disabled = true;
 
             fetch(WEB_APP_URL, {
@@ -343,13 +307,13 @@
                 submitBtn.innerHTML = `<i data-lucide="plus-circle"></i> Save to Import Sheet`;
                 submitBtn.disabled = false;
                 if(result.status === "success") {
-                    alert(editingIndex !== null ? 'Stock Successfully Added & Updated!' : 'New Data Added to Google Sheet Successfully!');
+                    alert(editingIndex !== null ? 'Successfully Updated in Google Sheet!' : 'Successfully Added to Google Sheet!');
                     document.getElementById('importForm').reset();
                     document.getElementById('formTitle').innerHTML = `<i data-lucide="package-plus"></i> New Stock In (Import Sheet သို့ စာရင်းသွင်းရန်)`;
                     editingIndex = null;
                     loadSheetData(); 
                 } else {
-                    alert('Error saving data: ' + result.message);
+                    alert('Error: ' + result.message);
                 }
             })
             .catch(error => {
@@ -360,15 +324,73 @@
             });
         }
 
-        // 7. Delete Item Handler
         function deleteItem(index) {
-            if (confirm("ဤ Import စာရင်းအချက်အလက်ကို ဖျက်ရန် သေချာပါသလား?")) {
+            if (confirm("ဤ Import စာရင်းအချက်အလက်ကို Google Sheet မှပါ ဖျက်ရန် သေချာပါသလား?")) {
                 const itemToDelete = filteredData[index];
-                allData = allData.filter(i => i !== itemToDelete);
-                filteredData = filteredData.filter(i => i !== itemToDelete);
-                renderTable();
-                alert("Import Data Successfully Deleted!");
+                
+                const formData = {
+                    action: "delete",
+                    itemId: itemToDelete.itemId
+                };
+
+                fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if(result.status === "success") {
+                        alert("Successfully Deleted from Google Sheet!");
+                        loadSheetData(); // Refresh table from sheet
+                    } else {
+                        alert("Error deleting: " + result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to connect to Google Sheet for deletion!');
+                });
             }
+        }
+
+        // Export All Data from Google Sheet to CSV
+        function exportToCSV() {
+            if (allData.length === 0) {
+                alert("Export လုပ်ရန် ဒေတာ မရှိသေးပါ။");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            // Headers
+            const headers = ["No", "Date", "Item ID", "Item Name", "Category", "Quantity", "Unit", "Price", "Total Amount", "Supplier", "Remark"];
+            csvContent += headers.join(",") + "\r\n";
+
+            // Rows (allData ကို သုံးထားသောကြောင့် Google Sheet ထဲက အချက်အလက် အကုန်ပါမည်)
+            allData.forEach((item, index) => {
+                let cleanDate = item.date ? item.date.split('T')[0] : '';
+                let row = [
+                    index + 1,
+                    cleanDate,
+                    `"${item.itemId || ''}"`,
+                    `"${item.itemName || ''}"`,
+                    `"${item.category || ''}"`,
+                    item.quantity || 0,
+                    `"${item.unit || ''}"`,
+                    item.price || 0,
+                    item.totalAmount || 0,
+                    `"${item.supplier || ''}"`,
+                    `"${item.remark || ''}"`
+                ];
+                csvContent += row.join(",") + "\r\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Stationery_Inventory_All_Data.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>
