@@ -133,3 +133,22 @@
         .register-link a:hover {
             text-decoration: underline;
         }
+
+.icon-box {
+    width: 70px;  /* လိုချင်တဲ့ ပုံအရွယ်အစား (ဥပမာ - 70px သို့မဟုတ် 80px) */
+    height: 70px;
+    background-color: #2563eb;
+    border-radius: 50%; /* စက်ဝိုင်းပုံစံ ဖြစ်စေရန် */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 16px auto; /* အလယ်ဗဟိုရောက်စေရန် */
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    overflow: hidden; /* စက်ဝိုင်းဘောင်ထက် ကျော်လွန်ထွက်မသွားစေရန် */
+}
+
+.icon-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* ပုံကို စက်ဝိုင်းအတွင်း အပြည့်အဝင်ဖြစ်စေရန် */
+}
