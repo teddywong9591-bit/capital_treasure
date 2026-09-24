@@ -5,31 +5,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manpower Planning - Capital Treasure</title>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="manpower.css">
     <style>
-        :root { --bg-primary: #0f172a; --bg-card: #ffffff; --text-main: #0f172a; --accent: #2563eb; --border: #e2e8f0; --radius: 12px; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: #f8fafc; color: var(--text-main); display: flex; min-height: 100vh; }
-        .sidebar { width: 260px; background-color: var(--bg-primary); color: #fff; display: flex; flex-direction: column; position: fixed; height: 100vh; overflow-y: auto; }
-        .brand { padding: 24px; display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .brand i { color: var(--accent); }
-        .nav-list { list-style: none; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
-        .nav-item a { width: 100%; padding: 12px 16px; border-radius: var(--radius); color: #94a3b8; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 12px; text-decoration: none; }
-        .nav-item a:hover, .nav-item.active a { background-color: rgba(255, 255, 255, 0.1); color: #fff; }
-        .nav-item.active a { background-color: var(--accent); }
-        .nav-divider { height: 1px; background-color: rgba(255, 255, 255, 0.1); margin: 8px 0; }
-        .main-wrapper { margin-left: 260px; flex: 1; display: flex; flex-direction: column; }
-        header { background-color: var(--bg-card); padding: 16px 32px; border-bottom: 1px solid var(--border); }
-        .content-body { padding: 32px; }
-        .form-card { background: var(--bg-card); padding: 28px; border-radius: var(--radius); border: 1px solid var(--border); max-width: 800px; margin: 0 auto; }
-        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .form-group { display: flex; flex-direction: column; gap: 6px; }
-        .form-group.full { grid-column: span 2; }
-        label { font-size: 13px; font-weight: 600; color: #334155; }
-        input, select, textarea { padding: 10px; border: 1px solid var(--border); border-radius: 8px; outline: none; }
-        .btn-primary { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        .btn-details {
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .btn-details:hover {
+            background-color: #4338ca;
+        }
+        /* Modal Popup Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-overlay.hidden {
+            display: none;
+        }
+        .modal-content {
+            background: #fff;
+            width: 95%;
+            max-width: 1300px;
+            max-height: 85vh;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .modal-header {
+            background: #1e293b;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+        .modal-footer {
+            background: #f8fafc;
+            padding: 12px 20px;
+            text-align: right;
+            border-top: 1px solid #e2e8f0;
+        }
+        .close-modal-btn {
+            background: none;
+            border: none;
+            color: #cbd5e1;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .close-modal-btn:hover {
+            color: #fff;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            text-align: left;
+            white-space: nowrap;
+        }
+        .data-table th, .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 13px;
+        }
+        .data-table th {
+            background-color: #f1f5f9;
+            color: #475569;
+            font-weight: 600;
+        }
+        .search-box-modal {
+            width: 100%;
+            max-width: 300px;
+            padding: 8px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <aside class="sidebar">
         <div class="brand"><i data-lucide="shield-check"></i><span>Capital Treasure</span></div>
         <ul class="nav-list">
@@ -64,26 +151,408 @@
             <li class="nav-item"><a href="logout.html"><i data-lucide="log-out"></i> Log Out</a></li>
         </ul>
     </aside>
+
     <div class="main-wrapper">
-        <header><h1 style="font-size: 20px;">Manpower Requisition & Request</h1></header>
+        <header>
+            <div class="header-flex">
+                <h1 style="font-size: 20px; margin: 0;">Employee Information & Manpower Form</h1>
+                <!-- Click Details ခလုတ် -->
+                <button type="button" class="btn-details" onclick="openDetailsModal()">
+                    <i data-lucide="eye" style="width: 18px; height: 18px;"></i> Click Details
+                </button>
+            </div>
+        </header>
+
         <div class="content-body">
             <div class="form-card">
-                <form class="form-grid" onsubmit="event.preventDefault(); alert('Manpower Request Submitted!');">
-                    <div class="form-group"><label>Department Requesting</label><select><option>Operations</option><option>Logistics</option><option>IT / Software</option><option>Finance</option></select></div>
-                    <div class="form-group"><label>Job Title Required</label><input type="text" placeholder="e.g. Senior Accountant" required></div>
-                    <div class="form-group"><label>Number of Positions</label><input type="number" min="1" placeholder="1" required></div>
-                    <div class="form-group"><label>Employment Type</label><select><option>Full-time</option><option>Part-time</option><option>Contract / Project</option></select></div>
-                    <div class="form-group full"><label>Job Qualifications & Requirement Summary</label><textarea rows="3" placeholder="Brief requirements..."></textarea></div>
-                    <div class="form-group full"><button class="btn-primary">Submit Manpower Requisition</button></div>
+                <form class="form-grid" id="manpowerForm">
+                    
+                    <!-- 1. Name -->
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" id="empName" placeholder="နာမည်ထည့်ရန်" required>
+                    </div>
+
+                    <!-- 2. National Registration Card (NRC) -->
+                    <div class="form-group">
+                        <label>National Registration Card (NRC)</label>
+                        <input type="text" id="nrc" placeholder="ဥပမာ - ၁၂/ဥကတ(နိုင်)၁၂၃၄၅၆" required>
+                    </div>
+
+                    <!-- 3. Office Location -->
+                    <div class="form-group">
+                        <label>Office Location</label>
+                        <select id="officeLocation" required>
+                            <option value="">Select Office Location</option>
+                            <option>Yangon</option>
+                            <option>Mandalay</option>
+                        </select>
+                    </div>
+
+                     <!-- 9. Contact Number -->
+                    <div class="form-group">
+                        <label>Contact Number</label>
+                        <input type="tel" id="contactNumber" placeholder="ဖုန်းနံပါတ်" required>
+                    </div>
+
+                    <!-- 4. Date of Birth -->
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" id="dob" required>
+                    </div>
+
+                    <!-- 5. Joined Date -->
+                    <div class="form-group">
+                        <label>Joined Date</label>
+                        <input type="date" id="joinedDate" required>
+                    </div>
+
+                    <!-- 6. Department -->
+                    <div class="form-group">
+                        <label>Department</label>
+                        <select id="department" required>
+                            <option value="">Select Department</option>
+                        </select>
+                    </div>
+
+                    <!-- 7. Position (Filtered by Department) -->
+                    <div class="form-group">
+                        <label>Position</label>
+                        <select id="position" required>
+                            <option value="">Select Position</option>
+                        </select>
+                    </div>
+
+                    <!-- 3. Marital Status -->
+                    <div class="form-group">
+                        <label>Marital Status</label>
+                        <select id="maritalstatus" required>
+                            <option value="">Select Marital</option>
+                            <option>Single</option>
+                            <option>Married</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <!-- 8. Living Condition -->
+                    <div class="form-group">
+                        <label>Living Condition</label>
+                        <select id="livingCondition" required>
+                            <option value="">Select Living Condition</option>
+                        </select>
+                    </div>
+
+                    <!-- 11. Emergency Contact / Relationship -->
+                    <div class="form-group">
+                        <label>Emergency Contact / Relationship</label>
+                        <select id="emergencyRelationship" required>
+                            <option value="">Select Relationship</option>
+                        </select>
+                    </div>
+
+                    <!-- 10. Emergency Contact Number -->
+                    <div class="form-group">
+                        <label>Emergency Contact Number</label>
+                        <input type="tel" id="emergencyContactNumber" placeholder="အရေးပေါ် ဖုန်းနံပါတ်" required>
+                    </div>
+
+                    <!-- 12. Residential Current Address -->
+                    <div class="form-group full">
+                        <label>Residential Current Address</label>
+                        <textarea id="address" rows="2" placeholder="လက်ရှိနေထိုင်ရာ လိပ်စာအပြည့်အစုံ" required></textarea>
+                    </div>
+
+                    <div class="form-group full">
+                        <button type="submit" class="btn-primary" id="submitBtn">Submit Information</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Lucide Icons Initialization -->
-    <script>lucide.createIcons();</script>
+    <!-- GOOGLE SHEET MANPOWER ALL LISTS MODAL -->
+    <div id="manpowerDetailsModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="margin: 0; font-size: 18px;">Manpower & Employee Lists (Google Sheet Up-to-Date)</h3>
+                <button type="button" class="close-modal-btn" onclick="closeDetailsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                    <span style="font-size: 13px; color: #64748b;">All employee details fetched directly from Google Sheet.</span>
+                    <input type="text" id="modalSearchInput" class="search-box-modal" placeholder="Search by name or department..." onkeyup="filterModalTable()">
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table" id="allManpowerTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date of Birth</th>
+                                <th>Joined Date</th>
+                                <th>NRC</th>
+                                <th>Marital Status</th>
+                                <th>Office Location</th>
+                                <th>Department</th>
+                                <th>Position</th>
+                                <th>Contact Number</th>
+                                <th>Residential Address</th>
+                                <th>Emergency Contact Number</th>
+                                <th>Emergency Contact / Relationship</th>
+                                <th>Living Condition</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modalTableBody">
+                            <tr>
+                                <td colspan="13" style="text-align: center; color: #64748b; padding: 20px;">Loading data... Please wait.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-primary" style="padding: 6px 16px; font-size: 14px; cursor: pointer;" onclick="closeDetailsModal()">Close</button>
+            </div>
+        </div>
+    </div>
 
-    <!-- External Script File -->
-    <script src="script.js"></script>
+    <!-- Script Files -->
+    <script src="config.js"></script>
+    <script>
+        lucide.createIcons();
+
+        // Custom Toast Function
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const iconName = type === 'success' ? 'check-circle' : 'alert-circle';
+            toast.innerHTML = `
+                <i data-lucide="${iconName}"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        let positionsByDept = {};
+
+        const departmentSelect = document.getElementById('department');
+        const positionSelect = document.getElementById('position');
+
+        positionSelect.disabled = true;
+
+        // Google Sheet ကနေ ဒေတာများ လှမ်းယူခြင်း
+        async function fetchSheetData() {
+            try {
+                let response = await fetch(CONFIG1.WEB_APP_URL + "?action=getData", {
+                    method: 'GET'
+                });
+                let result = await response.json();
+                
+                console.log("Fetched Data:", result);
+
+                const positions = result.positionsByDept || (result.data && result.data.positionsByDept);
+                const livingConditions = result.livingConditions || (result.data && result.data.livingConditions) || [];
+                const emergencyRelations = result.emergencyRelations || (result.data && result.data.emergencyRelations) || [];
+
+                // Google Sheet ထဲမှ သိမ်းဆည်းထားပြီးသော Manpower စာရင်းအပြည့်အစုံကို table ထဲထည့်ရန်
+                const manpowerRecords = result.manpowerList || result.allManpower || (result.data && result.data.manpowerList) || [];
+                populateModalTable(manpowerRecords);
+
+                if (positions) {
+                    positionsByDept = positions;
+
+                    // 1. Department Dropdown ရှင်းလင်းပြီး အသစ်ထည့်ခြင်း
+                    departmentSelect.innerHTML = '<option value="">Select Department</option>';
+                    Object.keys(positionsByDept).forEach(dept => {
+                        const option = document.createElement('option');
+                        option.value = dept;
+                        option.textContent = dept;
+                        departmentSelect.appendChild(option);
+                    });
+
+                    // 2. Living Condition Dropdown ဖြည့်ခြင်း
+                    const livingSelect = document.getElementById('livingCondition');
+                    livingSelect.innerHTML = '<option value="">Select Status</option>';
+                    livingConditions.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item;
+                        option.textContent = item;
+                        livingSelect.appendChild(option);
+                    });
+
+                    // 3. Emergency Contact / Relationship Dropdown ဖြည့်ခြင်း
+                    const emergencySelect = document.getElementById('emergencyRelationship');
+                    emergencySelect.innerHTML = '<option value="">Select Relationship</option>';
+                    emergencyRelations.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item;
+                        option.textContent = item;
+                        emergencySelect.appendChild(option);
+                    });
+
+                    console.log("Departments loaded successfully:", Object.keys(positionsByDept));
+                } else {
+                    console.error("positionsByDept not found in response:", result);
+                }
+            } catch (error) {
+                console.error('Error fetching sheet data:', error);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', fetchSheetData);
+
+        // Modal Table ထဲသို့ ဒေတာများ ဖြည့်ပေးသည့် ဖန်ရှင် (Timestamp များကို ဖယ်ထုတ်ထားပါသည်)
+        function populateModalTable(records) {
+            const tbody = document.getElementById('modalTableBody');
+            tbody.innerHTML = '';
+
+            if (!records || records.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="13" style="text-align: center; color: #64748b; padding: 20px;">No records found.</td></tr>';
+                return;
+            }
+
+            records.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><b>${row.name || '-'}</b></td>
+                    <td>${row.dob || '-'}</td>
+                    <td>${row.joinedDate || '-'}</td>
+                    <td>${row.nrc || '-'}</td>
+                    <td>${row.maritalStatus || '-'}</td>
+                    <td>${row.officeLocation || '-'}</td>
+                    <td>${row.department || '-'}</td>
+                    <td>${row.position || '-'}</td>
+                    <td>${row.contactNumber || '-'}</td>
+                    <td>${row.address || '-'}</td>
+                    <td>${row.emergencyContactNumber || '-'}</td>
+                    <td>${row.emergencyRelationship || '-'}</td>
+                    <td>${row.livingCondition || '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Modal ဖွင့်ရန်နှင့် ပိတ်ရန် ဖန်ရှင်များ
+        function openDetailsModal() {
+            document.getElementById('manpowerDetailsModal').classList.remove('hidden');
+        }
+
+        function closeDetailsModal() {
+            document.getElementById('manpowerDetailsModal').classList.add('hidden');
+        }
+
+        // Modal ထဲတွင် စာရင်းရှာရန် (Search Filter)
+        function filterModalTable() {
+            let input = document.getElementById("modalSearchInput");
+            let filter = input.value.toLowerCase();
+            let table = document.getElementById("allManpowerTable");
+            let tr = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < tr.length; i++) {
+                let tdName = tr[i].getElementsByTagName("td")[0];
+                let tdDept = tr[i].getElementsByTagName("td")[6];
+                if (tdName || tdDept) {
+                    let nameValue = tdName ? tdName.textContent.toLowerCase() : "";
+                    let deptValue = tdDept ? tdDept.textContent.toLowerCase() : "";
+                    if (nameValue.indexOf(filter) > -1 || deptValue.indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        // Department ပြောင်းလဲတဲ့အခါ Position များကို Filter လုပ်ပေးခြင်း
+        departmentSelect.addEventListener('change', function() {
+            const selectedDept = this.value;
+            positionSelect.innerHTML = '<option value="">Select Position</option>';
+
+            if (selectedDept && positionsByDept[selectedDept]) {
+                positionSelect.disabled = false;
+                positionsByDept[selectedDept].forEach(pos => {
+                    const option = document.createElement('option');
+                    option.value = pos;
+                    option.textContent = pos;
+                    positionSelect.appendChild(option);
+                });
+            } else {
+                positionSelect.disabled = true;
+                positionSelect.innerHTML = '<option value="">Select Department First</option>';
+            }
+        });
+
+        const manpowerForm = document.getElementById('manpowerForm');
+        manpowerForm.addEventListener('submit', handleManpowerSubmit);
+
+        async function handleManpowerSubmit(event) {
+            event.preventDefault();
+
+            const now = new Date();
+            const timestamp = now.toISOString().replace('T', ' ').substring(0, 19);
+
+            const formData = {
+                action: "manpower",
+                timestamp: timestamp,
+                name: document.getElementById('empName').value.trim(),
+                nrc: document.getElementById('nrc').value.trim(),
+                officeLocation: document.getElementById('officeLocation').value.trim(),
+                dob: document.getElementById('dob').value,
+                joinedDate: document.getElementById('joinedDate').value,
+                department: document.getElementById('department').value,
+                position: document.getElementById('position').value.trim(),
+                maritalStatus: document.getElementById('maritalstatus').value.trim(),
+                livingCondition: document.getElementById('livingCondition').value.trim() || '-',
+                contactNumber: document.getElementById('contactNumber').value.trim(),
+                emergencyContactNumber: document.getElementById('emergencyContactNumber').value.trim(),
+                emergencyRelationship: document.getElementById('emergencyRelationship').value.trim(),
+                address: document.getElementById('address').value.trim()
+            };
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = `Submitting...`;
+            submitBtn.disabled = true;
+
+            try {
+                let response = await fetch(CONFIG1.WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(formData)
+                });
+                let result = await response.json();
+
+                if (result.status === "success" || result.message) {
+                    showToast('Information Submitted Successfully to Google Sheet!', 'success');
+                    manpowerForm.reset();
+                    positionSelect.disabled = true;
+                    positionSelect.innerHTML = '<option value="">Select Department First</option>';
+                    fetchSheetData(); // အချက်အလက်အသစ် ပို့ပြီးတာနဲ့ Table ကို Auto Update လုပ်ပေးမည်
+                } else {
+                    showToast('Error: ' + (result.message || 'Something went wrong'), 'error');
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                showToast('Google Sheet သို့ ချိတ်ဆက်၍ မရပါ။ URL သို့မဟုတ် Network ကို စစ်ဆေးပါ။', 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                lucide.createIcons();
+            }
+        }
+    </script>
 </body>
 </html>

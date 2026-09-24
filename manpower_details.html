@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manpower Details - Capital Treasure</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="manpower.css">
+    <a href="manpower_checker.html" class="btn-details" style="background-color: #0d9488;">
+    <i data-lucide="calendar" style="width: 18px; height: 18px;"></i> Service & Leave Summary
+</a>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand"><i data-lucide="shield-check"></i><span>Capital Treasure</span></div>
+        <ul class="nav-list">
+            <!-- Dashboard Menu -->
+            <li class="nav-item" id="menu-dashboard"><a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+
+            <!-- Fleet Items -->
+            <li class="nav-item" id="menu-fuel"><a href="refilling.html"><i data-lucide="fuel"></i> Fuel Refilling</a></li>
+            <li class="nav-item" id="menu-maintenance"><a href="matainment.html"><i data-lucide="wrench"></i> Maintenance</a></li>
+            <li class="nav-item" id="menu-inspection"><a href="Inspection.html"><i data-lucide="clipboard-check"></i> Inspection</a></li>
+
+            <!-- Warehouse Items -->
+            <li class="nav-item" id="menu-warehouse"><a href="warehouse.html"><i data-lucide="warehouse"></i> Warehouse Overview</a></li>
+            <li class="nav-item" id="menu-stock"><a href="stock.html"><i data-lucide="boxes"></i> Stock In/Out</a></li>
+            <li class="nav-item" id="menu-inventory"><a href="inventory.html"><i data-lucide="list-checks"></i> Inventory List</a></li>
+
+            <!-- Admin / Stationery Items -->
+            <li class="nav-item" id="menu-stationery"><a href="stationary.html"><i data-lucide="pen-tool"></i> Stationery Requests</a></li>
+            <li class="nav-item" id="menu-fixed-assets"><a href="fixaccess.html"><i data-lucide="box"></i> Fixed Assets</a></li>
+
+            <!-- HR Items -->
+            <li class="nav-item" id="menu-leave"><a href="leaves.html"><i data-lucide="calendar"></i> Leave Requests</a></li>
+            <li class="nav-item" id="menu-meeting"><a href="meetingnote.html"><i data-lucide="file-text"></i> Meeting Notes</a></li>
+            <li class="nav-item active" id="menu-manpower"><a href="manpower.html"><i data-lucide="user-plus"></i> Manpower Plan</a></li>
+            <li class="nav-item" id="menu-interview"><a href="interview-tracking.html"><i data-lucide="user-check"></i> Interview Tracking</a></li>
+
+            <!-- User Manage -->
+            <li class="nav-item" id="menu-usermanage"><a href="usermanage.html"><i data-lucide="users"></i> User & Role Control</a></li>
+
+            <!-- Log Out -->
+            <li class="nav-divider"></li>
+            <li class="nav-item"><a href="logout.html"><i data-lucide="log-out"></i> Log Out</a></li>
+        </ul>
+    </aside>
+
+    <div class="main-wrapper">
+        <header>
+            <div class="header-flex">
+                <h1 style="font-size: 20px; margin: 0;">Manpower Up-to-Date</h1>
+                <!-- Back Button to Manpower Form -->
+                <a href="manpower.html" class="btn-back">
+                    <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i> Back to Form
+                </a>
+            </div>
+        </header>
+
+        <div class="content-body">
+            <div class="details-container">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                    <span style="font-size: 13px; color: #64748b;">All employee details fetched directly from Google Sheet.</span>
+                    <input type="text" id="searchInput" class="search-box" placeholder="Search by name or department..." onkeyup="filterTable()">
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table" id="allManpowerTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date of Birth</th>
+                                <th>Joined Date</th>
+                                <th>NRC</th>
+                                <th>Marital Status</th>
+                                <th>Office Location</th>
+                                <th>Department</th>
+                                <th>Position</th>
+                                <th>Contact Number</th>
+                                <th>Residential Address</th>
+                                <th>Emergency Contact Number</th>
+                                <th>Emergency Contact / Relationship</th>
+                                <th>Living Condition</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr>
+                                <td colspan="13" style="text-align: center; color: #64748b; padding: 20px;">Loading data from Google Sheet... Please wait.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Files -->
+    <script src="config.js"></script>
+    <script>
+        lucide.createIcons();
+
+        // Google Sheet မှ ဒေတာများ လှမ်းဆွဲယူခြင်း
+        async function fetchAllManpowerData() {
+            try {
+                let response = await fetch(CONFIG1.WEB_APP_URL + "?action=getData", {
+                    method: 'GET'
+                });
+                let result = await response.json();
+                
+                const records = result.manpowerList || result.allManpower || (result.data && result.data.manpowerList) || [];
+                populateTable(records);
+            } catch (error) {
+                console.error('Error fetching sheet data:', error);
+                document.getElementById('tableBody').innerHTML = '<tr><td colspan="13" style="text-align: center; color: red; padding: 20px;">Failed to load data from Google Sheet.</td></tr>';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', fetchAllManpowerData);
+
+        // ဇယားထဲသို့ ဒေတာများ ထည့်သွင်းခြင်း (split('T')[0] ဖြင့် Date သက်သက် ထုတ်ယူခြင်း)
+        function populateTable(records) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            if (!records || records.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="13" style="text-align: center; color: #64748b; padding: 20px;">No records found.</td></tr>';
+                return;
+            }
+
+            records.forEach(row => {
+                let cleanDob = row.dob ? row.dob.split('T')[0] : '-';
+                let cleanJoinedDate = row.joinedDate ? row.joinedDate.split('T')[0] : '-';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><b>${row.name || '-'}</b></td>
+                    <td>${cleanDob}</td>
+                    <td>${cleanJoinedDate}</td>
+                    <td>${row.nrc || '-'}</td>
+                    <td>${row.maritalStatus || '-'}</td>
+                    <td>${row.officeLocation || '-'}</td>
+                    <td>${row.department || '-'}</td>
+                    <td>${row.position || '-'}</td>
+                    <td>${row.contactNumber || '-'}</td>
+                    <td>${row.address || '-'}</td>
+                    <td>${row.emergencyContactNumber || '-'}</td>
+                    <td>${row.emergencyRelationship || '-'}</td>
+                    <td>${row.livingCondition || '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // စာရင်းရှာရန် (Search Filter)
+        function filterTable() {
+            let input = document.getElementById("searchInput");
+            let filter = input.value.toLowerCase();
+            let table = document.getElementById("allManpowerTable");
+            let tr = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < tr.length; i++) {
+                let tdName = tr[i].getElementsByTagName("td")[0];
+                let tdDept = tr[i].getElementsByTagName("td")[6];
+                if (tdName || tdDept) {
+                    let nameValue = tdName ? tdName.textContent.toLowerCase() : "";
+                    let deptValue = tdDept ? tdDept.textContent.toLowerCase() : "";
+                    if (nameValue.indexOf(filter) > -1 || deptValue.indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

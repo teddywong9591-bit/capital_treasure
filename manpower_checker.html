@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manpower Checker & Leave Summary - Capital Treasure</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="manpower.css">
+   
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand"><i data-lucide="shield-check"></i><span>Capital Treasure</span></div>
+        <ul class="nav-list">
+            <li class="nav-item" id="menu-dashboard"><a href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+            <li class="nav-item" id="menu-fuel"><a href="refilling.html"><i data-lucide="fuel"></i> Fuel Refilling</a></li>
+            <li class="nav-item" id="menu-maintenance"><a href="matainment.html"><i data-lucide="wrench"></i> Maintenance</a></li>
+            <li class="nav-item" id="menu-inspection"><a href="Inspection.html"><i data-lucide="clipboard-check"></i> Inspection</a></li>
+            <li class="nav-item" id="menu-warehouse"><a href="warehouse.html"><i data-lucide="warehouse"></i> Warehouse Overview</a></li>
+            <li class="nav-item" id="menu-stock"><a href="stock.html"><i data-lucide="boxes"></i> Stock In/Out</a></li>
+            <li class="nav-item" id="menu-inventory"><a href="inventory.html"><i data-lucide="list-checks"></i> Inventory List</a></li>
+            <li class="nav-item" id="menu-stationery"><a href="stationary.html"><i data-lucide="pen-tool"></i> Stationery Requests</a></li>
+            <li class="nav-item" id="menu-fixed-assets"><a href="fixaccess.html"><i data-lucide="box"></i> Fixed Assets</a></li>
+            <li class="nav-item" id="menu-leave"><a href="leaves.html"><i data-lucide="calendar"></i> Leave Requests</a></li>
+            <li class="nav-item" id="menu-meeting"><a href="meetingnote.html"><i data-lucide="file-text"></i> Meeting Notes</a></li>
+            <li class="nav-item active" id="menu-manpower"><a href="manpower.html"><i data-lucide="user-plus"></i> Manpower Plan</a></li>
+            <li class="nav-item" id="menu-interview"><a href="interview-tracking.html"><i data-lucide="user-check"></i> Interview Tracking</a></li>
+            <li class="nav-item" id="menu-usermanage"><a href="usermanage.html"><i data-lucide="users"></i> User & Role Control</a></li>
+            <li class="nav-divider"></li>
+            <li class="nav-item"><a href="logout.html"><i data-lucide="log-out"></i> Log Out</a></li>
+        </ul>
+    </aside>
+
+    <div class="main-wrapper">
+        <header>
+            <div class="header-flex">
+                <h1 style="font-size: 20px; margin: 0;">Manpower Checker & Leave Summary</h1>
+                <a href="manpower.html" class="btn-back">
+                    <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i> Back to Form
+                </a>
+            </div>
+        </header>
+
+        <div class="content-body">
+            <div class="details-container">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                    <span style="font-size: 13px; color: #64748b;">ဝန်ထမ်းတစ်ဦးချင်းစီ၏ လုပ်သက်နှင့် ခွင့်အသေးစိတ်ကို ကြည့်ရန် <b>နာမည်ကို နှိပ်ပါ</b>။</span>
+                    <input type="text" id="searchInput" class="search-box" placeholder="Search by name or department..." onkeyup="filterTable()">
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table" id="allManpowerTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date of Birth</th>
+                                <th>Joined Date</th>
+                                <th>NRC</th>
+                                <th>Marital Status</th>
+                                <th>Office Location</th>
+                                <th>Department</th>
+                                <th>Position</th>
+                                <th>Contact Number</th>
+                                <th>Residential Address</th>
+                                <th>Emergency Contact Number</th>
+                                <th>Emergency Contact / Relationship</th>
+                                <th>Living Condition</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr>
+                                <td colspan="13" style="text-align: center; color: #64748b; padding: 20px;">Loading data from Google Sheet... Please wait.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DETAIL MODAL POPUP -->
+    <div id="detailModal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modalEmpName" style="margin: 0; font-size: 16px;">Employee Details</h3>
+                <button type="button" onclick="closeModal()" style="background:none; border:none; color:#fff; font-size:24px; cursor:pointer;">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBodyContent">
+                <!-- Dynamic Content -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-back" onclick="closeModal()" style="padding: 6px 16px;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Files -->
+    <script src="config.js"></script>
+    <script>
+        lucide.createIcons();
+
+        let allEmployees = [];
+
+        // Google Sheet မှ ဒေတာများ လှမ်းဆွဲယူခြင်း
+        async function fetchAllManpowerData() {
+            try {
+                let response = await fetch(CONFIG1.WEB_APP_URL + "?action=getData", {
+                    method: 'GET'
+                });
+                let result = await response.json();
+                
+                allEmployees = result.manpowerList || result.allManpower || (result.data && result.data.manpowerList) || [];
+                populateTable(allEmployees);
+            } catch (error) {
+                console.error('Error fetching sheet data:', error);
+                document.getElementById('tableBody').innerHTML = '<tr><td colspan="13" style="text-align: center; color: red; padding: 20px;">Failed to load data from Google Sheet.</td></tr>';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', fetchAllManpowerData);
+
+        // လုပ်သက် (နှစ်၊ လ၊ ရက်) အတိအကျ တွက်ချက်ပေးသည့် Function
+        function calculateExperience(joinedDateStr) {
+            if (!joinedDateStr) return "N/A";
+            
+            let joined = new Date(joinedDateStr.split('T')[0]);
+            let today = new Date();
+
+            if (isNaN(joined.getTime())) return "Invalid Date";
+
+            let years = today.getFullYear() - joined.getFullYear();
+            let months = today.getMonth() - joined.getMonth();
+            let days = today.getDate() - joined.getDate();
+
+            if (days < 0) {
+                months--;
+                let prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+                days += prevMonth.getDate();
+            }
+
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            let parts = [];
+            if (years > 0) parts.push(`${years} နှစ်`);
+            if (months > 0) parts.push(`${months} လ`);
+            if (days > 0 || parts.length === 0) parts.push(`${days} ရက်`);
+
+            return parts.join(' ');
+        }
+
+        // ဇယားထဲသို့ ဒေတာများ ထည့်သွင်းခြင်း
+        function populateTable(records) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            if (!records || records.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="13" style="text-align: center; color: #64748b; padding: 20px;">No records found.</td></tr>';
+                return;
+            }
+
+            records.forEach((row, index) => {
+                let cleanDob = row.dob ? row.dob.split('T')[0] : '-';
+                let cleanJoinedDate = row.joinedDate ? row.joinedDate.split('T')[0] : '-';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><a href="manpower_checker.html?name=${encodeURIComponent(row.name)}" style="color: #2563eb; font-weight: bold; text-decoration: underline;">${row.name || '-'}</a></td>
+    <td>${cleanDob}</td>
+                    <td>${cleanJoinedDate}</td>
+                    <td>${row.nrc || '-'}</td>
+                    <td>${row.maritalStatus || '-'}</td>
+                    <td>${row.officeLocation || '-'}</td>
+                    <td>${row.department || '-'}</td>
+                    <td>${row.position || '-'}</td>
+                    <td>${row.contactNumber || '-'}</td>
+                    <td>${row.address || '-'}</td>
+                    <td>${row.emergencyContactNumber || '-'}</td>
+                    <td>${row.emergencyRelationship || '-'}</td>
+                    <td>${row.livingCondition || '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ဝန်ထမ်းနာမည်ကို နှိပ်လိုက်သောအခါ အသေးစိတ်ပေါ်လာမည့် Modal Popup
+        function openEmployeeModal(index) {
+            let emp = allEmployees[index];
+            let joined = emp.joinedDate ? emp.joinedDate.split('T')[0] : '-';
+            let expStr = calculateExperience(joined);
+
+            document.getElementById('modalEmpName').textContent = (emp.name || 'Employee') + " - အသေးစိတ် အချက်အလက်";
+
+            let content = `
+                <div class="info-card">
+                    <h4>လုပ်သက် အသေးစိတ် (Service Period)</h4>
+                    <div class="info-row"><span class="info-label">အလုပ်စဝင်သည့်ရက်:</span> <span class="info-value">${joined}</span></div>
+                    <div class="info-row"><span class="info-label">စုစုပေါင်းလုပ်သက်:</span> <span class="info-value" style="color: #2563eb;">${expStr}</span></div>
+                </div>
+
+                <div class="info-card">
+                    <h4>ခွင့်ယူထားမှု အသေးစိတ် (Leave Summary)</h4>
+                    <div class="info-row"><span class="info-label">Medical Leave (ဆေးလက်မှတ်ခွင့်):</span> <span class="info-value">1 ရက်</span></div>
+                    <div class="info-row"><span class="info-label">Casual Leave (ကိုယ်ရေးခွင့်):</span> <span class="info-value">2 ရက်</span></div>
+                    <div class="info-row"><span class="info-label">Annual Leave (နှစ်ပတ်လည်ခွင့်):</span> <span class="info-value">0 ရက်</span></div>
+                    <div class="info-row" style="border-top: 1px dashed #cbd5e1; padding-top: 8px; margin-top: 5px;">
+                        <span class="info-label" style="font-weight: bold;">စုစုပေါင်း ခွင့်ယူပြီးရက်:</span> 
+                        <span class="info-value" style="color: #dc2626;">3 ရက်</span>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h4>အထွေထွေ အချက်အလက် (General Info)</h4>
+                    <div class="info-row"><span class="info-label">ဌာန (Department):</span> <span class="info-value">${emp.department || '-'}</span></div>
+                    <div class="info-row"><span class="info-label">ရာထူး (Position):</span> <span class="info-value">${emp.position || '-'}</span></div>
+                    <div class="info-row"><span class="info-label">ဖုန်းနံပါတ်:</span> <span class="info-value">${emp.contactNumber || '-'}</span></div>
+                    <div class="info-row"><span class="info-label">နေရပ်လိပ်စာ:</span> <span class="info-value">${emp.address || '-'}</span></div>
+                </div>
+            `;
+
+            document.getElementById('modalBodyContent').innerHTML = content;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        // စာရင်းရှာရန် (Search Filter)
+        function filterTable() {
+            let input = document.getElementById("searchInput");
+            let filter = input.value.toLowerCase();
+            let table = document.getElementById("allManpowerTable");
+            let tr = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < tr.length; i++) {
+                let tdName = tr[i].getElementsByTagName("td")[0];
+                let tdDept = tr[i].getElementsByTagName("td")[6];
+                if (tdName || tdDept) {
+                    let nameValue = tdName ? tdName.textContent.toLowerCase() : "";
+                    let deptValue = tdDept ? tdDept.textContent.toLowerCase() : "";
+                    if (nameValue.indexOf(filter) > -1 || deptValue.indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

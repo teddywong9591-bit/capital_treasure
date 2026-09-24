@@ -4,7 +4,7 @@
             <th>No.</th>
             <th>Item Name</th>
             <th>Quantity</th>
-            <th>Actions</th> <!-- Action ကော်လံ -->
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -25,3 +25,15 @@
         </tr>
     </tbody>
 </table>
+
+<!-- JavaScript ကို သုံးမယ်ဆိုရင် script tag အတွင်း ထည့်ပါ -->
+<script>
+// Add (အသစ်ထည့်ရန်) Form ဖွင့်သည့်အခါ - အားလုံးကို Enable လုပ်မည်
+function openAddForm() {
+    document.getElementById('itemName').disabled = false;
+    document.getElementById('category').disabled = false;
+    document.getElementById('unit').disabled = false;
+
+    
+}
+</script>
