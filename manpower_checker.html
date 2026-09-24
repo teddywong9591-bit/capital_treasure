@@ -150,39 +150,61 @@
             return parts.join(' ');
         }
 
-        // ဇယားထဲသို့ ဒေတာများ ထည့်သွင်းခြင်း
-        function populateTable(records) {
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
+// ဇယားထဲသို့ ဒေတာများ ထည့်သွင်းခြင်း (နာမည်ကို နှိပ်ရင် form ထဲ ဒေတာရောက်အောင် လုပ်ခြင်း)
+function populateTable(records) {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
 
-            if (!records || records.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="13" style="text-align: center; color: #64748b; padding: 20px;">No records found.</td></tr>';
-                return;
-            }
+    if (!records || records.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="13" style="text-align: center; color: #64748b; padding: 20px;">No records found.</td></tr>';
+        return;
+    }
 
-            records.forEach((row, index) => {
-                let cleanDob = row.dob ? row.dob.split('T')[0] : '-';
-                let cleanJoinedDate = row.joinedDate ? row.joinedDate.split('T')[0] : '-';
+    records.forEach((row, index) => {
+        let cleanDob = row.dob ? row.dob.split('T')[0] : '-';
+        let cleanJoinedDate = row.joinedDate ? row.joinedDate.split('T')[0] : '-';
 
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><a href="manpower_checker.html?name=${encodeURIComponent(row.name)}" style="color: #2563eb; font-weight: bold; text-decoration: underline;">${row.name || '-'}</a></td>
-    <td>${cleanDob}</td>
-                    <td>${cleanJoinedDate}</td>
-                    <td>${row.nrc || '-'}</td>
-                    <td>${row.maritalStatus || '-'}</td>
-                    <td>${row.officeLocation || '-'}</td>
-                    <td>${row.department || '-'}</td>
-                    <td>${row.position || '-'}</td>
-                    <td>${row.contactNumber || '-'}</td>
-                    <td>${row.address || '-'}</td>
-                    <td>${row.emergencyContactNumber || '-'}</td>
-                    <td>${row.emergencyRelationship || '-'}</td>
-                    <td>${row.livingCondition || '-'}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
+        const tr = document.createElement('tr');
+        // နာမည်ကို နှိပ်လျှင် openEmployeeForm(index) ကို ခေါ်မည် (Link အစား <a> သို့မဟုတ် onclick သုံးနိုင်သည်)
+        tr.innerHTML = `
+            <td><a href="#" onclick="selectEmployee(${index}); return false;" style="color: #2563eb; font-weight: bold; text-decoration: underline;">${row.name || '-'}</a></td>
+            <td>${cleanDob}</td>
+            <td>${cleanJoinedDate}</td>
+            <td>${row.nrc || '-'}</td>
+            <td>${row.maritalStatus || '-'}</td>
+            <td>${row.officeLocation || '-'}</td>
+            <td>${row.department || '-'}</td>
+            <td>${row.position || '-'}</td>
+            <td>${row.contactNumber || '-'}</td>
+            <td>${row.address || '-'}</td>
+            <td>${row.emergencyContactNumber || '-'}</td>
+            <td>${row.emergencyRelationship || '-'}</td>
+            <td>${row.livingCondition || '-'}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// နာမည်ကို နှိပ်လိုက်ပါက အပေါ်က Form နေရာများထဲသို့ ဒေတာဖြည့်ပေးပြီး Modal ပိတ်မည့် Function
+function selectEmployee(index) {
+    let emp = allEmployees[index];
+    if (!emp) return;
+
+    // သင့်ရဲ့ form ထဲက input ID များအလိုက် ဖြည့်ပေးရန် (ဥပမာ ID များကို သင့် form အတိုင်း ပြင်ပေးပါ)
+    document.getElementById('nameInput').value = emp.name || '';
+    document.getElementById('nrcInput').value = emp.nrc || '';
+    document.getElementById('officeLocationInput').value = emp.officeLocation || '';
+    document.getElementById('contactInput').value = emp.contactNumber || '';
+    document.getElementById('dobInput').value = emp.dob ? emp.dob.split('T')[0] : '';
+    document.getElementById('joinedDateInput').value = emp.joinedDate ? emp.joinedDate.split('T')[0] : '';
+    document.getElementById('departmentInput').value = emp.department || '';
+    document.getElementById('positionInput').value = emp.position || '';
+
+    // ဒေတာ ဖြည့်ပြီးပါက အောက်ခြေဇယားပြထားသော Modal (သို့) Popup ကို ပိတ်ရန်
+    // ဥပမာ - closeModal() သို့မဟုတ် modal class ကို ဖျောက်ရန်
+    closeModal(); // (သို့) ပုံပါ modal ပိတ်ရန် function ခေါ်ပါ
+}
+
 
         // ဝန်ထမ်းနာမည်ကို နှိပ်လိုက်သောအခါ အသေးစိတ်ပေါ်လာမည့် Modal Popup
         function openEmployeeModal(index) {
